@@ -22,7 +22,7 @@ namespace uppgifLoginViewComponent.ViewComponents
             }
             catch (ArgumentNullException) { }
 
-            return View(Model);
+            return View("Default",Model);
 
         }
     }
