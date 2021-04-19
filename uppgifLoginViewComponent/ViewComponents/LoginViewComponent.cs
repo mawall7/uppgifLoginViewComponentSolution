@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using uppgifLoginViewComponent.Models.ViewModels;
 
 namespace uppgifLoginViewComponent.ViewComponents
 {
@@ -16,7 +17,7 @@ namespace uppgifLoginViewComponent.ViewComponents
 
             try
             {
-               // Model = new LoginViewModel { IsLoggedIn = User.Identity.IsAuthenticated, Name = User.Identity.Name };
+                Model = new LoginViewModel { IsLoggedIn = User.Identity.IsAuthenticated, Name = User.Identity.Name };
 
             }
             catch (ArgumentNullException) { }
