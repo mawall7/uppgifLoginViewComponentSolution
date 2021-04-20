@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using uppgifLoginViewComponent.Models;
+using uppgifLoginViewComponent.Models.ViewModels;
 
 
 namespace uppgifLoginViewComponent.Controllers
@@ -26,6 +27,7 @@ namespace uppgifLoginViewComponent.Controllers
         private bool HttpOnly { get; set; }
         public IActionResult Index()
         {
+                        
             return View();
         }
 
@@ -34,13 +36,17 @@ namespace uppgifLoginViewComponent.Controllers
             string key = "cookie_test1";
             string value = DateTime.Now.ToString();
             CookieOptions c = new CookieOptions();
-            
             c.Expires = DateTime.Now.AddMinutes(1);
+                     
             c.HttpOnly = !IsInDevelopment(Data.StartupData.MyWebHostEnv);
             Response.Cookies.Append(key, value, c);
             
-            return View("Index");
+            CookieViewModel model = new CookieViewModel
+            {
+                CookieExpirationDate = c.Expires.ToString()
+            };
             
+            return View("Index", model);
 
         }
 
