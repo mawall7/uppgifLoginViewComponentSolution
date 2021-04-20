@@ -44,6 +44,12 @@ namespace uppgifLoginViewComponent.Controllers
 
         }
 
+        public IActionResult RemoveCookie()
+        {           
+            Response.Cookies.Delete("cookie_test1");
+            return View("Index");
+        }
+
         public IActionResult Privacy()
         {
             return View();
