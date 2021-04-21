@@ -31,22 +31,23 @@ namespace uppgifLoginViewComponent.Controllers
             return View();
         }
 
-        public IActionResult CreateCookie()
+        public ActionResult<CookieViewModel> CreateCookie()
         {
             string key = "cookie_test1";
             string value = DateTime.Now.ToString();
             CookieOptions c = new CookieOptions();
             c.Expires = DateTime.Now.AddMinutes(1);
-                     
             c.HttpOnly = !IsInDevelopment(Data.StartupData.MyWebHostEnv);
+            c.Secure = true;
+            c.SameSite = SameSiteMode.Strict;
             Response.Cookies.Append(key, value, c);
             
-            CookieViewModel model = new CookieViewModel
+            CookieViewModel model = new CookieViewModel 
             {
                 CookieExpirationDate = c.Expires.ToString()
             };
-            
-            return View("Index", model);
+
+            return View(nameof(Index), model);
 
         }
 
