@@ -7,10 +7,23 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
-@if (Model!= null)
-{
-    <div class="alert-info">
-        <p> This cookie will expire and be deleted:&nbsp; @Model.CookieExpirationDate <p>
+
+<div class="text-center ml-1">This project is for display purpose. - To sample some common components of a website
+    </div> 
+
+<div class="container">
+    <div class="row">
+        <a asp-action="CreateCookie" class="btn btn-outline-primary" value="">Create Cookie</a>
+       </div>
+        
+        @if (Model != null)
+        {
+    <div class="alert alert-info alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert">&times; </a>
+        cookie will expire and be deleted:&nbsp; @Model.CookieExpirationDate
     </div>
-}
+        }
+
+    
+</div>
 
