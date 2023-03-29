@@ -8,7 +8,8 @@ namespace uppgifLoginViewComponent.Models.ViewModels
 
     public class LoginViewModel
     {
-        public bool IsLoggedIn { get; set; }
+        public bool IsLoggedIn { get; set;}
         public string? Name { get; set; }
+        
     }
 }

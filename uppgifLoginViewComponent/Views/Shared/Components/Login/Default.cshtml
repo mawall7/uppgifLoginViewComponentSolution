@@ -1,5 +1,6 @@
 ﻿@model uppgifLoginViewComponent.Models.ViewModels.LoginViewModel
 
+@{ Model.IsLoggedIn = true;} 
 <div class="navbar-nav">
     @if (Model.IsLoggedIn)
     {

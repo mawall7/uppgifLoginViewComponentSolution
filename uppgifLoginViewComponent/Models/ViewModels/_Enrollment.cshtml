@@ -1,0 +1,74 @@
+﻿@model IEnumerable<uppgifLoginViewComponent.Models.Student>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model)
+            </th>
+            <th>
+
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            
+            <button id="@item.ID" type="submit"></button>
+
+            <tr>
+                <td>
+                    <div id="enrname"></div>@*@Html.DisplayFor(modelItem => item.Enrollments)*@
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.)*@
+                </td>
+                <td>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*@section Scripts{*@ 
+<script>
+    
+
+    async function GetMe() {
+
+    let enrollmentstud = document.getElementsByTagName("button");
+
+    let studid = Id;
+    let uri = "https://localhost:44343//Home/StudentEnrollment" + "/" + 1;
+
+    const respons = await fetch(uri , { method: "GET" });
+
+    if (!respons.ok) {
+    nameofmovie.innerHTML = `${respons.status}resp ej ok`;
+    return;
+    }
+
+    return await respons.json();
+
+    }
+
+    async function GetEnrollment() {
+   /*   let Id1 = Id;*/
+    let enrollment = await GetMe();
+    let html = '';
+
+    html += enrollment.name;
+    enrollmentstud.innerHTML = `<h1>${enrollment.name} ${enrollment.grade}</h1>`;
+    }
+
+    let btn = document.getElementById("mybtn")
+        .addEventListener("click", GetEnrollment(1));
+    </script>
+}
