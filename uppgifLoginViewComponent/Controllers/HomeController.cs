@@ -26,6 +26,7 @@ namespace uppgifLoginViewComponent.Controllers
             _logger = logger;
             _context = context;
             hostEnv = env;
+            _logger.LogInformation("Logging from Index - index reached");
         }
 
 

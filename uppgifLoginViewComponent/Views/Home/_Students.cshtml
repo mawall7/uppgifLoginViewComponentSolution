@@ -78,9 +78,13 @@
         if (select.value == "0") {
 
             upload.setAttribute("hidden", "hidden");
+            $("#fileupload").attr("hidden","hidden");
+
         }
         else {
             upload.removeAttribute("hidden");
+            $("#fileupload").removeAttr("hidden");
+
         }
 
 
@@ -112,7 +116,7 @@
 
         var value = select.value;
         console.log(value, typeof (select.value));
-        $("#myModal").modal('show');
+       /* $("#myModal").modal('show');*/
         //$("myoffCanv").offcanvas('hide');
         //let canv = document.getElementById("myoffCanv");
         //let canvclass = document.createArribute("class");
@@ -148,6 +152,7 @@
                 <input type="submit" value="avregistrera" class="btn btn-default" /> |
                 </p>
                 </form>
+                
                 <a asp-action="Index" > Back to Full List</a>
                 <a href="/Home/Delete?lastname=${lastname}&courseTitle=${courseTitle}"> Back to Full List</a>`
 
@@ -178,7 +183,10 @@
     /*<a class="btn btn-danger" asp-action="Delete" asp-route-lastname="${lastn}" asp-route-courseTitle="${courseTitle}">Aregistrera </a>*/
 
 
-
+    function AddUpload() {
+       
+        $("#myModal").modal('show');
+    }
 
 
 </script>
@@ -214,9 +222,9 @@
 
                 <form id="my-awesome-dropzone" class="dropzone" hidden="hidden" action="/Home/Upload" method="post" enctype="multipart/form-data">
                     <div class="dropzone-previews"></div>
-                    this is were the previews should be shown.
-                    Now setup your input fields
-                    <button type="submit">Submit data and files!</button>
+                    <span>-></span>
+                    <button class="btn btn-success btn-sm " type="submit">Spara din fil</button>
+                    <span>| Ladda upp/ skicka din text-fil</span>
                 </form>
                 <script src="dropzone-custom.js"></script>
 
@@ -368,7 +376,11 @@
                                         </div>
 
                                         <div class="col-10 bg-light" id="coursespopover">
-                                            <div style="display:inline;" id="@(item.LastName)"></div>
+                                            <div style="display:inline;" id="@(item.LastName)">
+
+                                            </div>
+
+                                         <div typeof="button" id="fileupload" class="btn btn-dark" hidden="hidden" onclick="AddUpload()"> upload file</div>
 
 
 

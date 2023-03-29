@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace uppgifLoginViewComponent
             var host = CreateHostBuilder(args).Build();
             CreateDbIfNotExists(host);  
                 host.Run();
+
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -25,7 +28,9 @@ namespace uppgifLoginViewComponent
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+            ;
+               
 
         private static void CreateDbIfNotExists(IHost host)
         {
