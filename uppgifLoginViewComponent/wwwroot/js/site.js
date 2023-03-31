@@ -3,8 +3,9 @@
 
 // Write your JavaScript code.
 
-var divs = document.getElementsByName("div");
-divs.forEach(a => a.style.color = "green");
+
+
+
 
 
 

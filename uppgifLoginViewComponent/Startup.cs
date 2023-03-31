@@ -19,6 +19,7 @@ namespace uppgifLoginViewComponent
 {
     public class Startup
     {
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,15 +32,21 @@ namespace uppgifLoginViewComponent
         public void ConfigureServices(IServiceCollection services)
         {
 
-
+            
             services.AddControllersWithViews().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
             services.AddRazorPages();
             services.AddDbContext<SchoolContext>(options  => { 
-                  options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")); 
-                   
+                  options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            
+            
         }
+           
 
+
+                
+            
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

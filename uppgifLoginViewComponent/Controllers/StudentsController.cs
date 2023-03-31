@@ -16,6 +16,7 @@ namespace uppgifLoginViewComponent.Controllers
     {
         private readonly SchoolContext _context;
         private readonly ILogger<StudentsController> _logger;
+        public string Enrollname { get; set; }
         public StudentsController(ILogger<StudentsController> logger, SchoolContext context)
         {
             _context = context;
@@ -25,7 +26,9 @@ namespace uppgifLoginViewComponent.Controllers
         // GET: Students
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)//string är nullable per default är null första träffen
         {
-                
+
+
+           
             
             //obs ViewData adderas hela tiden med en ny key så där CurrentFilter sätts till null har den redan två keys. 
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -235,6 +238,37 @@ namespace uppgifLoginViewComponent.Controllers
             IQueryable<EnrollmentDateGroup> data = _context.Students.GroupBy(a => a.EnrollmentDate).Select(a =>
                new EnrollmentDateGroup() { EnrollmentDate = a.Key, StudentCount = a.Count()});
             return View(await data.AsNoTracking().ToListAsync());
+        }
+        public IActionResult Grades()
+        {
+            List<StudentGradeViewModel> gradelist = GroupEnrollments();
+            return View(gradelist);
+        }
+
+
+        public List<StudentGradeViewModel> GroupEnrollments() {
+            Student Student = new Student() { FirstMidName = "Name", LastName = "LastName", ID = 77 };
+            List<Enrollment> stud = _context.Enrollments.ToList();
+            IEnumerable<IGrouping<string, Enrollment>> enrolls = stud.GroupBy(a => a.Name);
+            List<int> grademean = new List<int>();
+            int enrollmentsumgrad = 0;
+            List<StudentGradeViewModel> studentgradeViewmodelList = new List<StudentGradeViewModel>();
+            string name;
+            foreach(IGrouping<string, Enrollment> group in enrolls)
+            {
+                Console.WriteLine(group.Key, group.Count());
+                foreach(var enrollment in group)
+                {
+                    enrollmentsumgrad += (int)enrollment.StudentGrade;
+                    Enrollname = enrollment.Name;
+                }
+                var enrollmentaverage = enrollmentsumgrad / group.Count();
+                studentgradeViewmodelList.Add(new StudentGradeViewModel() { CourseName = Enrollname, Grade = ((Enrollment.Grade)enrollmentaverage).ToString() });
+                enrollmentsumgrad = 0;
+            }
+            return studentgradeViewmodelList;
+            
+
         }
     }
 
