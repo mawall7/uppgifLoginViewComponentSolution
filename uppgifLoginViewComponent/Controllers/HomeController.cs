@@ -31,19 +31,24 @@ namespace uppgifLoginViewComponent.Controllers
 
 
         private bool HttpOnly { get; set; }
-        
+
         Dictionary<string, string> KVDict;
-       
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
 
             IndexViewModel model = new IndexViewModel();
 
-            var students = _context.Students.Include(a => a.Enrollments);
-            model.Students = students;
-            
+            model.Students = await _context.Students.Include(a => a.Enrollments).ToListAsync();
+
+
             return View(model);
         }
+    
+
+
+            
+        
             
         public IActionResult StudentsPartial()
         {
@@ -140,26 +145,67 @@ namespace uppgifLoginViewComponent.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file)
         {
-            string ext = file.ContentType;
             
-            if(file.ContentType!="text/plain")
+            
+           if (isTextFile(file)){
+           
+           //var filePath = CreateFilePath(file);
+
+           using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                try
+                {
+                    if (memoryStream.Length < 10000) //validera bytelängd 
+                    {
+                        var assignment = new Assignment() { AssignmentFile = memoryStream.ToArray()};//IFORM fil konverteras till bytes eller sparas som textfil.
+                        _context.Assignments.Add(assignment);
+                        _context.SaveChanges();
+
+                    }
+                }
+                catch(Exception e)
+                {
+                    throw new FileLoadException("file is to large must be less than 10 kb ", e.Message);
+                }
+                
+            } 
+            
+            //using (FileStream fs = System.IO.File.Create(filePath))  //sparar filerna till root/files 
+            //{
+
+            //    file.CopyTo(fs);
+
+            //}
+            }
+            else
             {
                 throw new IOException("file must be a text file");
+
             }
 
+            return RedirectToAction(nameof(Index));
+        }
+
+        private string CreateFilePath(IFormFile file)
+        {
             var fileDic = "files";
             string filePath = Path.Combine(hostEnv.WebRootPath, fileDic);
             if (!Directory.Exists(filePath))
             {
-                Directory.CreateDirectory(filePath);
+                Directory.CreateDirectory(filePath); //skapar en mapp files under root
+
             }
             var filename = file.FileName;
-            filePath = Path.Combine(filePath, filename);
-            using(FileStream fs= System.IO.File.Create(filePath))
-            {
-                file.CopyTo(fs);
-            }
-            return RedirectToAction(nameof(Index));
+            filePath = Path.Combine(filePath, filename); //skapa filnamn concatenerarar till en string 
+            return filePath;
+        }
+
+        public bool isTextFile(IFormFile file)
+        {
+
+            return file.ContentType == "text/plain";
+
         }
     }
 }

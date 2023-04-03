@@ -10,8 +10,8 @@ using uppgifLoginViewComponent.Data;
 namespace uppgifLoginViewComponent.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20230315135935_Init")]
-    partial class Init
+    [Migration("20230403144300_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,24 @@ namespace uppgifLoginViewComponent.Migrations
                 .HasAnnotation("ProductVersion", "3.1.32")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("uppgifLoginViewComponent.Models.Assignment", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("AssignmentFile")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Assignments");
+                });
 
             modelBuilder.Entity("uppgifLoginViewComponent.Models.Course", b =>
                 {

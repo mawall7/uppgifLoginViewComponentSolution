@@ -50,24 +50,12 @@
         let upload = document.getElementById("my-awesome-dropzone");
         //let hidden = upload.getAttribute("hidden");
         
-        upload.setAttribute("hidden", "hidden");
+        upload.setAttribute("hidden", "hidden");//modalknapp
+        $(".fileupload").attr("hidden", "hidden"); // knapponcanv
         console.log(upload.getAttribute("hidden").value);
         select.value = "0";
 
-       
-
-       
-        
-
-
-        
-        
-
     }
-
-
-
-
 
     async function myFunction(selectid, lastname) {
         var select = document.getElementById(selectid);
@@ -78,15 +66,14 @@
         if (select.value == "0") {
 
             upload.setAttribute("hidden", "hidden");
-            $("#fileupload").attr("hidden","hidden");
+            $(".fileupload").attr("hidden","hidden");
 
         }
         else {
             upload.removeAttribute("hidden");
-            $("#fileupload").removeAttr("hidden");
+            $(".fileupload").removeAttr("hidden"); // måste vara en klass id hittar bara första klassen då det är unikt.
 
         }
-
 
 
         console.log(select.value, "= select.value", hidden, "=attrhidden")
@@ -99,8 +86,6 @@
             return;
         }
        
-
-
         
 
         //if (select.value == "0" || typeof (select.value) === 'undefined') {
@@ -145,8 +130,8 @@
             let courseCredits = String(enroll.credits);
 
             coursestring += `<div class="text-primary" style="display:inline;"id="coursesinfo"><p>CourseName: ${courseTitle}</p><p>CourseCredits: ${courseCredits}</p></div>`
-            //let avregistrera = `<a class="btn btn-danger" asp-action="Delete" asp-route-lastname="${lastn}" asp-route-courseTitle="${courseTitle}">Aregistrera </a>`
-            let avregistrera = `<form asp-action="Delete">
+            //let avregistrera = `<a class="btn btn-danger" asp-action="Delete" asp-route-lastname="${lastn}" asp-route-courseTitle="${courseTitle}">Aregistrera </a>` lägger kurs info efter selectlist onklick 
+            let avregistrera = `<form asp-action="Delete"> 
                 Avregistrera: <div><input type="hidden" asp-for="lastname" name="lastname" value="${lastname}"/>
                 <input type="hidden" asp-for="courseTitle" name="courseTitle" value="${courseTitle}"></input>
                 <input type="submit" value="avregistrera" class="btn btn-default" /> |
@@ -156,7 +141,7 @@
                 <a asp-action="Index" > Back to Full List</a>
                 <a href="/Home/Delete?lastname=${lastname}&courseTitle=${courseTitle}"> Back to Full List</a>`
 
-            //let dropfile = `<form id = "my-awesome-dropzone" class="dropzone" action = "/Home/Upload" method = "post" enctype = "multipart/form-data" >
+            ////let dropfile = `<form id = "my-awesome-dropzone" class="dropzone" action = "/Home/Upload" method = "post" enctype = "multipart/form-data" >
             //      <div class="dropzone-previews"></div>
             //      <button type="submit">Submit data and files!</button>
             //      </form >
@@ -193,10 +178,6 @@
 
 
 <h1>Index</h1>
-
-
-
-
 
 
 <p>
@@ -358,38 +339,39 @@
                                     @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
                                         asp-items="@items" onchange="myFunction('@(item.ID)', '@(item.LastName)')">*@
                                     @*myFunction('@(item.ID)')*@
-                                    <div class="row">
-                                        <div class="col-2">
-                                            <form id="@(item.ID.ToString())form ">
-                                                <select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
-                                                        asp-items="@items" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <form id="@(item.ID.ToString())form ">
+                                            <select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
+                                                    asp-items="@items" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')">
 
-                                                    <option value="0" selected>Se pågående kurser</option>
-
-
-                                                    @*.innerHTML =" ${this.value}"*@
-                                                    @*hur göra ett c variabel till javascript variabel this.value vill leta efter den valda kursen och visa dess namn och betyg?*@
+                                                <option value="0" selected>Se pågående kurser</option>
 
 
-                                                </select>
-                                            </form>
-                                        </div>
-
-                                        <div class="col-10 bg-light" id="coursespopover">
-                                            <div style="display:inline;" id="@(item.LastName)">
-
-                                            </div>
-
-                                            <div typeof="button" id="fileupload" class="btn btn-dark" hidden="hidden" onclick="AddUpload()">
-                                                <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
-                                                upload file
-                                            </div>
+                                                @*.innerHTML =" ${this.value}"*@
+                                                @*hur göra ett c variabel till javascript variabel this.value vill leta efter den valda kursen och visa dess namn och betyg?*@
 
 
+                                            </select>
+                                        </form>
+                                    </div>
+
+                                    <div class="col-10 bg-light" id="coursespopover">
+                                        <div style="display:inline;" id="@(item.LastName)">
 
                                         </div>
+
+
+
+
 
                                     </div>
+                                    <div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
+                                        <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
+                                        upload file
+                                    </div>
+
+                                </div>
                                     <!--<form id="my-awesome-dropzone" class="dropzone" action="/Home/Upload" method="post" enctype="multipart/form-data">
                                     <div class="dropzone-previews"></div>-->
                                     <!-- this is were the previews should be shown. -->
