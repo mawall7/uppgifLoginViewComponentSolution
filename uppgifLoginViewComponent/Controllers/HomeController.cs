@@ -34,12 +34,16 @@ namespace uppgifLoginViewComponent.Controllers
 
         Dictionary<string, string> KVDict;
 
+        
+        
         public async Task<IActionResult> Index()
         {
 
             IndexViewModel model = new IndexViewModel();
 
-            model.Students = await _context.Students.Include(a => a.Enrollments).ToListAsync();
+            model.Students = await _context.Students.Include(a => a.Enrollments)
+                .Include(a => a.Assignments)
+                .ToListAsync();
 
 
             return View(model);
@@ -158,7 +162,7 @@ namespace uppgifLoginViewComponent.Controllers
                 {
                     if (memoryStream.Length < 10000) //validera bytelängd 
                     {
-                        var assignment = new Assignment() { AssignmentFile = memoryStream.ToArray()};//IFORM fil konverteras till bytes eller sparas som textfil.
+                        var assignment = new Assignment() { AssignmentFile = memoryStream.ToArray(), Name = file.FileName};//IFORM fil konverteras till bytes eller sparas som textfil.
                         _context.Assignments.Add(assignment);
                         _context.SaveChanges();
 

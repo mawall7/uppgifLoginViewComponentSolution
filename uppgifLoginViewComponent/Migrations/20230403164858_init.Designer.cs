@@ -10,7 +10,7 @@ using uppgifLoginViewComponent.Data;
 namespace uppgifLoginViewComponent.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20230403144300_init")]
+    [Migration("20230403164858_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,12 @@ namespace uppgifLoginViewComponent.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("StudentID")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("StudentID");
 
                     b.ToTable("Assignments");
                 });
@@ -104,6 +109,13 @@ namespace uppgifLoginViewComponent.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("uppgifLoginViewComponent.Models.Assignment", b =>
+                {
+                    b.HasOne("uppgifLoginViewComponent.Models.Student", null)
+                        .WithMany("Assignments")
+                        .HasForeignKey("StudentID");
                 });
 
             modelBuilder.Entity("uppgifLoginViewComponent.Models.Enrollment", b =>

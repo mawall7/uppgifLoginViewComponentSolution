@@ -10,6 +10,8 @@ namespace uppgifLoginViewComponent.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public byte[] AssignmentFile { get; set; }
+
+        public int? StudentID { get; set; }
         string StudentName { get; set; }
         DateTime Date { get; set; }
 

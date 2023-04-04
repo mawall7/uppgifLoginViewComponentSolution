@@ -15,17 +15,17 @@
 
 
 
-    //fungerar ej
-    //var courseinfo = document.getElementById("courseinfo");
-    //courseinfo.innerHTML = "string";
-    //var courseselect = document.getElementById("courses");
-    //var itemselected = courseselect.value;
-    //courseselect.addEventListener("change", myfunction());
-    //function myfunction() {
-    //    var cinfo = document.getElementById("courseinfo");
-    //    cinfo.innerHTML = "courseinfo here update";
-    //    courseinfo.innerHTML = "courses";
-    //}
+    @*//fungerar ej
+        //var courseinfo = document.getElementById("courseinfo");
+        //courseinfo.innerHTML = "string";
+        //var courseselect = document.getElementById("courses");
+        //var itemselected = courseselect.value;
+        //courseselect.addEventListener("change", myfunction());
+        //function myfunction() {
+        //    var cinfo = document.getElementById("courseinfo");
+        //    cinfo.innerHTML = "courseinfo here update";
+        //    courseinfo.innerHTML = "courses";
+        //}*@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -49,7 +49,7 @@
         //upload.setAttribute("hidden", "hidden");
         let upload = document.getElementById("my-awesome-dropzone");
         //let hidden = upload.getAttribute("hidden");
-        
+
         upload.setAttribute("hidden", "hidden");//modalknapp
         $(".fileupload").attr("hidden", "hidden"); // knapponcanv
         console.log(upload.getAttribute("hidden").value);
@@ -66,7 +66,7 @@
         if (select.value == "0") {
 
             upload.setAttribute("hidden", "hidden");
-            $(".fileupload").attr("hidden","hidden");
+            $(".fileupload").attr("hidden", "hidden");
 
         }
         else {
@@ -82,18 +82,18 @@
             /*DeleteOnClose(selectid, lastname);*/
             htmlstring = "";
             document.getElementById(lastname).innerHTML = htmlstring;
-            
+
             return;
         }
-       
-        
+
+
 
         //if (select.value == "0" || typeof (select.value) === 'undefined') {
         //    upload.setAttribute("hidden", "hidden");
         //    return; //om select är Pågående kurser visa inget
         //}
         //else {
-        //    if (hidden) 
+        //    if (hidden)
         //    upload.removeAttribute("hidden");
 
         //}
@@ -101,7 +101,7 @@
 
         var value = select.value;
         console.log(value, typeof (select.value));
-       /* $("#myModal").modal('show');*/
+        /* $("#myModal").modal('show');*/
         //$("myoffCanv").offcanvas('hide');
         //let canv = document.getElementById("myoffCanv");
         //let canvclass = document.createArribute("class");
@@ -130,14 +130,14 @@
             let courseCredits = String(enroll.credits);
 
             coursestring += `<div class="text-primary" style="display:inline;"id="coursesinfo"><p>CourseName: ${courseTitle}</p><p>CourseCredits: ${courseCredits}</p></div>`
-            //let avregistrera = `<a class="btn btn-danger" asp-action="Delete" asp-route-lastname="${lastn}" asp-route-courseTitle="${courseTitle}">Aregistrera </a>` lägger kurs info efter selectlist onklick 
-            let avregistrera = `<form asp-action="Delete"> 
+            //let avregistrera = `<a class="btn btn-danger" asp-action="Delete" asp-route-lastname="${lastn}" asp-route-courseTitle="${courseTitle}">Aregistrera </a>` lägger kurs info efter selectlist onklick
+            let avregistrera = `<form asp-action="Delete">
                 Avregistrera: <div><input type="hidden" asp-for="lastname" name="lastname" value="${lastname}"/>
                 <input type="hidden" asp-for="courseTitle" name="courseTitle" value="${courseTitle}"></input>
                 <input type="submit" value="avregistrera" class="btn btn-default" /> |
                 </p>
                 </form>
-                
+
                 <a asp-action="Index" > Back to Full List</a>
                 <a href="/Home/Delete?lastname=${lastname}&courseTitle=${courseTitle}"> Back to Full List</a>`
 
@@ -147,7 +147,7 @@
             //      </form >
             //      <script src="dropzone-custom.js">`
 
-           
+
 
 
             /*/ok:) avregistrera2 . avregistrera1a tag ej ok renderar ingen länk:( varför? fråga någon /vad jag lärt?det är svårt att blanda ihop bootstrap komponenter?  */
@@ -169,7 +169,7 @@
 
 
     function AddUpload() {
-       
+
         $("#myModal").modal('show');
     }
 
@@ -184,13 +184,15 @@
     <a asp-action="Create">Create New</a>
 </p>
 
+
+
 <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Modal Heading</h4>
+                <h4 class="modal-title">Sänd uppgift</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
@@ -220,9 +222,8 @@
     </div>
 </div>
 
-<a asp-action="Delete" asp-route-lastname="Olivetto" asp-route-courseTitle="Algebra A">Aregistrera </a>
 
-<a type="submit" asp-action="Delete" asp-route-lastname="Olivetto" asp-route-coursetitle="ProgrammeringA">avregistrera2</a>
+@*<a type="submit" asp-action="Delete" asp-route-lastname="Olivetto" asp-route-coursetitle="ProgrammeringA">avregistrera2</a>*@
 <table class="table">
     <thead class="text-center">
         <tr>
@@ -291,104 +292,141 @@
                             //ny kod nedan 2 rader
 
                             <div class="td1">
-                                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="@(studcanv1)" aria-controls="@(studcanv1)" >Pågående kurser</button>
+                                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="@(studcanv1)" aria-controls="@(studcanv1)">Pågående kurser</button>
                             </div>
                             //var student = new Student(); student = item;
                             // @Html.Partial("_Modal", student)//funkar ej ger samma student för alla knappar;
 
-                            <div class="offcanvas offcanvas-bottom"  tabindex="-1" id="@(studcanv2)" aria-labelledby="offcanvasBottomLabel">
+
+
+
+                            <div class="offcanvas offcanvas-bottom" tabindex="-1" id="@(studcanv2)" aria-labelledby="offcanvasBottomLabel">
                                 <div class="offcanvas-header">
                                     <h5 class="offcanvas-title" id="offcanvasBottomLabel">Pågående kurser:</h5>
                                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" onclick="DeleteOnClose('@(item.ID.ToString())','@(item.LastName)')"></button>
                                 </div>
                                 <div class="offcanvas-body small">
-                                    <p>Student: @item.FirstMidName @item.LastName</p>
 
-                                    @{var enrolls = item.Enrollments.Select(a => a.Name).ToList();
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <p>Student: @item.FirstMidName @item.LastName</p>
 
-                                        List<SelectListItem> items = enrolls.ConvertAll(a =>
-                                        {
-                                            return new SelectListItem()
-                                            {
-                                                Text = a.ToString(),
-                                                Value = a.ToString(),
-                                                Selected = false
-                                            };
-                                        });
-                                    }
-                                    @*på det här sättet kan man skriva för att lägga till html.*@
-                                    @{string enrhtml = "";
-                                        foreach (var itemx in enrolls)
-                                        {
-                                            enrhtml += $"<p>{itemx.ToString()}</p>";
-                                        };
+                                            @{var enrolls = item.Enrollments.Select(a => a.Name).ToList();
 
-                                    } @*i onchanve innerHTML='@(enrhtml)' *@
-                                    @*id måste vara unikt för varje selectlist eftersom varje student ska ha en selectlist (i varje popover id sätts i oncklick med '' ej " i getElementById ='@(item.ID)' )*@
-                                    @{ var cid = item.ID.ToString(); var pid = item.ID.ToString() + item.LastName;}
-                                    @*hur gör man en onchange funktion istället fungerar inte vill ju bara visa den valda kursens info. få select värdet genom element.value*@
-                                    @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
-                                            asp-items="@items" onchange="document.getElementById('@(item.LastName)').innerHTML=" ${this.value}">
-                                        @{ var stringx = item.Enrollments.Select(a => a.Name + " " + a.StudentGrade).ToString();}
-                                            >*@
+                                                List<SelectListItem> items = enrolls.ConvertAll(a =>
+                                                {
+                                                    return new SelectListItem()
+                                                    {
+                                                        Text = a.ToString(),
+                                                        Value = a.ToString(),
+                                                        Selected = false
+                                                    };
+                                                });
+                                            }
+                                            @*på det här sättet kan man skriva för att lägga till html.*@
+                                            @{string enrhtml = "";
+                                                foreach (var itemx in enrolls)
+                                                {
+                                                    enrhtml += $"<p>{itemx.ToString()}</p>";
+                                                };
 
-                                    @*@{ var jsonenroll = System.Text.Json.JsonSerializer.Serialize(item.Enrollments);
-                                        }*@
+                                            } @*i onchanve innerHTML='@(enrhtml)' *@
+                                            @*id måste vara unikt för varje selectlist eftersom varje student ska ha en selectlist (i varje popover id sätts i oncklick med '' ej " i getElementById ='@(item.ID)' )*@
+                                            @{ var cid = item.ID.ToString(); var pid = item.ID.ToString() + item.LastName;}
+                                            @*hur gör man en onchange funktion istället fungerar inte vill ju bara visa den valda kursens info. få select värdet genom element.value*@
+                                            @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
+                                                    asp-items="@items" onchange="document.getElementById('@(item.LastName)').innerHTML=" ${this.value}">
+                                                @{ var stringx = item.Enrollments.Select(a => a.Name + " " + a.StudentGrade).ToString();}
+                                                    >*@
 
-                                    @*ok :)*@
-                                    @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
-                                        asp-items="@items" onchange="myFunction('@(item.ID)', '@(item.LastName)')">*@
-                                    @*myFunction('@(item.ID)')*@
-                                <div class="row">
-                                    <div class="col-2">
-                                        <form id="@(item.ID.ToString())form ">
-                                            <select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
-                                                    asp-items="@items" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')">
+                                            @*@{ var jsonenroll = System.Text.Json.JsonSerializer.Serialize(item.Enrollments);
+                                                }*@
 
-                                                <option value="0" selected>Se pågående kurser</option>
+                                            @*ok :)*@
+                                            @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
+                                                asp-items="@items" onchange="myFunction('@(item.ID)', '@(item.LastName)')">*@
+                                            @*myFunction('@(item.ID)')*@
 
 
-                                                @*.innerHTML =" ${this.value}"*@
-                                                @*hur göra ett c variabel till javascript variabel this.value vill leta efter den valda kursen och visa dess namn och betyg?*@
+                                            <form id="@(item.ID.ToString())form ">
+                                                <select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
+                                                        asp-items="@items" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')">
+
+                                                    <option value="0" selected>Se pågående kurser</option>
 
 
-                                            </select>
-                                        </form>
-                                    </div>
+                                                    @*.innerHTML =" ${this.value}"*@
+                                                    @*hur göra ett c variabel till javascript variabel this.value vill leta efter den valda kursen och visa dess namn och betyg?*@
 
-                                    <div class="col-10 bg-light" id="coursespopover">
-                                        <div style="display:inline;" id="@(item.LastName)">
 
+                                                </select>
+                                            </form>
                                         </div>
 
+                                        @*<div class="col-8 bg-light">*@ @*id = coursepopover*@ @*//här visas kurser onselect, avregistrera o. upload*@
+                                        <div class="col-4 border-right border-dark" id="@(item.LastName)"></div>
+                                        <div class="col-4 m-5">
+                                            <div class="asssignments align-items-center pb-3">Inskickade uppgifter</div>
+                                            <table>
+                                                <tablehead>
+                                                    <tr>
+                                                        <td>
+                                                            FilNamn
+                                                        </td>
+                                                        <td>
+                                                            Datum
+                                                        </td>
+                                                    </tr>
+                                                </tablehead>
+                                                <tbody>
+
+                                                    @foreach (var assignment in item.Assignments)
+                                                    {
+                                                        <tr>
+                                                            <td>@assignment.Name</td>
+                                                            <td>Datenotimplemented</td>
+                                                        </tr>
+
+                                                    }
+                                                </tbody>
+                                            </table>
 
 
-
-
+                                        </div>
                                     </div>
-                                    <div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
-                                        <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
-                                        upload file
-                                    </div>
-
                                 </div>
-                                    <!--<form id="my-awesome-dropzone" class="dropzone" action="/Home/Upload" method="post" enctype="multipart/form-data">
-                                    <div class="dropzone-previews"></div>-->
-                                    <!-- this is were the previews should be shown. -->
-                                    <!-- Now setup your input fields -->
-                                    <!--<button type="submit">Submit data and files!</button>
-                                    </form>
-                                    <script src="dropzone-custom.js"></script>-->
-                                    @*@foreach (var xitem in item.Enrollments)
-                                        {
-                                            <p>KursNamn: @xitem.Name</p>
-                                            <p>Betyg: @xitem.StudentGrade.ToString()</p>*@
-
-                                    @*}*@
 
 
+
+
+
+
+
+
+
+                                <div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
+                                    <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
+                                    upload file
                                 </div>
-                            </div><div>
+
+                            </div>
+                            <!--<form id="my-awesome-dropzone" class="dropzone" action="/Home/Upload" method="post" enctype="multipart/form-data">
+                            <div class="dropzone-previews"></div>-->
+                            <!-- this is were the previews should be shown. -->
+                            <!-- Now setup your input fields -->
+                            <!--<button type="submit">Submit data and files!</button>
+                            </form>
+                            <script src="dropzone-custom.js"></script>-->
+                            @*@foreach (var xitem in item.Enrollments)
+                                {
+                                    <p>KursNamn: @xitem.Name</p>
+                                    <p>Betyg: @xitem.StudentGrade.ToString()</p>*@
+
+                            @*}*@
+
+
+
+                            @*</div>*@<div>
                             </div>
                         }
 
@@ -438,17 +476,30 @@
     </tbody>
 </table>
 
+<div class="row">
+    <div class="col-6 border-right border-secondary text-right">
+   <a href="https://www.google.com"> <img class="mr-3" src="https://cdn.pixabay.com/photo/2017/06/25/19/09/house-2441625_960_720.png" style="height:auto; width:20%;"></a>
+   <div class="text-info mr-5">Dina kurser</div>
+    </div>
+    <div class="col-6 text-left">
+        <a href="https://www.google.com"> <img class="ml-3" src="https://cdn.pixabay.com/photo/2019/07/03/05/58/envelope-4313721_960_720.png" style="height:auto; width:20%;"></a>
+        <div class="text-info mr-5">Dina kontaktuppgifter</div>
+    </div>
+
+
+</div>
+
 @*<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
-<link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 
 
-<form id="my-awesome-dropzone" class="dropzone" hidden="hidden" action="/Home/Upload" method="post" enctype="multipart/form-data">
-    <div class="dropzone-previews"></div>
-    this is were the previews should be shown.
-    Now setup your input fields
-    <button type="submit">Submit data and files!</button>
-</form>
-<script src="dropzone-custom.js"></script>*@
+    <form id="my-awesome-dropzone" class="dropzone" hidden="hidden" action="/Home/Upload" method="post" enctype="multipart/form-data">
+        <div class="dropzone-previews"></div>
+        this is were the previews should be shown.
+        Now setup your input fields
+        <button type="submit">Submit data and files!</button>
+    </form>
+    <script src="dropzone-custom.js"></script>*@
 
 
 
