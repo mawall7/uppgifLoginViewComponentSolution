@@ -1,1 +1,17 @@
-2023-02-20 16:57:14
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+
+
+<script>
+  let demo = getElementById("demo");
+  let atr = getAttribute('color-mix');
+  console.log(atr); 
+
+</script>
+
+</body>
+</html>

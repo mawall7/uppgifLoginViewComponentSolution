@@ -223,271 +223,357 @@
 </div>
 
 
-@*<a type="submit" asp-action="Delete" asp-route-lastname="Olivetto" asp-route-coursetitle="ProgrammeringA">avregistrera2</a>*@
-<table class="table">
-    <thead class="text-center">
-        <tr>
-            <th>
-                Info
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student.FirstMidName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student.EnrollmentDate)
-            </th>
-            <th>
-                Enrollments
-            </th>
-        </tr>
-    </thead>
+<div class="row">
+    <div class="col-12">
+        @*<a type="submit" asp-action="Delete" asp-route-lastname="Olivetto" asp-route-coursetitle="ProgrammeringA">avregistrera2</a>*@
+        <table class="table">
+            <thead class="text-center">
+                <tr>
+                    <th>
+                        Info
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Student.LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Student.FirstMidName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Student.EnrollmentDate)
+                    </th>
+                    <th>
+                        Enrollments
+                    </th>
+                </tr>
+            </thead>
 
 
-    <tbody>
-        @foreach (var item in Model.Students)
-        {
+            <tbody>
+                @foreach (var item in Model.Students)
+                {
 
-            @*<div @Html.Partial("_Enrollment") asp-contoller="Home" asp-action="StudentEnrollments"></div>*@
+                    @*<div @Html.Partial("_Enrollment") asp-contoller="Home" asp-action="StudentEnrollments"></div>*@
 
-            <tr>
+                <tr>
+                    @*<div class="col-8"> inte tillåtet med en td innanför en div tvärtom ok*@
 
-                <td class="td1">
-                    <a asp-controller="Students" asp-action="Edit" asp-route-id="@item.ID">Edit</a>
-                    <a asp-controller="Students" asp-action="Details" asp-route-id="@item.ID">Details</a>
-                    <a asp-controller="Students" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-
-
-
-
-                <!--<td>-->@*<div @Html.Partial("_Modal", ViewData["thisstudentrolls"])></div>*@<!--</td>-->
-                <td class="td1">
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td class="td1">
-                    @Html.DisplayFor(modelItem => item.FirstMidName)
-                </td>
-                <td class="td1">
-                    @Html.DisplayFor(modelItem => item.EnrollmentDate)
-                </td>
-
-
-                <td>
-
-                    @{if (item.Enrollments.Count == 0)
-                        {
-                            <p class="td1">no enrollments</p>
-                        }
-                        else
-                        {
-                            @*@Model.Student = item;*@ @*funkar ej*@
-                            var studstr = "modal" + item.ID.ToString();
-                            var stud = "#modal" + item.ID.ToString();
-                            var studcanv2 = "offcanv" + item.ID.ToString();
-                            var studcanv1 = "#offcanv" + item.ID.ToString();
-
-                            //ny kod nedan 2 rader
-
-                            <div class="td1">
-                                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="@(studcanv1)" aria-controls="@(studcanv1)">Pågående kurser</button>
-                            </div>
-                            //var student = new Student(); student = item;
-                            // @Html.Partial("_Modal", student)//funkar ej ger samma student för alla knappar;
+                        <td class="td1">
+                            <a asp-controller="Students" asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                            <a asp-controller="Students" asp-action="Details" asp-route-id="@item.ID">Details</a>
+                            <a asp-controller="Students" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        </td>
 
 
 
 
-                            <div class="offcanvas offcanvas-bottom" tabindex="-1" id="@(studcanv2)" aria-labelledby="offcanvasBottomLabel">
-                                <div class="offcanvas-header">
-                                    <h5 class="offcanvas-title" id="offcanvasBottomLabel">Pågående kurser:</h5>
-                                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" onclick="DeleteOnClose('@(item.ID.ToString())','@(item.LastName)')"></button>
-                                </div>
-                                <div class="offcanvas-body small">
+                        <!--<td>-->@*<div @Html.Partial("_Modal", ViewData["thisstudentrolls"])></div>*@<!--</td>-->
+                        <td class="td1">
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td class="td1">
+                            @Html.DisplayFor(modelItem => item.FirstMidName)
+                        </td>
+                        <td class="td1">
+                            @Html.DisplayFor(modelItem => item.EnrollmentDate)
+                        </td>
 
-                                    <div class="row">
-                                        <div class="col-2">
-                                            <p>Student: @item.FirstMidName @item.LastName</p>
+                    
+                    
+                    
 
-                                            @{var enrolls = item.Enrollments.Select(a => a.Name).ToList();
+                        <td>
 
-                                                List<SelectListItem> items = enrolls.ConvertAll(a =>
-                                                {
-                                                    return new SelectListItem()
-                                                    {
-                                                        Text = a.ToString(),
-                                                        Value = a.ToString(),
-                                                        Selected = false
-                                                    };
-                                                });
-                                            }
-                                            @*på det här sättet kan man skriva för att lägga till html.*@
-                                            @{string enrhtml = "";
-                                                foreach (var itemx in enrolls)
-                                                {
-                                                    enrhtml += $"<p>{itemx.ToString()}</p>";
-                                                };
-
-                                            } @*i onchanve innerHTML='@(enrhtml)' *@
-                                            @*id måste vara unikt för varje selectlist eftersom varje student ska ha en selectlist (i varje popover id sätts i oncklick med '' ej " i getElementById ='@(item.ID)' )*@
-                                            @{ var cid = item.ID.ToString(); var pid = item.ID.ToString() + item.LastName;}
-                                            @*hur gör man en onchange funktion istället fungerar inte vill ju bara visa den valda kursens info. få select värdet genom element.value*@
-                                            @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
-                                                    asp-items="@items" onchange="document.getElementById('@(item.LastName)').innerHTML=" ${this.value}">
-                                                @{ var stringx = item.Enrollments.Select(a => a.Name + " " + a.StudentGrade).ToString();}
-                                                    >*@
-
-                                            @*@{ var jsonenroll = System.Text.Json.JsonSerializer.Serialize(item.Enrollments);
-                                                }*@
-
-                                            @*ok :)*@
-                                            @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
-                                                asp-items="@items" onchange="myFunction('@(item.ID)', '@(item.LastName)')">*@
-                                            @*myFunction('@(item.ID)')*@
-
-
-                                            <form id="@(item.ID.ToString())form ">
-                                                <select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
-                                                        asp-items="@items" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')">
-
-                                                    <option value="0" selected>Se pågående kurser</option>
-
-
-                                                    @*.innerHTML =" ${this.value}"*@
-                                                    @*hur göra ett c variabel till javascript variabel this.value vill leta efter den valda kursen och visa dess namn och betyg?*@
-
-
-                                                </select>
-                                            </form>
-                                        </div>
-
-                                        @*<div class="col-8 bg-light">*@ @*id = coursepopover*@ @*//här visas kurser onselect, avregistrera o. upload*@
-                                        <div class="col-4 border-right border-dark" id="@(item.LastName)"></div>
-                                        <div class="col-4 m-5">
-                                            <div class="asssignments align-items-center pb-3">Inskickade uppgifter</div>
-                                            <table>
-                                                <tablehead>
-                                                    <tr>
-                                                        <td>
-                                                            FilNamn
-                                                        </td>
-                                                        <td>
-                                                            Datum
-                                                        </td>
-                                                    </tr>
-                                                </tablehead>
-                                                <tbody>
-
-                                                    @foreach (var assignment in item.Assignments)
-                                                    {
-                                                        <tr>
-                                                            <td>@assignment.Name</td>
-                                                            <td>Datenotimplemented</td>
-                                                        </tr>
-
-                                                    }
-                                                </tbody>
-                                            </table>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-
-
-
-
-
-
-                                <div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
-                                    <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
-                                    upload file
-                                </div>
-
-                            </div>
-                            <!--<form id="my-awesome-dropzone" class="dropzone" action="/Home/Upload" method="post" enctype="multipart/form-data">
-                            <div class="dropzone-previews"></div>-->
-                            <!-- this is were the previews should be shown. -->
-                            <!-- Now setup your input fields -->
-                            <!--<button type="submit">Submit data and files!</button>
-                            </form>
-                            <script src="dropzone-custom.js"></script>-->
-                            @*@foreach (var xitem in item.Enrollments)
+                            @{if (item.Enrollments.Count == 0)
                                 {
-                                    <p>KursNamn: @xitem.Name</p>
-                                    <p>Betyg: @xitem.StudentGrade.ToString()</p>*@
+                                    <p class="td1">no enrollments</p>
+                                }
+                                else
+                                {
 
-                            @*}*@
+
+                                    @*@Model.Student = item;*@ @*funkar ej*@
+                                    var studstr = "modal" + item.ID.ToString();
+                                    var stud = "#modal" + item.ID.ToString();
+                                    var studcanv2 = "offcanv" + item.ID.ToString();
+                                    var studcanv1 = "#offcanv" + item.ID.ToString();
+
+                                    //ny kod nedan 2 rader
 
 
 
-                            @*</div>*@<div>
-                            </div>
-                        }
+                                    //var student = new Student(); student = item;
+                                    // @Html.Partial("_Modal", student)//funkar ej ger samma student för alla knappar;
+
+                                    @*<div class="col-4 border-right border-secondary text-right">
+
+                    <button class="btn" type="button" data-bs-toggle="offcanvas" off-canvas-target="@(studcanv1)"> <img class="mr-3" src="https://cdn.pixabay.com/photo/2017/06/25/19/09/house-2441625_960_720.png" style="height:auto; width:20%;"></button>
+                    <div class="text-info mr-5">Dina kurser</div>
+                </div>
+                <div class="col-4 text-left">
+                    <a href="https://www.google.com"> <img class="ml-3" src="https://cdn.pixabay.com/photo/2019/07/03/05/58/envelope-4313721_960_720.png" style="height:auto; width:20%;"></a>
+                    <div class="text-info mr-5">Dina kontaktuppgifter</div>
+                </div>*@
+
+                                    <div class="text-center">
+                                        <a class="btn text-info ml-5 d-inline " role="button" data-bs-toggle="offcanvas" data-bs-target="@(studcanv1)"> <img src="https://cdn.pixabay.com/photo/2017/06/25/19/09/house-2441625_960_720.png" style="height:auto; width:5%;">Mina kurser</a>
+                                        @*<div class="text-info mr-5">Dina kurser</div>*@
+                                        <div class="border-left border-primary d-inline"></div>
+                                        <a class="text-info ml-3 mr-5 d-inline" href="https://www.google.com"> <img src="https://cdn.pixabay.com/photo/2019/07/03/05/58/envelope-4313721_960_720.png" style="height:auto; width:5%;">Dina kontaktuppifter</a>
+                                    </div>
+                                    
+
+
+
+                                    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="@(studcanv2)" aria-labelledby="offcanvasBottomLabel">
+                                        <div class="offcanvas-header">
+                                            <h5 class="offcanvas-title" id="offcanvasBottomLabel">Pågående kurser:</h5>
+                                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" onclick="DeleteOnClose('@(item.ID.ToString())','@(item.LastName)')"></button>
+                                        </div>
+                                        <div class="offcanvas-body small">
+
+                                            <div class="row">
+                                                <div class="col-2">
+                                                    <p>Student: @item.FirstMidName @item.LastName</p>
+
+                                                    @{var enrolls = item.Enrollments.Select(a => a.Name).ToList();
+
+                                                        List<SelectListItem> items = enrolls.ConvertAll(a =>
+                                                        {
+                                                            return new SelectListItem()
+                                                            {
+                                                                Text = a.ToString(),
+                                                                Value = a.ToString(),
+                                                                Selected = false
+                                                            };
+                                                        });
+                                                    }
+                                                    @*på det här sättet kan man skriva för att lägga till html.*@
+                                                    @{string enrhtml = "";
+                                                        foreach (var itemx in enrolls)
+                                                        {
+                                                            enrhtml += $"<p>{itemx.ToString()}</p>";
+                                                        };
+
+                                                    } @*i onchanve innerHTML='@(enrhtml)' *@
+                                                    @*id måste vara unikt för varje selectlist eftersom varje student ska ha en selectlist (i varje popover id sätts i oncklick med '' ej " i getElementById ='@(item.ID)' )*@
+                                                    @{ var cid = item.ID.ToString(); var pid = item.ID.ToString() + item.LastName;}
+                                                    @*hur gör man en onchange funktion istället fungerar inte vill ju bara visa den valda kursens info. få select värdet genom element.value*@
+                                                    @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
+                                    asp-items="@items" onchange="document.getElementById('@(item.LastName)').innerHTML=" ${this.value}">
+                                @{ var stringx = item.Enrollments.Select(a => a.Name + " " + a.StudentGrade).ToString();}
+                                    >*@
+
+                                                    @*@{ var jsonenroll = System.Text.Json.JsonSerializer.Serialize(item.Enrollments);
+                                }*@
+
+                                                    @*ok :)*@
+                                                    @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
+                                asp-items="@items" onchange="myFunction('@(item.ID)', '@(item.LastName)')">*@
+                                                    @*myFunction('@(item.ID)')*@
+
+
+                                                    <form id="@(item.ID.ToString())form ">
+                                                        <select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
+                                                                asp-items="@items" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')">
+
+                                                            <option value="0" selected>Se pågående kurser</option>
+
+
+                                                            @*.innerHTML =" ${this.value}"*@
+                                                            @*hur göra ett c variabel till javascript variabel this.value vill leta efter den valda kursen och visa dess namn och betyg?*@
+
+
+                                                        </select>
+                                                    </form>
+                                                </div>
+
+                                              <div class="col-4 bg-light">@*id = coursepopover*@ @*//här visas kurser onselect, avregistrera o. upload*@
+                                                <div border-right border-dark" id="@(item.LastName)"></div>
+                                                <div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
+                                                    <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
+                                                    upload file
+                                                </div>
+                                                
+                                                </div>
+                                                
+                                              <div class="col-4">
+                                                    <div class="asssignments align-items-center pb-3">Inskickade uppgifter</div>
+                                                    <table>
+                                                        <tablehead>
+                                                            <tr>
+                                                                <td>
+                                                                    FilNamn
+                                                                </td>
+                                                                <td>
+                                                                    Datum
+                                                                </td>
+                                                            </tr>
+                                                        </tablehead>
+                                                        <tbody>
+
+                                                            @foreach (var assignment in item.Assignments)
+                                                            {
+                                                                <tr>
+                                                                    <td>@assignment.Name</td>
+                                                                    <td>Datenotimplemented</td>
+                                                                </tr>
+
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                          </div>
+                                        @*<div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
+                                            <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
+                                            upload file
+                                        </div>*@
+                                            
+                                            </div>
+                                        </div>
+
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    @*<div class="td1">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="@(studcanv1)" aria-controls="@(studcanv1)">Pågående kurser</button>
+                </div>*@
+
+
+
+
+
+
+
+
+                                    <!--<form id="my-awesome-dropzone" class="dropzone" action="/Home/Upload" method="post" enctype="multipart/form-data">
+            <div class="dropzone-previews"></div>-->
+                                    <!-- this is were the previews should be shown. -->
+                                    <!-- Now setup your input fields -->
+                                    <!--<button type="submit">Submit data and files!</button>
+            </form>
+            <script src="dropzone-custom.js"></script>-->
+                                    @*@foreach (var xitem in item.Enrollments)
+                {
+                    <p>KursNamn: @xitem.Name</p>
+                    <p>Betyg: @xitem.StudentGrade.ToString()</p>*@
+
+                                    @*}*@
+
+
+
+                                    @*</div>*@
+                                    @*<div>*@
+
+                                    @*<div class="row">
+                    <div class="col-6 border-right border-secondary text-right">
+
+                        <a class="btn" type="button" data-bs-target="@(studcanv1)"> <img class="mr-3" src="https://cdn.pixabay.com/photo/2017/06/25/19/09/house-2441625_960_720.png" style="height:auto; width:20%;"></a>
+                        <div class="text-info mr-5">Dina kurser</div>
+                    </div>
+                    <div class="col-6 text-left">
+                        <a href="https://www.google.com"> <img class="ml-3" src="https://cdn.pixabay.com/photo/2019/07/03/05/58/envelope-4313721_960_720.png" style="height:auto; width:20%;"></a>
+                        <div class="text-info mr-5">Dina kontaktuppgifter</div>
+                    </div>
+                </div>*@
+                                    @*</div>*@
+                                }
+
+
+                            }
+                            @*<script>
+            const dz = new Dropzone(".dropzone", {
+            // The configuration we've talked about above
+            url: "/home/Upload",
+            autoProcessQueue: false,
+            uploadMultiple: false,
+            parallelUploads: 100,
+            maxFiles: 100,
+            // The setting up of the dropzone
+            init: function () {
+            var myDropzone = this;
+            // First change the button to actually tell Dropzone to process the queue.
+            this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+            // Make sure that the form isn't actually being sent.
+            e.preventDefault();
+            e.stopPropagation();
+            myDropzone.processQueue();
+            });
+            // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+            // of the sending event because uploadMultiple is set to true.
+            this.on("sendingmultiple", function () {
+            // Gets triggered when the form is actually being sent.
+            // Hide the success button or the complete form.
+            });
+            this.on("successmultiple", function (files, response) {
+            // Gets triggered when the files have successfully been sent.
+            // Redirect user or notify of success.
+            });
+            this.on("errormultiple", function (files, response) {
+            // Gets triggered when there was an error sending the files.
+            // Maybe show form again, and notify user of error
+            });
+            }
+            });
+        </script>*@
+
+
+
+                        </td>
+
+                    
+
+
+
+
+                </tr>
+                    
+
+                                                       
 
 
                     }
-                    @*<script>
-                            const dz = new Dropzone(".dropzone", {
-                            // The configuration we've talked about above
-                            url: "/home/Upload",
-                            autoProcessQueue: false,
-                            uploadMultiple: false,
-                            parallelUploads: 100,
-                            maxFiles: 100,
-                            // The setting up of the dropzone
-                            init: function () {
-                            var myDropzone = this;
-                            // First change the button to actually tell Dropzone to process the queue.
-                            this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-                            // Make sure that the form isn't actually being sent.
-                            e.preventDefault();
-                            e.stopPropagation();
-                            myDropzone.processQueue();
-                            });
-                            // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
-                            // of the sending event because uploadMultiple is set to true.
-                            this.on("sendingmultiple", function () {
-                            // Gets triggered when the form is actually being sent.
-                            // Hide the success button or the complete form.
-                            });
-                            this.on("successmultiple", function (files, response) {
-                            // Gets triggered when the files have successfully been sent.
-                            // Redirect user or notify of success.
-                            });
-                            this.on("errormultiple", function (files, response) {
-                            // Gets triggered when there was an error sending the files.
-                            // Maybe show form again, and notify user of error
-                            });
-                            }
-                            });
-                        </script>*@
-                </td>
-            </tr>
-        }
-
-
-        </div>
     </tbody>
-</table>
 
-<div class="row">
+    </table>
+
+
+
+    </div>
+
+</div>
+
+
+
+@*<div class="row">
     <div class="col-6 border-right border-secondary text-right">
-   <a href="https://www.google.com"> <img class="mr-3" src="https://cdn.pixabay.com/photo/2017/06/25/19/09/house-2441625_960_720.png" style="height:auto; width:20%;"></a>
-   <div class="text-info mr-5">Dina kurser</div>
+        <a class="btn" type="button" data-bs-target="@(studcanv1) ">
+
+        </a>
+        <a href="https://www.google.com"> <img class="mr-3" src="https://cdn.pixabay.com/photo/2017/06/25/19/09/house-2441625_960_720.png" style="height:auto; width:20%;"></a>
+        <div class="text-info mr-5">Dina kurser</div>
     </div>
     <div class="col-6 text-left">
         <a href="https://www.google.com"> <img class="ml-3" src="https://cdn.pixabay.com/photo/2019/07/03/05/58/envelope-4313721_960_720.png" style="height:auto; width:20%;"></a>
         <div class="text-info mr-5">Dina kontaktuppgifter</div>
     </div>
+</div>*@
 
 
-</div>
 
 @*<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
     <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />

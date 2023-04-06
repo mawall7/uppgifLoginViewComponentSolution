@@ -48,13 +48,16 @@ namespace uppgifLoginViewComponent.Controllers
 
             return View(model);
         }
-    
 
 
-            
-        
-            
-        public IActionResult StudentsPartial()
+        public async Task<IActionResult> Index1()
+        {
+            return View();
+        }
+
+
+
+            public IActionResult StudentsPartial()
         {
             var st = _context.Students.ToList();
            
