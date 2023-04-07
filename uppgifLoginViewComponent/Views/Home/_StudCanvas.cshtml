@@ -1,0 +1,125 @@
+﻿@{
+    Tuple<Student, string, string> tupleitems = (Tuple<Student, string, string>)ViewData["partialstudinfo"];
+    string studcanv2 = tupleitems.Item2;
+    string studcan1 = tupleitems.Item3;
+    Student item = tupleitems.Item1;
+    
+    foreach (var s in item.Enrollments)
+    {
+        <p>menypartialcanvas</p>
+        <p class="text-primary">@s.Student</p>
+        <p class="text-primary">@s.Name</p>
+        <p class="text-primary">@s.StudentGrade</p>
+    };
+    
+    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="@(studcanv2)" aria-labelledby="offcanvasBottomLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasBottomLabel">Pågående kurser:</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" onclick="DeleteOnClose('@(item.ID.ToString())','@(item.LastName)')"></button>
+        </div>
+        <div class="offcanvas-body small">
+
+            <div class="row">
+                <div class="col-2">
+                    <p>Student: @item.FirstMidName @item.LastName</p>
+
+                    @{var enrolls = item.Enrollments.Select(a => a.Name).ToList();
+
+                        //to do taghelper
+                        List<SelectListItem> items = enrolls.ConvertAll(a =>
+                        {
+                            return new SelectListItem()
+                            {
+                                Text = a.ToString(),
+                                Value = a.ToString(),
+                                Selected = false
+                            };
+                        });
+                    }
+                    @*på det här sättet kan man skriva för att lägga till html.*@
+                    @{string enrhtml = "";
+                        foreach (var itemx in enrolls)
+                        {
+                            enrhtml += $"<p>{itemx.ToString()}</p>";
+                        };
+
+                    } @*i onchanve innerHTML='@(enrhtml)' *@
+                    @*id måste vara unikt för varje selectlist eftersom varje student ska ha en selectlist (i varje popover id sätts i oncklick med '' ej " i getElementById ='@(item.ID)' )*@
+                    @{ var cid = item.ID.ToString(); var pid = item.ID.ToString() + item.LastName;}
+                    @*hur gör man en onchange funktion istället fungerar inte vill ju bara visa den valda kursens info. få select värdet genom element.value*@
+                    @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
+                            asp-items="@items" onchange="document.getElementById('@(item.LastName)').innerHTML=" ${this.value}">
+                        @{ var stringx = item.Enrollments.Select(a => a.Name + " " + a.StudentGrade).ToString();}
+                            >*@
+
+                    @*@{ var jsonenroll = System.Text.Json.JsonSerializer.Serialize(item.Enrollments);
+                        }*@
+
+                    @*ok :)*@
+                    @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
+                        asp-items="@items" onchange="myFunction('@(item.ID)', '@(item.LastName)')">*@
+                    @*myFunction('@(item.ID)')*@
+
+
+                    <form id="@(item.ID.ToString())form ">
+                        <select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
+                                asp-items="@items" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')">
+
+                            <option value="0" selected>Se pågående kurser</option>
+
+
+                            @*.innerHTML =" ${this.value}"*@
+                            @*hur göra ett c variabel till javascript variabel this.value vill leta efter den valda kursen och visa dess namn och betyg?*@
+
+
+                        </select>
+                    </form>
+                </div>
+
+                <div class="col-4 bg-light">
+                    @*id = coursepopover*@ @*//här visas kurser onselect, avregistrera o. upload*@
+                    <div border-right border-dark" id="@(item.LastName)"></div>
+                    <div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
+                        <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
+                        upload file
+                    </div>
+
+                </div>
+
+                <div class="col-4">
+                    <div class="asssignments align-items-center pb-3">Inskickade uppgifter</div>
+                    <table>
+                        <tablehead>
+                            <tr>
+                                <td>
+                                    FilNamn
+                                </td>
+                                <td>
+                                    Datum
+                                </td>
+                            </tr>
+                        </tablehead>
+                        <tbody>
+
+                            @foreach (var assignment in item.Assignments)
+                            {
+                                <tr>
+                                    <td>@assignment.Name</td>
+                                    <td>Datenotimplemented</td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @*<div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
+                    <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
+                    upload file
+                </div>*@
+
+        </div>
+    </div>
+
+
+}

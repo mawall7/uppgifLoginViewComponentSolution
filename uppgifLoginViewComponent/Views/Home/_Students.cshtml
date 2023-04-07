@@ -176,8 +176,10 @@
 
 </script>
 
+<div class="text-dark text-center">
+   <h1>StudentView</h1>
+</div>
 
-<h1>Index</h1>
 
 
 <p>
@@ -223,11 +225,11 @@
 </div>
 
 
-<div class="row">
-    <div class="col-12">
+@*<div class="row">
+    <div class="col-8">*@
         @*<a type="submit" asp-action="Delete" asp-route-lastname="Olivetto" asp-route-coursetitle="ProgrammeringA">avregistrera2</a>*@
-        <table class="table">
-            <thead class="text-center">
+        <table class="table ">
+            <thead class="text-center bg bg-warning">
                 <tr>
                     <th>
                         Info
@@ -241,7 +243,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Student.EnrollmentDate)
                     </th>
-                    <th>
+                    <th class="text-left pl-5 ">
                         Enrollments
                     </th>
                 </tr>
@@ -278,7 +280,7 @@
                         </td>
 
                     
-                    
+           
                     
 
                         <td>
@@ -292,17 +294,17 @@
 
 
                                     @*@Model.Student = item;*@ @*funkar ej*@
-                                    var studstr = "modal" + item.ID.ToString();
-                                    var stud = "#modal" + item.ID.ToString();
-                                    var studcanv2 = "offcanv" + item.ID.ToString();
-                                    var studcanv1 = "#offcanv" + item.ID.ToString();
+                            var studstr = "modal" + item.ID.ToString();
+                            var stud = "#modal" + item.ID.ToString();
+                            var studcanv2 = "offcanv" + item.ID.ToString();
+                            var studcanv1 = "#offcanv" + item.ID.ToString();
 
-                                    //ny kod nedan 2 rader
+                            //ny kod nedan 2 rader
 
 
 
-                                    //var student = new Student(); student = item;
-                                    // @Html.Partial("_Modal", student)//funkar ej ger samma student för alla knappar;
+                            //var student = new Student(); student = item;
+                            // @Html.Partial("_Modal", student)//funkar ej ger samma student för alla knappar;
 
                                     @*<div class="col-4 border-right border-secondary text-right">
 
@@ -314,17 +316,21 @@
                     <div class="text-info mr-5">Dina kontaktuppgifter</div>
                 </div>*@
 
-                                    <div class="text-center">
-                                        <a class="btn text-info ml-5 d-inline " role="button" data-bs-toggle="offcanvas" data-bs-target="@(studcanv1)"> <img src="https://cdn.pixabay.com/photo/2017/06/25/19/09/house-2441625_960_720.png" style="height:auto; width:5%;">Mina kurser</a>
-                                        @*<div class="text-info mr-5">Dina kurser</div>*@
-                                        <div class="border-left border-primary d-inline"></div>
-                                        <a class="text-info ml-3 mr-5 d-inline" href="https://www.google.com"> <img src="https://cdn.pixabay.com/photo/2019/07/03/05/58/envelope-4313721_960_720.png" style="height:auto; width:5%;">Dina kontaktuppifter</a>
-                                    </div>
-                                    
+
+                                    <a class="btn text-info ml-5 d-inline" style="margin:0; padding:0" role="button" data-bs-toggle="offcanvas" data-bs-target="@(studcanv1)"> <img src="https://cdn.pixabay.com/photo/2017/06/25/19/09/house-2441625_960_720.png" style="height:auto; width:5%; margin:0; padding:0">Mina kurser</a>
+                                    @*<div class="text-info mr-5">Dina kurser</div>*@
+                                    <div class="border-left border-primary d-inline" style="margin:0; padding:0"></div>
+                                    <a class="text-info ml-3 mr-5 d-inline" style="margin:0; padding:0" href="https://www.google.com"> <img src="https://cdn.pixabay.com/photo/2019/07/03/05/58/envelope-4313721_960_720.png" style="height:auto; width:5%; margin:0; padding:0">Dina kontaktuppifter</a>
 
 
+                                    @*<div @Html.Partial("_Modal", @ViewData["Enrollments"] = (Student)item )></div>*@
+                            { Tuple<Student, string, string> studpartialinfo = new Tuple<Student, string, string>(item, studcanv2, studcanv1);
+                                ViewData["partialstudinfo"] = studpartialinfo;
+                            }
+                               <div @Html.Partial("_StudCanvas", ViewData["partialstudinfo"])></div>
 
-                                    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="@(studcanv2)" aria-labelledby="offcanvasBottomLabel">
+
+                                    <!--<div class="offcanvas offcanvas-bottom" tabindex="-1" id="@(studcanv2)" aria-labelledby="offcanvasBottomLabel">
                                         <div class="offcanvas-header">
                                             <h5 class="offcanvas-title" id="offcanvasBottomLabel">Pågående kurser:</h5>
                                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" onclick="DeleteOnClose('@(item.ID.ToString())','@(item.LastName)')"></button>
@@ -337,6 +343,7 @@
 
                                                     @{var enrolls = item.Enrollments.Select(a => a.Name).ToList();
 
+                                                        //to do taghelper
                                                         List<SelectListItem> items = enrolls.ConvertAll(a =>
                                                         {
                                                             return new SelectListItem()
@@ -346,17 +353,17 @@
                                                                 Selected = false
                                                             };
                                                         });
-                                                    }
+                                                    }-->
                                                     @*på det här sättet kan man skriva för att lägga till html.*@
-                                                    @{string enrhtml = "";
+                                                    <!--@{string enrhtml = "";
                                                         foreach (var itemx in enrolls)
                                                         {
                                                             enrhtml += $"<p>{itemx.ToString()}</p>";
                                                         };
 
-                                                    } @*i onchanve innerHTML='@(enrhtml)' *@
+                                                    }--> @*i onchanve innerHTML='@(enrhtml)' *@
                                                     @*id måste vara unikt för varje selectlist eftersom varje student ska ha en selectlist (i varje popover id sätts i oncklick med '' ej " i getElementById ='@(item.ID)' )*@
-                                                    @{ var cid = item.ID.ToString(); var pid = item.ID.ToString() + item.LastName;}
+                                                    <!--@{ var cid = item.ID.ToString(); var pid = item.ID.ToString() + item.LastName;}-->
                                                     @*hur gör man en onchange funktion istället fungerar inte vill ju bara visa den valda kursens info. få select värdet genom element.value*@
                                                     @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
                                     asp-items="@items" onchange="document.getElementById('@(item.LastName)').innerHTML=" ${this.value}">
@@ -372,31 +379,32 @@
                                                     @*myFunction('@(item.ID)')*@
 
 
-                                                    <form id="@(item.ID.ToString())form ">
+                                                    <!--<form id="@(item.ID.ToString())form ">
                                                         <select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
                                                                 asp-items="@items" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')">
 
-                                                            <option value="0" selected>Se pågående kurser</option>
+                                                            <option value="0" selected>Se pågående kurser</option>-->
 
 
                                                             @*.innerHTML =" ${this.value}"*@
                                                             @*hur göra ett c variabel till javascript variabel this.value vill leta efter den valda kursen och visa dess namn och betyg?*@
 
 
-                                                        </select>
+                                                        <!--</select>
                                                     </form>
                                                 </div>
 
-                                              <div class="col-4 bg-light">@*id = coursepopover*@ @*//här visas kurser onselect, avregistrera o. upload*@
-                                                <div border-right border-dark" id="@(item.LastName)"></div>
-                                                <div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
-                                                    <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
-                                                    upload file
+                                                <div class="col-4 bg-light">-->
+                                                    @*id = coursepopover*@ @*//här visas kurser onselect, avregistrera o. upload*@
+                                                    <!--<div border-right border-dark" id="@(item.LastName)"></div>
+                                                    <div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
+                                                        <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
+                                                        upload file
+                                                    </div>
+
                                                 </div>
-                                                
-                                                </div>
-                                                
-                                              <div class="col-4">
+
+                                                <div class="col-4">
                                                     <div class="asssignments align-items-center pb-3">Inskickade uppgifter</div>
                                                     <table>
                                                         <tablehead>
@@ -422,16 +430,16 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                          </div>
-                                        @*<div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
-                                            <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
-                                            upload file
-                                        </div>*@
-                                            
-                                            </div>
-                                        </div>
+                                            </div>-->
+                                            @*<div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
+                            <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
+                            upload file
+                        </div>*@
 
-                                    
+                                        <!--</div>
+                                    </div>-->
+
+
 
 
 
@@ -553,9 +561,9 @@
 
 
 
-    </div>
+  
 
-</div>
+@*</div>*@
 
 
 
