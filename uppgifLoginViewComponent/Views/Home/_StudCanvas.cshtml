@@ -4,13 +4,7 @@
     string studcan1 = tupleitems.Item3;
     Student item = tupleitems.Item1;
     
-    foreach (var s in item.Enrollments)
-    {
-        <p>menypartialcanvas</p>
-        <p class="text-primary">@s.Student</p>
-        <p class="text-primary">@s.Name</p>
-        <p class="text-primary">@s.StudentGrade</p>
-    };
+   
     
     <div class="offcanvas offcanvas-bottom" tabindex="-1" id="@(studcanv2)" aria-labelledby="offcanvasBottomLabel">
         <div class="offcanvas-header">
@@ -23,10 +17,10 @@
                 <div class="col-2">
                     <p>Student: @item.FirstMidName @item.LastName</p>
 
-                    @{var enrolls = item.Enrollments.Select(a => a.Name).ToList();
+                    @*@{var enrolls = item.Enrollments.Select(a => a.Name).ToList();
 
                         //to do taghelper
-                        List<SelectListItem> items = enrolls.ConvertAll(a =>
+                        List<SelectListItem> items = enrolls.ConvertAll(a => //nås via asp-items i selectlistanee
                         {
                             return new SelectListItem()
                             {
@@ -35,13 +29,13 @@
                                 Selected = false
                             };
                         });
-                    }
+                    }*@
                     @*på det här sättet kan man skriva för att lägga till html.*@
-                    @{string enrhtml = "";
+                    @*@{string enrhtml = "";
                         foreach (var itemx in enrolls)
                         {
                             enrhtml += $"<p>{itemx.ToString()}</p>";
-                        };
+                        };*@
 
                     } @*i onchanve innerHTML='@(enrhtml)' *@
                     @*id måste vara unikt för varje selectlist eftersom varje student ska ha en selectlist (i varje popover id sätts i oncklick med '' ej " i getElementById ='@(item.ID)' )*@
@@ -61,19 +55,20 @@
                     @*myFunction('@(item.ID)')*@
 
 
-                    <form id="@(item.ID.ToString())form ">
-                        <select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
-                                asp-items="@items" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')">
+                <form id="@(item.ID.ToString())form ">
 
-                            <option value="0" selected>Se pågående kurser</option>
+                    <enrollments-select id="@(item.ID.ToString())" asp-for="@item" class="custom-select" selectvalues="@item.Enrollments.ToList()" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')"> </enrollments-select>
+
+                    @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
+            asp-items="@items" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')">*@
+
+        @*<option value="0" selected ="selected">Se pågående kurser</option>-->*@
+                    @*.innerHTML =" ${this.value}"*@
+                    @*hur göra ett c variabel till javascript variabel this.value vill leta efter den valda kursen och visa dess namn och betyg?*@
 
 
-                            @*.innerHTML =" ${this.value}"*@
-                            @*hur göra ett c variabel till javascript variabel this.value vill leta efter den valda kursen och visa dess namn och betyg?*@
-
-
-                        </select>
-                    </form>
+                    <!--</select>-->
+                </form>
                 </div>
 
                 <div class="col-4 bg-light">

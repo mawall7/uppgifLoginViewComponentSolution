@@ -1,4 +1,5 @@
-﻿@*@model IEnumerable<uppgifLoginViewComponent.Models.Student>*@
+﻿
+@*@model IEnumerable<uppgifLoginViewComponent.Models.Student>*@
 @model uppgifLoginViewComponent.Models.ViewModels.IndexViewModel
 @*@{
         ViewData["Title"] = "Home Page";
@@ -74,6 +75,9 @@
     @*<div @Html.Partial("_Students", Model)*@ @*asp-controller="Home" asp-action="StudentsPartial"*@>@*</div>*@
     <p class="text-primary">
     </p>
+    
+           
+    
 
    @*.fa fa-floppy-o fa-lg {color: blue;}*@
     <div @Html.Partial("_Students", Model)></div>
