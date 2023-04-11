@@ -44,7 +44,9 @@ namespace uppgifLoginViewComponent.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     AssignmentFile = table.Column<byte[]>(nullable: true),
-                    StudentID = table.Column<int>(nullable: true)
+                    StudentID = table.Column<int>(nullable: false),
+                    StudentName = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,7 +56,7 @@ namespace uppgifLoginViewComponent.Migrations
                         column: x => x.StudentID,
                         principalTable: "Students",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

@@ -150,33 +150,34 @@ namespace uppgifLoginViewComponent.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Upload(IFormFile file, int id) //to do skicka istället en vymodel via en form. IForm som property i vymodellen
         {
-            
+            int StudentId = id;
             
            if (isTextFile(file)){
            
-           //var filePath = CreateFilePath(file);
+           var filePath = CreateFilePath(file);
 
            using (var memoryStream = new MemoryStream())
             {
                 await file.CopyToAsync(memoryStream);
-                try
-                {
-                    if (memoryStream.Length < 10000) //validera bytelängd 
-                    {
-                        var assignment = new Assignment() { AssignmentFile = memoryStream.ToArray(), Name = file.FileName};//IFORM fil konverteras till bytes eller sparas som textfil.
+                //try
+                //{
+                    //if (memoryStream.Length < 100000) //validera bytelängd 
+                    //{
+                        var assignment = new Assignment() { AssignmentFile = memoryStream.ToArray(), Name = file.FileName, Date = DateTime.Now, StudentID = id};//IFORM fil konverteras till bytes eller sparas som textfil.
                         _context.Assignments.Add(assignment);
                         _context.SaveChanges();
 
-                    }
-                }
-                catch(Exception e)
-                {
-                    throw new FileLoadException("file is to large must be less than 10 kb ", e.Message);
-                }
+                    //}
+              }
+                //catch(Exception e)
+                //{
+                //    throw new FileLoadException("file is to large must be less than 10 kb ", e.Message);
+                //}
                 
-            } 
+            //} 
             
             //using (FileStream fs = System.IO.File.Create(filePath))  //sparar filerna till root/files 
             //{

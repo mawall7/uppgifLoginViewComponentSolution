@@ -1,4 +1,5 @@
 ﻿@{
+    //data skickat via _Students.cshtml
     Tuple<Student, string, string> tupleitems = (Tuple<Student, string, string>)ViewData["partialstudinfo"];
     string studcanv2 = tupleitems.Item2;
     string studcan1 = tupleitems.Item3;
@@ -19,7 +20,7 @@
 
                     @*@{var enrolls = item.Enrollments.Select(a => a.Name).ToList();
 
-                        //to do taghelper
+                        
                         List<SelectListItem> items = enrolls.ConvertAll(a => //nås via asp-items i selectlistanee
                         {
                             return new SelectListItem()
@@ -29,7 +30,7 @@
                                 Selected = false
                             };
                         });
-                    }*@
+                    }
                     @*på det här sättet kan man skriva för att lägga till html.*@
                     @*@{string enrhtml = "";
                         foreach (var itemx in enrolls)
@@ -37,7 +38,7 @@
                             enrhtml += $"<p>{itemx.ToString()}</p>";
                         };*@
 
-                    } @*i onchanve innerHTML='@(enrhtml)' *@
+                    @*}*@ @*i onchanve innerHTML='@(enrhtml)' *@
                     @*id måste vara unikt för varje selectlist eftersom varje student ska ha en selectlist (i varje popover id sätts i oncklick med '' ej " i getElementById ='@(item.ID)' )*@
                     @{ var cid = item.ID.ToString(); var pid = item.ID.ToString() + item.LastName;}
                     @*hur gör man en onchange funktion istället fungerar inte vill ju bara visa den valda kursens info. få select värdet genom element.value*@
@@ -71,19 +72,21 @@
                 </form>
                 </div>
 
-                <div class="col-4 bg-light">
+                <div class="col-4 m-3 p-4 bg-light text-primary">
                     @*id = coursepopover*@ @*//här visas kurser onselect, avregistrera o. upload*@
-                    <div border-right border-dark" id="@(item.LastName)"></div>
-                    <div typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
+                    <div style="display:inline;" id="@(item.LastName)"></div>
+                    <div style="display:inline;" typeof="button" id="fileupload" class="btn btn-dark fileupload" hidden="hidden" onclick="AddUpload()">
                         <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>
                         upload file
                     </div>
+                    @*<span><a class="btn btn-warning" style="display:inline-block" href="/Home/Delete?lastname=${lastname}&courseTitle=${courseTitle}">Avregistrera kurs</a></span>*@
+                   
 
                 </div>
 
-                <div class="col-4">
+                <div class="col-4 ml-3 text-primary">
                     <div class="asssignments align-items-center pb-3">Inskickade uppgifter</div>
-                    <table>
+                    <table class="table text-primary">
                         <tablehead>
                             <tr>
                                 <td>
@@ -100,7 +103,7 @@
                             {
                                 <tr>
                                     <td>@assignment.Name</td>
-                                    <td>Datenotimplemented</td>
+                                    <td>@assignment.Date</td>
                                 </tr>
 
                             }

@@ -85,7 +85,7 @@
             let courseTitle = enroll.title;
             let courseCredits = String(enroll.credits);
 
-            coursestring += `<div class="text-primary" style="display:inline;"id="coursesinfo"><p>CourseName: ${courseTitle}</p><p>CourseCredits: ${courseCredits}</p></div>`
+            coursestring += `<div class="text-primary" style="display:inline;"id="coursesinfo"><span>CourseName: ${courseTitle}</p><p>CourseCredits: ${courseCredits}</span> </div><span><a class="btn btn-warning" style="display:inline-block" href="/Home/Delete?lastname=${lastname}&courseTitle=${courseTitle}">Avregistrera kurs</a></span>`
             //let avregistrera = `<a class="btn btn-danger" asp-action="Delete" asp-route-lastname="${lastn}" asp-route-courseTitle="${courseTitle}">Aregistrera </a>` lägger kurs info efter selectlist onklick
             let avregistrera = `<form asp-action="Delete">
                 Avregistrera: <div><input type="hidden" asp-for="lastname" name="lastname" value="${lastname}"/>
@@ -99,8 +99,8 @@
 
 
             /*/ok:) avregistrera2 . avregistrera1a tag ej ok renderar ingen länk:( varför? fråga någon /vad jag lärt?det är svårt att blanda ihop bootstrap komponenter?  */
-            let avregistrera2 = `<a class="btn btn-danger " href="/Home/Delete?lastname=${lastname}&courseTitle=${courseTitle}">Avregistrera kurs</a>`
-            let htmlstring = coursestring + avregistrera2;
+            let avregistrera2 = `<a class="btn btn-danger" style="display:inline" href="/Home/Delete?lastname=${lastname}&courseTitle=${courseTitle}">Avregistrera kurs</a>`
+            let htmlstring = coursestring; /*+ avregistrera2;*/
 
             if (value == "0") { //value för pågående kurser
                 htmlstring = "";
@@ -153,7 +153,8 @@
                 <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 
 
-                <form id="my-awesome-dropzone" class="dropzone" hidden="hidden" action="/Home/Upload" method="post" enctype="multipart/form-data">
+                <form id="my-awesome-dropzone" class="dropzone" hidden="hidden" action="/Home/Upload/" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="1"/>
                     <div class="dropzone-previews"></div>
                     <span>-></span>
                     <button class="btn btn-success btn-sm " type="submit">Spara din fil</button>
@@ -203,6 +204,42 @@
     <tbody>
         @foreach (var item in Model.Students)
         {
+            <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Sänd uppgift</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+
+                            <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+                            <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+
+
+                            <form id="my-awesome-dropzone" class="dropzone" hidden="hidden" action="/Home/Upload/" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="id" value="@item.ID" />
+                                <div class="dropzone-previews"></div>
+                                <span>-></span>
+                                <button class="btn btn-success btn-sm " type="submit">Spara din fil</button>
+                                <span>| Ladda upp/ skicka din text-fil</span>
+                            </form>
+                            <script src="dropzone-custom.js"></script>
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
             <enrollments-select class="custom-select" selectvalues="@item.Enrollments.ToList()"> </enrollments-select>
 

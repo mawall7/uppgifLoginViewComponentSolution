@@ -29,11 +29,17 @@ namespace uppgifLoginViewComponent.Migrations
                     b.Property<byte[]>("AssignmentFile")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StudentID")
                         .HasColumnType("int");
+
+                    b.Property<string>("StudentName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
