@@ -34,7 +34,7 @@ namespace uppgifLoginViewComponent
 
             
             services.AddControllersWithViews().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
-            services.AddRazorPages();
+            //services.AddRazorPages();
             services.AddDbContext<SchoolContext>(options  => { 
                   options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
@@ -53,7 +53,7 @@ namespace uppgifLoginViewComponent
 
             
 
-            Data.StartupData.MyWebHostEnv =  env;
+            //Data.StartupData.MyWebHostEnv =  env;
 
             if (env.IsDevelopment())
             {
@@ -79,7 +79,7 @@ namespace uppgifLoginViewComponent
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}");
-                endpoints.MapRazorPages();
+                //endpoints.MapRazorPages();
             });
         }
     }

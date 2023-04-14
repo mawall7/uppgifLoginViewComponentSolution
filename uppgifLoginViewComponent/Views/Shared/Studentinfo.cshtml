@@ -1,0 +1,20 @@
+﻿@model uppgifLoginViewComponent.Models.Student
+
+@*@if (ViewBag.Submit == true)*@
+{
+<table>
+    <thead>
+</thead>
+    <tbody>
+        <tr>
+            <td class="td1">
+                @Html.DisplayFor(modelItem => Model.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.FirstMidName)
+            </td>
+        </tr>
+        
+    </tbody>
+</table>
+@*}*@

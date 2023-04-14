@@ -29,7 +29,9 @@ namespace uppgifLoginViewComponent.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LastName = table.Column<string>(nullable: true),
                     FirstMidName = table.Column<string>(nullable: true),
-                    EnrollmentDate = table.Column<DateTime>(nullable: false)
+                    EnrollmentDate = table.Column<DateTime>(nullable: false),
+                    Email = table.Column<string>(nullable: false),
+                    PostalCode = table.Column<string>(maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {

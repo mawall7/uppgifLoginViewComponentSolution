@@ -23,8 +23,6 @@
 
   <ItemGroup>
     <PackageReference Include="dropzone" Version="4.3.0" />
-    <PackageReference Include="jQuery.Ajax.Unobtrusive" Version="2.0.20710" />
-    <PackageReference Include="jQuery.Validation.Unobtrusive" Version="2.0.20710" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.12" />
@@ -35,6 +33,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="3.2.11" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
@@ -42,6 +42,12 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\files\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\jquery-ajax-unobtrusive\dist\jquery.unobtrusive-ajax.js" />
+    <None Include="wwwroot\lib\jquery-ajax-unobtrusive\dist\jquery.unobtrusive-ajax.min.js" />
+    <None Include="wwwroot\lib\jquery-ajax-unobtrusive\README.md" />
   </ItemGroup>
 
 </Project>

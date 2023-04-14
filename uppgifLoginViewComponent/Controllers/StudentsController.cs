@@ -28,14 +28,14 @@ namespace uppgifLoginViewComponent.Controllers
         {
 
 
-           
-            
+
+
             //obs ViewData adderas hela tiden med en ny key så där CurrentFilter sätts till null har den redan två keys. 
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
             ViewData["CurrentFilter"] = searchString;
 
-            if(searchString!= null)
+            if (searchString != null)
             {
                 pageNumber = 1;
 
@@ -44,9 +44,9 @@ namespace uppgifLoginViewComponent.Controllers
             {
                 searchString = currentFilter;
             }
-            
+
             //var students = from s in _context.Students
-                           //select s;
+            //select s;
             var students = _context.Students.AsQueryable();
 
             if (!String.IsNullOrEmpty(searchString))
@@ -86,26 +86,39 @@ namespace uppgifLoginViewComponent.Controllers
         //    return View();
         //}
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> StudentDetails(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var student = await _context.Students
+            Student s = await _context.Students
                 .Include(s => s.Enrollments)
-                    .ThenInclude(e => e.Course)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.ID == id);
-
-            if (student == null)
-            {
-                return NotFound();
-            }
-
-            return View(student);
+                .FirstOrDefaultAsync(s => s.ID == id);
+            return View(s);
         }
+
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var student = await _context.Students
+        //        .Include(s => s.Enrollments)
+        //            .ThenInclude(e => e.Course)
+        //        .AsNoTracking()
+        //        .FirstOrDefaultAsync(m => m.ID == id);
+
+        //    if (student == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(student);
+        //}
 
         // GET: Students/Create
         public IActionResult Create()
@@ -118,7 +131,7 @@ namespace uppgifLoginViewComponent.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LastName,FirstMidName,EnrollmentDate")] Student student)
+        public async Task<IActionResult> Create([Bind("LastName,FirstMidName,EnrollmentDate, Email, PostalCode")] Student student)
         {
             try
             {
@@ -133,9 +146,9 @@ namespace uppgifLoginViewComponent.Controllers
             catch (DbUpdateException)
             {
                 ModelState.AddModelError("", "Unable to save changes." + "If the problem persists contact admnistrator");
-                
+
             }
-                return View(student);
+            return View(student);
         }
 
         // GET: Students/Edit/5
@@ -157,29 +170,35 @@ namespace uppgifLoginViewComponent.Controllers
         // POST: Students/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ActionName("Edit")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(int? id)
+        [HttpPost]
+        public async Task<IActionResult> EditPost(int? id/*Student student*/)
         {
-            var StudenttoUpdate = await _context.Students.FirstOrDefaultAsync(s => s.ID == id);
-            if (await TryUpdateModelAsync<Student>(
-                StudenttoUpdate, ""
-                , s => s.FirstMidName, s => s.LastName, s => s.EnrollmentDate))
-            {
-                try
-                {
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateException)
-                {
-                    ModelState.AddModelError("", "Unable to do changes. If the problem persists contact administrator");
-                    
-                }
-            }        
 
-            return View(StudenttoUpdate);
+            //_context.Students.Update(student);//undvik det här för att hindra overposting posta fält som inte är inkluderade i en fält via fiddler tool som inte är tänkta att postas men finns i en student entity
+            
+            if (ModelState.IsValid)
+            {
+                var StudenttoUpdate = await _context.Students.FirstOrDefaultAsync(s => s.ID == id);
+                //trypudatemodel fungerar nu, inte när den var i en try catch som i contoso university tutorial försökte hitta felet
+                var updateresult = TryUpdateModelAsync<Student>(
+                       StudenttoUpdate, "",
+                       s => s.LastName, s => s.FirstMidName, s => s.EnrollmentDate, s => s.PostalCode, s => s.Email);
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+
+            }
+            else if(!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Unable to do changes. If the problem persists contact administrator");
+            }
+                return RedirectToAction(nameof(Index));
         }
+                
+               
+
+
+    
 
         // GET: Students/Delete/5
         public async Task<IActionResult> Delete(int? id, bool? SaveChangesError = false)
@@ -272,6 +291,6 @@ namespace uppgifLoginViewComponent.Controllers
         }
     }
 
-        
-    }
+    
+}
 

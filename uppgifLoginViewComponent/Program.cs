@@ -1,3 +1,4 @@
+using ContosoUniversity.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +41,7 @@ namespace uppgifLoginViewComponent
                 try
                 {
                     var context = services.GetRequiredService<SchoolContext>();
-                    DbInitialize.Initialize(context);
+                    DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
                 {

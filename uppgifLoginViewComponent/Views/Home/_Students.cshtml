@@ -1,4 +1,6 @@
-﻿@model uppgifLoginViewComponent.Models.ViewModels.IndexViewModel
+﻿@using uppgifLoginViewComponent.Models
+
+@model uppgifLoginViewComponent.Models.ViewModels.IndexViewModel
 @*@{
         ViewData["Title"] = "Index";
     }*@
@@ -130,9 +132,10 @@
 
 
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<!--<p>
+    <a asp-action="Create">Create New</a>-->
+@*bara som teacher*@
+<!--</p>-->
 
 
 
@@ -154,7 +157,7 @@
 
 
                 <form id="my-awesome-dropzone" class="dropzone" hidden="hidden" action="/Home/Upload/" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="id" value="1"/>
+                    <input type="hidden" name="id" value="1" />
                     <div class="dropzone-previews"></div>
                     <span>-></span>
                     <button class="btn btn-success btn-sm " type="submit">Spara din fil</button>
@@ -184,7 +187,7 @@
     <thead class="text-center bg bg-warning">
         <tr>
             <th>
-                Info
+                Redigera
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Student.LastName)
@@ -204,42 +207,7 @@
     <tbody>
         @foreach (var item in Model.Students)
         {
-            <div class="modal" id="myModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">Sänd uppgift</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- Modal body -->
-                        <div class="modal-body">
-
-                            <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
-                            <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
-
-
-                            <form id="my-awesome-dropzone" class="dropzone" hidden="hidden" action="/Home/Upload/" method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="id" value="@item.ID" />
-                                <div class="dropzone-previews"></div>
-                                <span>-></span>
-                                <button class="btn btn-success btn-sm " type="submit">Spara din fil</button>
-                                <span>| Ladda upp/ skicka din text-fil</span>
-                            </form>
-                            <script src="dropzone-custom.js"></script>
-
-                        </div>
-
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+            
 
             <enrollments-select class="custom-select" selectvalues="@item.Enrollments.ToList()"> </enrollments-select>
 
@@ -252,6 +220,45 @@
                     <a asp-controller="Students" asp-action="Edit" asp-route-id="@item.ID">Edit</a>
                     <a asp-controller="Students" asp-action="Details" asp-route-id="@item.ID">Details</a>
                     <a asp-controller="Students" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+
+
+                    <div class="modal" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Sänd uppgift</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+
+                                    <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+                                    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+
+
+                                    <form id="my-awesome-dropzone" class="dropzone" hidden="hidden" action="/Home/Upload/" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="id" value="@item.ID" />
+                                        <div class="dropzone-previews"></div>
+                                        <span>-></span>
+                                        <button class="btn btn-success btn-sm " type="submit">Spara din fil</button>
+                                        <span>| Ladda upp/ skicka din text-fil</span>
+                                    </form>
+                                    <script src="dropzone-custom.js"></script>
+
+                                </div>
+
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                 </td>
 
 
@@ -267,6 +274,27 @@
                 </td>
 
                 <td>
+
+                    <form asp-action="OnStudinfoSubmit" asp-controller="Home"
+                          data-ajax="true"
+                          data-ajax-metod="POST"
+                          data-ajax-mode="replace"
+                          data-ajax-update="#studnfo"
+                          data-ajax-success="Success"
+                          data-ajax-failure="Failure">
+
+                        <div class="form-group">
+                            <input name="studentid" value="@item.ID"/>
+                        </div>
+                        <input type="submit" name="Submit" class="btn btn-dark">
+                    </form>
+
+                    <p>info</p>
+                    <div id="studnfo">
+                        display info here
+                    </div>
+
+
 
                     @{if (item.Enrollments.Count == 0)
                         {
@@ -285,7 +313,7 @@
 
 
 
-                            <a class="btn text-info ml-5 d-inline" style="margin:0; padding:0" role="button" data-bs-toggle="offcanvas" data-bs-target="@(studcanv1)"> <img src="https://cdn.pixabay.com/photo/2017/06/25/19/09/house-2441625_960_720.png" style="height:auto; width:5%; margin:0; padding:0">Mina kurser</a>
+                            <a class="btn text-info ml-5 d-inline" style="margin:0; padding:0" role="button" data-bs-toggle="offcanvas" data-bs-target="@(studcanv1)"> <img src="https://cdn.pixabay.com/photo/2017/06/25/19/09/house-2441625_960_720.png" style="height:auto; width:5%; margin:0; padding:0" />Mina kurser</a>
                             @*<div class="text-info mr-5">Dina kurser</div>*@
                             <div class="border-left border-primary d-inline" style="margin:0; padding:0"></div>
                             <a class="text-info ml-3 mr-5 d-inline" style="margin:0; padding:0" href="https://www.google.com"> <img src="https://cdn.pixabay.com/photo/2019/07/03/05/58/envelope-4313721_960_720.png" style="height:auto; width:5%; margin:0; padding:0">Dina kontaktuppifter</a>
@@ -299,16 +327,27 @@
                             <div @Html.Partial("_StudCanvas", ViewData["partialstudinfo"])></div>
 
 
+
+
+
                         }
 
                     }
 
+
                 </td>
+    <td>
+       
+
+    </td>
             </tr>
         }
     </tbody>
 
+    
+
 </table>
+
 
 <script>
 

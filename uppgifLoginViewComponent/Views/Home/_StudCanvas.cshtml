@@ -7,7 +7,7 @@
     
    
     
-    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="@(studcanv2)" aria-labelledby="offcanvasBottomLabel">
+    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="@studcanv2" aria-labelledby="offcanvasBottomLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasBottomLabel">Pågående kurser:</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" onclick="DeleteOnClose('@(item.ID.ToString())','@(item.LastName)')"></button>
@@ -56,9 +56,9 @@
                     @*myFunction('@(item.ID)')*@
 
 
-                <form id="@(item.ID.ToString())form ">
+                <form id="@(item.ID.ToString())">
 
-                    <enrollments-select id="@(item.ID.ToString())" asp-for="@item" class="custom-select" selectvalues="@item.Enrollments.ToList()" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')"> </enrollments-select>
+                    <enrollments-select id="@item.ID.ToString()" asp-for="@item" class="custom-select" selectvalues="@item.Enrollments.ToList()" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')"> </enrollments-select>
 
                     @*<select class="form-control-sm" id="@(item.ID.ToString())" asp-for="@item"
             asp-items="@items" onchange="myFunction('@(item.ID.ToString())', '@(item.LastName)')">*@

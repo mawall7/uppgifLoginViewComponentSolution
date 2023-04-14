@@ -35,10 +35,10 @@ namespace uppgifLoginViewComponent.Controllers
         Dictionary<string, string> KVDict;
 
         
-        
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-
+            ViewBag.Submit = false;
             IndexViewModel model = new IndexViewModel();
 
             model.Students = await _context.Students.Include(a => a.Enrollments)
@@ -49,11 +49,9 @@ namespace uppgifLoginViewComponent.Controllers
             return View(model);
         }
 
+        
 
-        public async Task<IActionResult> Index1()
-        {
-            return View();
-        }
+        
 
 
 
@@ -92,25 +90,25 @@ namespace uppgifLoginViewComponent.Controllers
 
 
 
-        public ActionResult<CookieViewModel> CreateCookie()
-        {
-            string key = "cookie_test1";
-            string value = DateTime.Now.ToString();
-            CookieOptions c = new CookieOptions();
-            c.Expires = DateTime.Now.AddMinutes(1);
-            c.HttpOnly = !IsInDevelopment(Data.StartupData.MyWebHostEnv); // inga client side scripts kan komma åt cookien (döljs från javascriptet). sätts bara till true när appen är deployed kan annars ge error.
-            c.Secure = true;
-            c.SameSite = SameSiteMode.Strict;
-            Response.Cookies.Append(key, value, c);
+        //public ActionResult<CookieViewModel> CreateCookie()
+        //{
+        //    string key = "cookie_test1";
+        //    string value = DateTime.Now.ToString();
+        //    CookieOptions c = new CookieOptions();
+        //    c.Expires = DateTime.Now.AddMinutes(1);
+        //    c.HttpOnly = !IsInDevelopment(Data.StartupData.MyWebHostEnv); // inga client side scripts kan komma åt cookien (döljs från javascriptet). sätts bara till true när appen är deployed kan annars ge error.
+        //    c.Secure = true;
+        //    c.SameSite = SameSiteMode.Strict;
+        //    Response.Cookies.Append(key, value, c);
             
-            CookieViewModel model = new CookieViewModel 
-            {
-                CookieExpirationDate = c.Expires.ToString()
-            };
+        //    CookieViewModel model = new CookieViewModel 
+        //    {
+        //        CookieExpirationDate = c.Expires.ToString()
+        //    };
 
-            return View(nameof(Index), model);
+        //    return View(nameof(Index), model);
 
-        }
+        //}
         
         public IActionResult Delete(string courseTitle, string lastname)
         {
@@ -156,7 +154,7 @@ namespace uppgifLoginViewComponent.Controllers
             int StudentId = id;
             
            if (isTextFile(file)){
-           
+           https://www.msn.com/sv-se/feed
            var filePath = CreateFilePath(file);
 
            using (var memoryStream = new MemoryStream())
@@ -193,6 +191,27 @@ namespace uppgifLoginViewComponent.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult OnSubmit(int studentid)
+        {
+            ViewBag.Name = _context.Students.Find(studentid).FirstMidName;
+            ViewBag.Submit = true;
+            return View("Testajax");
+        }
+
+
+
+
+        [HttpPost]
+        public IActionResult OnStudinfoSubmit(int studentid)
+        {
+            
+            var student = _context.Students.Find(studentid);
+            ViewBag.Submit = true;
+            return View("Studentinfo", student);
+            
         }
 
         private string CreateFilePath(IFormFile file)
