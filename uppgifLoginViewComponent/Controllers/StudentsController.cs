@@ -194,8 +194,32 @@ namespace uppgifLoginViewComponent.Controllers
             }
                 return RedirectToAction(nameof(Index));
         }
-                
-               
+        public async Task<IActionResult> DeleteCourse(int id)
+        {
+
+            try
+            {
+
+                var enr = await _context.Enrollments.Where(e => e.ID == id).FirstOrDefaultAsync();
+                Student s = await _context.Students.FindAsync(enr.StudentID);
+                int sid = s.ID;
+
+                _context.Enrollments.Remove(enr);
+                _context.SaveChanges();
+                return View(nameof(StudentDetails), s);
+
+            }
+
+
+            catch (Exception e)
+            {
+                _logger.Log(LogLevel.Information, e.Message);
+            }
+            ViewBag.DelCourseMessage = "Course Deleted";
+
+            return View();
+            
+        }
 
 
     

@@ -63,19 +63,79 @@
 </div>
 @{ List<Enrollment> enrollments = Model.Enrollments.ToList(); @*new List<Enrollment>()*@;
 List<SelectListItem> items = enrollments.ConvertAll(a =>
- {
-     return new SelectListItem()
-     {
-         Text = a.Name,
-         Value = a.ToString(),
-         Selected = false
-     };
- });
+{
+    return new SelectListItem()
+    {
+        Text = a.Name,
+        Value = a.ToString(),
+        Selected = false
+    };
+});
 
-<div class="text-black-50"><h3>@Html.DisplayNameFor(a => a.Enrollments)</h3></div>
-<select class="form-select" asp-items="@items"></select>
+
 
 <div class="accordion accordion-flush" id="accordionFlushExample">
+    
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                <h3>@Html.DisplayNameFor(a => a.Enrollments)</h3>
+            </button>
+        </h2>
+        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+                <div class="text-black-50"></div>
+                <select class="form-select" asp-items="@items"></select>
+                <div class="row">
+                    <div class="col-4">
+
+                        <table class="table text-primary">
+                            <tablehead>
+                                <tr>
+                                    <td>
+                                        CourseName 
+                                    </td>
+                                    <td>
+                                        Grade
+                                    </td>
+                                </tr>
+                            </tablehead>
+                            <tbody>
+
+                                @foreach (var enrollm in Model.Enrollments)
+                                {
+                                <tr>
+                                    <td>@(enrollm.Name)</td>
+                                    <td>@(enrollm.StudentGrade)<a asp-controller="Students" asp-action="DeleteCourse"asp-route-id="@enrollm.ID" id="@enrollm.ID" class="btn btn-default">Avregistrera</a></td>
+                                    
+                                </tr>
+
+                                }
+                            </tbody>
+                        </table>
+
+                        <script>
+                            function Avregistrera_kurs(int enrollmid) {
+
+                                 
+                            }
+                        </script>
+
+
+                    </div>
+                    
+
+                    <div class="col-4"></div>
+                    <div class="col-4"></div>
+                    
+                 </div>
+    
+          </div>
+        </div>
+    </div>
+    
+       
+    
     <div class="accordion-item">
         <h2 class="accordion-header" id="flush-headingOne">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
