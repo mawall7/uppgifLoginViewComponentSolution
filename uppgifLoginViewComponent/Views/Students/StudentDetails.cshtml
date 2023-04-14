@@ -88,7 +88,8 @@ List<SelectListItem> items = enrollments.ConvertAll(a =>
                 <select class="form-select" asp-items="@items"></select>
                 <div class="row">
                     <div class="col-4">
-
+                        @if (enrollments.Count != 0)
+                        {
                         <table class="table text-primary">
                             <tablehead>
                                 <tr>
@@ -106,14 +107,18 @@ List<SelectListItem> items = enrollments.ConvertAll(a =>
                                 {
                                 <tr>
                                     <td>@(enrollm.Name)</td>
-                                    <td>@(enrollm.StudentGrade)<a asp-controller="Students" asp-action="DeleteCourse"asp-route-id="@enrollm.ID" id="@enrollm.ID" class="btn btn-default">Avregistrera</a></td>
+                                    <td>@(enrollm.StudentGrade)<a asp-controller="Student" asp-action="DeleteCourse"asp-route-id="@enrollm.ID" id="@enrollm.ID" class="btn btn-default">Avregistrera</a></td>
                                     
                                 </tr>
 
                                 }
                             </tbody>
                         </table>
+                        }
 
+                         else {
+                          <p class="text-primary">För närvarande inga kurser</p>
+                        }
                         <script>
                             function Avregistrera_kurs(int enrollmid) {
 
