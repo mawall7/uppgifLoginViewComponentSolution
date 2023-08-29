@@ -146,52 +146,69 @@ namespace uppgifLoginViewComponent.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        
+
+
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upload(IFormFile file, int id) //to do skicka istället en vymodel via en form. IForm som property i vymodellen
+        public async Task<IActionResult> Upload(IFormFile file)
         {
-            int StudentId = id;
-            
-           if (isTextFile(file)){
-           https://www.msn.com/sv-se/feed
-           var filePath = CreateFilePath(file);
+            //var uploads = @"C:\Users\matte\Downloads\";
 
-           using (var memoryStream = new MemoryStream())
+            var uploads = CreateFilePath(file);
+            if (file.Length > 0)
             {
-                await file.CopyToAsync(memoryStream);
-                //try
-                //{
-                    //if (memoryStream.Length < 100000) //validera bytelängd 
-                    //{
-                        var assignment = new Assignment() { AssignmentFile = memoryStream.ToArray(), Name = file.FileName, Date = DateTime.Now, StudentID = id};//IFORM fil konverteras till bytes eller sparas som textfil.
-                        _context.Assignments.Add(assignment);
-                        _context.SaveChanges();
-
-                    //}
-              }
-                //catch(Exception e)
-                //{
-                //    throw new FileLoadException("file is to large must be less than 10 kb ", e.Message);
-                //}
-                
-            //} 
-            
-            //using (FileStream fs = System.IO.File.Create(filePath))  //sparar filerna till root/files 
-            //{
-
-            //    file.CopyTo(fs);
-
-            //}
+                using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
             }
-            else
-            {
-                throw new IOException("file must be a text file");
-
-            }
-
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        ////public async Task<IActionResult> Upload(IFormFile file, int id) //to do skicka istället en vymodel via en form. IForm som property i vymodellen
+        //{
+        //    int StudentId = id;
+
+        //   if (isTextFile(file)){
+
+        //   var filePath = CreateFilePath(file);  verkar inte fungera
+
+        //   using (var memoryStream = new MemoryStream())
+        //    {
+        //        await file.CopyToAsync(memoryStream);
+        //        //try
+        //        //{
+        //            //if (memoryStream.Length < 100000) //validera bytelängd 
+        //            //{
+        //                var assignment = new Assignment() { AssignmentFile = memoryStream.ToArray(), Name = file.FileName, Date = DateTime.Now, StudentID = id};//IFORM fil konverteras till bytes eller sparas som textfil.
+        //                _context.Assignments.Add(assignment);
+        //                _context.SaveChanges();
+
+        //            //}
+        //      }
+        //        //catch(Exception e)
+        //        //{
+        //        //    throw new FileLoadException("file is to large must be less than 10 kb ", e.Message);
+        //        //}
+
+        //        //} 
+
+        //        //using (FileStream fs = System.IO.File.Create(filePath))  //sparar filerna till root/files 
+        //        //{
+
+        //        //    file.CopyTo(fs);
+
+        //        //}
+        //    }
+        //    else
+        //    {
+        //        throw new IOException("file must be a text file");
+
+        //    }
+
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         [HttpPost]
         public IActionResult OnSubmit(int studentid)
@@ -223,8 +240,8 @@ namespace uppgifLoginViewComponent.Controllers
                 Directory.CreateDirectory(filePath); //skapar en mapp files under root
 
             }
-            var filename = file.FileName;
-            filePath = Path.Combine(filePath, filename); //skapa filnamn concatenerarar till en string 
+            //var filename = file.FileName;
+            //filePath = Path.Combine(filePath, filename); //skapa filnamn concatenerarar till en string 
             return filePath;
         }
 

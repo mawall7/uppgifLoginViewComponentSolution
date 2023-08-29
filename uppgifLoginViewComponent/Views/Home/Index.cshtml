@@ -34,8 +34,8 @@
     <script> function Success() {
      alert("Success?");
         }</script>
-    @*dropzone ok :) *@
-    @*<meta charset="UTF-8">
+    dropzone ok :) 
+    <meta charset="UTF-8">
         <title>Dropzone JS tutorial</title>
         <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
         <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
@@ -53,7 +53,7 @@
             const dz = new Dropzone(".dropzone", {
                 // The configuration we've talked about above
                 url: "/home/Upload",
-               autoProcessQueue: false,
+                autoProceshQueue: false,
                 uploadMultiple: false,
                 parallelUploads: 100,
                 maxFiles: 100,
@@ -68,7 +68,7 @@
                         myDropzone.processQueue();
                     });
                     // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
-                    // of the sending event because uploadMultiple is set to true.
+                    // of the sending event because uploadMultiple is set to true. < changed to false
                     this.on("sendingmultiple", function () {
                         // Gets triggered when the form is actually being sent.
                         // Hide the success button or the complete form.
@@ -83,7 +83,7 @@
                     });
                 }
             });
-        </script>*@
+        </script>
 
 
     @*</div>*@
