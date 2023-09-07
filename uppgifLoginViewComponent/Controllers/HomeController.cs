@@ -13,6 +13,7 @@ using uppgifLoginViewComponent.Models.ViewModels;
 using uppgifLoginViewComponent.Data;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace uppgifLoginViewComponent.Controllers
 {
@@ -40,12 +41,19 @@ namespace uppgifLoginViewComponent.Controllers
         {
             ViewBag.Submit = false;
             IndexViewModel model = new IndexViewModel();
+            var studentselect = new List<SelectListItem>();
 
             model.Students = await _context.Students.Include(a => a.Enrollments)
                 .Include(a => a.Assignments)
                 .ToListAsync();
 
+            //var students = model.Students as List<Student>;
 
+
+            //model.StudentsSelect = new SelectList(model.Students);
+              _context.Students.ForEachAsync(s => studentselect.Add(new SelectListItem() { Text = s.FirstMidName, Value = s.ID.ToString() })) ;
+               model.StudentsSelect = studentselect.Select(s => s).Distinct();
+            
             return View(model);
         }
 
@@ -150,7 +158,7 @@ namespace uppgifLoginViewComponent.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> Upload(IFormFile file) //to do kolla vilken student som laddat upp t.ex. döp om filen till att sluta med studentnamn via student id
         {
             //var uploads = @"C:\Users\matte\Downloads\";
 
@@ -213,10 +221,19 @@ namespace uppgifLoginViewComponent.Controllers
         [HttpPost]
         public IActionResult OnSubmit(int studentid)
         {
-            ViewBag.Name = _context.Students.Find(studentid).FirstMidName;
-            ViewBag.Submit = true;
-            return View("Testajax");
+            try
+            {
+                ViewBag.Name = _context.Students.Find(studentid).FirstMidName;
+                ViewBag.Submit = true;
+                return View("Testajax");
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
         }
+
 
 
 

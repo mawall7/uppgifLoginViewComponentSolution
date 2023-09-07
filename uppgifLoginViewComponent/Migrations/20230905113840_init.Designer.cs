@@ -10,7 +10,7 @@ using uppgifLoginViewComponent.Data;
 namespace uppgifLoginViewComponent.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20230413200148_init")]
+    [Migration("20230905113840_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
