@@ -29,13 +29,10 @@ namespace uppgifLoginViewComponent.Controllers
             hostEnv = env;
             _logger.LogInformation("Logging from Index - index reached");
         }
-
-
         private bool HttpOnly { get; set; }
-
         Dictionary<string, string> KVDict;
 
-        
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -47,31 +44,23 @@ namespace uppgifLoginViewComponent.Controllers
                 .Include(a => a.Assignments)
                 .ToListAsync();
 
-            //var students = model.Students as List<Student>;
-
-
-            //model.StudentsSelect = new SelectList(model.Students);
             var studentslist = new List<Student>();
             studentslist = _context.Students.ToList();
             
             foreach (var s in _context.Students) 
             {
-                if (NameisNotDuplicated(studentslist))
+                if (NameisNotDuplicatedinDb(studentslist)) //kunde göras i dbklass
                 {
                     studentselect.Add(new SelectListItem() { Value = s.ID.ToString(), Text = s.LastName });
                 }
-                //studentselect.Add(new SelectListItem() {Value = s.ID.ToString(), Text = s.LastName });
+          
             } ;
-            
-           // _context.Students.ForEachAsync(s => studentselect.Add(new SelectListItem() { Text = s.FirstMidName, Value = s.ID.ToString() })) ;
-           
-            // fungerar ej pga olika id
                   
             return View(model);
         }
 
         
-        public bool NameisNotDuplicated(List<Student> students)
+        public bool NameisNotDuplicatedinDb(List<Student> students)
         {
             
             foreach (var s in _context.Students)
