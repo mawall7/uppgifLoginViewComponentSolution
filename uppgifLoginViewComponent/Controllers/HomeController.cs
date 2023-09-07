@@ -14,6 +14,7 @@ using uppgifLoginViewComponent.Data;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using uppgifLoginViewComponent.Extensionmethods;
 
 namespace uppgifLoginViewComponent.Controllers
 {
@@ -45,35 +46,37 @@ namespace uppgifLoginViewComponent.Controllers
                 .ToListAsync();
 
             var studentslist = new List<Student>();
-            studentslist = _context.Students.ToList();
+            //studentslist = _context.Students.ToList();
             
             foreach (var s in _context.Students) 
             {
-                if (NameisNotDuplicatedinDb(studentslist)) //kunde göras i dbklass
+                //if (studentslist.Any(a => a.FirstMidName == s.FirstMidName)) {
+                //    continue;
+                //}
+                if (studentslist.NameIsDuplicated(s)) 
                 {
-                    studentselect.Add(new SelectListItem() { Value = s.ID.ToString(), Text = s.LastName });
+                    continue;
                 }
-          
+                //if(IsDuplicated(s, studentslist))
+                //{
+                //    continue;
+                //}
+                else
+                {
+                    studentslist.Add(s);
+                    studentselect.Add(new SelectListItem() { Value = s.ID.ToString(), Text = $"{s.FirstMidName} {s.LastName }" });
+                }    
             } ;
-                  
+            model.StudentsSelect = studentselect;
+            
             return View(model);
         }
-
-        
-        public bool NameisNotDuplicatedinDb(List<Student> students)
-        {
             
-            foreach (var s in _context.Students)
-            {
-                 return !students.Any(s => s.LastName == s.LastName);
-                 
-            }
-            return true;
+        public bool IsDuplicated(Student s, List<Student> list) 
+        {
+            return list.Any(i => i.FirstMidName == s.FirstMidName);
         }
-        
-
-
-
+       
             public IActionResult StudentsPartial()
         {
             var st = _context.Students.ToList();
