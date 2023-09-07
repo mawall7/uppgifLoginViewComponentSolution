@@ -51,14 +51,36 @@ namespace uppgifLoginViewComponent.Controllers
 
 
             //model.StudentsSelect = new SelectList(model.Students);
-              _context.Students.ForEachAsync(s => studentselect.Add(new SelectListItem() { Text = s.FirstMidName, Value = s.ID.ToString() })) ;
-               model.StudentsSelect = studentselect.Select(s => s).Distinct();
+            var studentslist = new List<Student>();
+            studentslist = _context.Students.ToList();
             
+            foreach (var s in _context.Students) 
+            {
+                if (NameisNotDuplicated(studentslist))
+                {
+                    studentselect.Add(new SelectListItem() { Value = s.ID.ToString(), Text = s.LastName });
+                }
+                //studentselect.Add(new SelectListItem() {Value = s.ID.ToString(), Text = s.LastName });
+            } ;
+            
+           // _context.Students.ForEachAsync(s => studentselect.Add(new SelectListItem() { Text = s.FirstMidName, Value = s.ID.ToString() })) ;
+           
+            // fungerar ej pga olika id
+                  
             return View(model);
         }
 
         
-
+        public bool NameisNotDuplicated(List<Student> students)
+        {
+            
+            foreach (var s in _context.Students)
+            {
+                 return !students.Any(s => s.LastName == s.LastName);
+                 
+            }
+            return true;
+        }
         
 
 
