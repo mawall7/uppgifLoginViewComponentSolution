@@ -1,4 +1,10 @@
 ﻿<div class="text-primary">
     <p>Name:</p>
     <p>@ViewBag.Name</p>
+     @{ foreach (var item in ViewBag.Enrollments)
+         {
+            <p>CourseName : @item.Name</p>
+            <p>Grade: @item.StudentGrade</p>
+         }
+     }
 </div>

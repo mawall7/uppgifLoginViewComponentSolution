@@ -11,7 +11,9 @@ namespace uppgifLoginViewComponent.Models.ViewModels
         public IEnumerable<Student> Students { get; set; }
         public IEnumerable<SelectListItem> StudentsSelect { get; set; }
         public Student Student { get; set; }
+        public int StudentId { get; set; }
         public LoginViewModel Login { get; set; }
+
 
         
     }

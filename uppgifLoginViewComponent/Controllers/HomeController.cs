@@ -35,7 +35,7 @@ namespace uppgifLoginViewComponent.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Student selected) //selected student skickas från OnSubmit Action metod nedan i Redirect från selectList formsubmit 
         {
             ViewBag.Submit = false;
             IndexViewModel model = new IndexViewModel();
@@ -44,38 +44,37 @@ namespace uppgifLoginViewComponent.Controllers
             model.Students = await _context.Students.Include(a => a.Enrollments)
                 .Include(a => a.Assignments)
                 .ToListAsync();
+           
+            model.Student = selected;
+            model.Student.Enrollments = _context.Enrollments.Where(e => e.StudentID == selected.ID).ToList();
+                //_context.Students.Where(s => s.ID == model.StudentId).Include(s => s.Enrollments).FirstOrDefault();
 
             var studentslist = new List<Student>();
             //studentslist = _context.Students.ToList();
             
             foreach (var s in _context.Students) 
             {
-                //if (studentslist.Any(a => a.FirstMidName == s.FirstMidName)) {
-                //    continue;
-                //}
+               
                 if (studentslist.NameIsDuplicated(s)) 
                 {
                     continue;
                 }
-                //if(IsDuplicated(s, studentslist))
-                //{
-                //    continue;
-                //}
                 else
                 {
                     studentslist.Add(s);
                     studentselect.Add(new SelectListItem() { Value = s.ID.ToString(), Text = $"{s.FirstMidName} {s.LastName }" });
                 }    
-            } ;
+            }
+           // studentselect.Add(new SelectListItem() { Value = 0.ToString(), Text = "--Select Student--", Selected = true });
             model.StudentsSelect = studentselect;
             
             return View(model);
         }
             
-        public bool IsDuplicated(Student s, List<Student> list) 
-        {
-            return list.Any(i => i.FirstMidName == s.FirstMidName);
-        }
+        //public bool IsDuplicated(Student s, List<Student> list) 
+        //{
+        //    return list.Any(i => i.FirstMidName == s.FirstMidName);
+        //}
        
             public IActionResult StudentsPartial()
         {
@@ -233,12 +232,37 @@ namespace uppgifLoginViewComponent.Controllers
         //}
 
         [HttpPost]
-        public IActionResult OnSubmit(int studentid)
+        public IActionResult OnSubmit(IndexViewModel model)
         {
+            Student s;
             try
             {
-                ViewBag.Name = _context.Students.Find(studentid).FirstMidName;
+                //s = _context.Students.Find(model.StudentId);
+                s = _context.Students.Where(s => s.ID == model.StudentId).Include(s => s.Enrollments).FirstOrDefault();
+               // ViewBag.Submit = true;
+
+                //return View("Testajax");
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+            return RedirectToAction(nameof(Index), s);
+        }
+
+        [HttpPost]
+        //parameter IndexViewModel model
+        public IActionResult OnSubmitAjax(int StudentId) //obs att selectlistan selected inte uppdateras görs genom 1) javascript onsubmit eller 2) att ta med selectlistan i partiella vyn "TestAjax".
+        {
+            Student s;
+            try
+            {
+                s = _context.Students.Where(s => s.ID == StudentId).Include(s => s.Enrollments).FirstOrDefault();
+                ViewBag.FName = s.FirstMidName; ViewBag.LName = s.LastName;
+                ViewBag.Enrollments = s.Enrollments;
                 ViewBag.Submit = true;
+
                 return View("Testajax");
             }
             catch (Exception e)
@@ -246,7 +270,10 @@ namespace uppgifLoginViewComponent.Controllers
 
                 throw e;
             }
+            //return RedirectToAction(nameof(Index), s);
         }
+
+
 
 
 
@@ -257,6 +284,7 @@ namespace uppgifLoginViewComponent.Controllers
         {
             
             var student = _context.Students.Find(studentid);
+         
             ViewBag.Submit = true;
             return View("Studentinfo", student);
             
