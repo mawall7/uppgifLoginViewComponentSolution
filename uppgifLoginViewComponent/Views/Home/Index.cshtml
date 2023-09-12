@@ -25,7 +25,7 @@
             @*<div>@Html.TextBox("Search student", "", htmlAttributes: new { @class = "form-control", id = "studentid" })</div>*@
             <label class="custom-control-label">Select Student</label>
             <select class="form-control" asp-items="Model.StudentsSelect" name="StudentId">
-             <option value="" selected="selected">--select student--</option>
+             <option value="" selected="selected" disabled="disabled">--select student--</option>
             </select>
             <input type="hidden" name="StudentId"/>
 
@@ -78,8 +78,8 @@
             //opt.value = students["firstMidName"];
 
             
-        
-            opt.setAttribute("selected", "selected"); opt.innerHTML = "--select student--";
+
+        opt.setAttribute("selected", "selected"); opt.innerHTML = "--select student--"; opt.setAttribute("disabled", "disabled");
             select.appendChild(opt);
             mainelement.appendChild(select);
     }
