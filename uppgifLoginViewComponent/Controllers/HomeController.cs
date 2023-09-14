@@ -171,18 +171,32 @@ namespace uppgifLoginViewComponent.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file) //to do kolla vilken student som laddat upp t.ex. döp om filen till att sluta med studentnamn via student id
+        public async Task<IActionResult> Upload(IFormFile file, int Id) //to do kolla vilken student som laddat upp t.ex. döp om filen till att sluta med studentnamn via student id
         {
             //var uploads = @"C:\Users\matte\Downloads\";
-
+            int teststudid = Id;
+            
+            //spara filen
             var uploads = CreateFilePath(file);
+
             if (file.Length > 0)
             {
                 using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
                 }
+
+                //sparars fil i databas som binär kod eller blob 
+
+                var mstream = new MemoryStream(); //hur använd using statement?
+                file.CopyTo(mstream);
+                byte[] byteArray = mstream.ToArray();
+                var assignment = new Assignment() { Date = DateTime.Now, Name = file.FileName, StudentID = Id, StudentName = _context.Students.Find(Id).LastName, AssignmentFile = byteArray };
+                _context.Assignments.Add(assignment);
+                _context.SaveChanges();
+                //// to do gör en Db klass istället för att jobba mot contextet direkt: Db.SaveAssignment(name); 
             }
+
             return RedirectToAction("Index");
         }
         //[HttpPost]
@@ -258,11 +272,14 @@ namespace uppgifLoginViewComponent.Controllers
             Student s;
             try
             {
-                s = _context.Students.Where(s => s.ID == StudentId).Include(s => s.Enrollments).FirstOrDefault();
+                s = _context.Students.Where(s => s.ID == StudentId).Include(s => s.Enrollments)
+                    .Include(s => s.Assignments).FirstOrDefault();
                 ViewBag.FName = s.FirstMidName; ViewBag.LName = s.LastName;
                 ViewBag.Enrollments = s.Enrollments;
                 ViewBag.Submit = true;
+                ViewBag.Assignments = s.Assignments;
 
+               //använd istället och flytta på dropzone/ var model = new IndexViewModel() { Student = s };
                 return View("Testajax");
             }
             catch (Exception e)
