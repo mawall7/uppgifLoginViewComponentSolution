@@ -19,7 +19,5 @@ namespace uppgifLoginViewComponent.Models
         [Required]
         [RegularExpression(@"/d{5}/s/[a-öA-Ö]")]
         public string PostalCode { get; set; }
-
-
     }
 }
