@@ -16,8 +16,8 @@
       data-ajax-metod="POST"
       data-ajax-mode="replace"
       data-ajax-update="#info"
-      data-ajax-success="UpdateSelect"
-      data-ajax-begin="AddStudId">
+      //data-ajax-success="UpdateSelect">
+
 
 
     <div id="jsupdate" class="form-group">
@@ -26,7 +26,7 @@
         @*<input type="text" name="studentid"/> alternativ*@
         @*<div>@Html.TextBox("Search student", "", htmlAttributes: new { @class = "form-control", id = "studentid" })</div>*@
         <label class="custom-control-label">Select Student</label>
-        <select id="studselect" class="form-control" asp-items="Model.StudentsSelect" name="StudentId">
+        <select id="studselect" class="form-control" asp-items="Model.StudentsSelect" name="StudentId" onchange="LoggSelectlistvalue()">
             <option value="" selected="selected" disabled="disabled">--select student--</option>
         </select>
         <input type="hidden" name="StudentId" />
@@ -38,8 +38,7 @@
 
 <script>
  //flytta till wwroot
-
-
+   
 
     function UpdateSelect() {
         document.getElementById("jsupdate").innerHTML = "";
@@ -87,9 +86,9 @@
 
 
 
-        opt.setAttribute("selected", "selected"); opt.innerHTML = "--select student--"; opt.setAttribute("disabled", "disabled");
-            select.appendChild(opt);
-            mainelement.appendChild(select);
+        //opt.setAttribute("selected", "selected"); opt.innerHTML = "--select student--"; opt.setAttribute("disabled", "disabled");
+        //    select.appendChild(opt);
+        //    mainelement.appendChild(select);
     }
 </script>
 
@@ -120,65 +119,90 @@
     dropzone ok :)
 <meta charset="UTF-8">
 <title>Dropzone JS tutorial</title>
-<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
 <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 
 
-<form id="my-awesome-dropzone" class="dropzone" action="~/Home/Upload?Id=1" method="post" enctype="multipart/form-data">
+@*action="~/Home/Upload?Id=1"*@
+<form id="my-awesome-dropzone" class="dropzone" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
     <div class="dropzone-previews"></div>
     this is were the previews should be shown.
     Now setup your input fields
 
     <button type="submit">Submit data and files! </button>
 </form>
-@*<script src="dropzone-custom.js"></script>*@
 
 
 
-    }
+@section Scripts{
+
+<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+<script src="dropzone-custom.js"></script>
 
 <script>
+
+    let selectvalue;
+    let myurl; 
+    function LoggSelectlistvalue() {
+        selectvalue = document.getElementById("studselect").value;
+        console.log("value=", selectvalue);
+         myurl = "/home/Upload?Id=" + selectvalue;
+    }
+
+
     const dz = new Dropzone(".dropzone", {
+
+
         // The configuration we've talked about above
-        //url: "/home/Upload", //tog bort det för att använda action = i form taggen i stället för att få in id
+        url: "/Home/Upload/", //tog bort det för att använda action = i form taggen i stället för att få in id
         autoProceshQueue: false,
         uploadMultiple: false,
         parallelUploads: 100,
         maxFiles: 100,
+        params: function params(files, xhr, chunk) { return { 'Id': selectvalue }; },
+       /* params: {'Id': 1},*/
+        
         // The setting up of the dropzone
         init: function () {
             var myDropzone = this;
-            // First change the button to actually tell Dropzone to process the queue.
+
             this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
                 // Make sure that the form isn't actually being sent.
                 e.preventDefault();
                 e.stopPropagation();
-                myDropzone.processQueue();
+                myDropzone.processQueue()
             });
-            // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
-            // of the sending event because uploadMultiple is set to true. < changed to false
-            this.on("sendingmultiple", function () {
-                // Gets triggered when the form is actually being sent.
-                // Hide the success button or the complete form.
-            });
-            this.on("successmultiple", function (files, response) {
-                // Gets triggered when the files have successfully been sent.
-                // Redirect user or notify of success.
-            });
-            this.on("errormultiple", function (files, response) {
-                // Gets triggered when there was an error sending the files.
-                // Maybe show form again, and notify user of error
-            });
+            //// First change the button to actually tell Dropzone to process the queue.
+            //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+            //    // Make sure that the form isn't actually being sent.
+            //    e.preventDefault();
+            //    e.stopPropagation();
+            //    myDropzone.processQueue();
+            //});
+            //// Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+            //// of the sending event because uploadMultiple is set to true. < changed to false
+            //this.on("sendingmultiple", function () {
+            //    // Gets triggered when the form is actually being sent.
+            //    // Hide the success button or the complete form.
+            //});
+            //this.on("successmultiple", function (files, response) {
+            //    // Gets triggered when the files have successfully been sent.
+            //    // Redirect user or notify of success.
+            //});
+            //this.on("errormultiple", function (files, response) {
+            //    // Gets triggered when there was an error sending the files.
+            //    // Maybe show form again, and notify user of error
+            //});
         }
     });
-
-   
-    function AddStudId() { //AddStudId till dropzone fungerar ej varför? borde gå att få id från selectlistan studselect efter att den byggs upp med BuildSelectOptions.  körs vid ajax anrop innan det körs , data-ajax-begin sätter då dit id på valdstudent på dropzone action attribut (id är parameter till Home/Upload i controllern)
-        let dz = document.getElementById("my-awesome-dropzone");
-        let sselectval = document.getElementById("studselect").value; //value ska vara studentid:t;
-        dz.setAttribute("action", "~/Home/Upload?Id=" + sselectval);
-    }
+    
+    
+        //function AddStudId() { //AddStudId till dropzone fungerar ej varför? borde gå att få id från selectlistan studselect efter att den byggs upp med BuildSelectOptions.  körs vid ajax anrop innan det körs , data-ajax-begin sätter då dit id på valdstudent på dropzone action attribut (id är parameter till Home/Upload i controllern)
+        //    let dz = document.getElementById("my-awesome-dropzone");
+        //    let sselectval = document.getElementById("studselect").value; //value ska vara studentid:t;
+        //    dz.setAttribute("action", "~/Home/Upload?Id=" + sselectval);
+        
 </script>
+}
 
 
 @*</div>*@

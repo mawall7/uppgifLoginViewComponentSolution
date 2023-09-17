@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using uppgifLoginViewComponent.Extensionmethods;
+using AutoMapper;
 
 namespace uppgifLoginViewComponent.Controllers
 {
@@ -23,12 +24,14 @@ namespace uppgifLoginViewComponent.Controllers
         private readonly ILogger<HomeController> _logger;
         public SchoolContext _context;
         private IWebHostEnvironment hostEnv;
-        public HomeController(ILogger<HomeController> logger, SchoolContext context, IWebHostEnvironment env)
+        private readonly IMapper _mapper;
+        public HomeController(ILogger<HomeController> logger, SchoolContext context, IWebHostEnvironment env, IMapper mapper)
         {
             _logger = logger;
             _context = context;
             hostEnv = env;
             _logger.LogInformation("Logging from Index - index reached");
+            _mapper = mapper;
         }
         private bool HttpOnly { get; set; }
         Dictionary<string, string> KVDict;
@@ -269,18 +272,18 @@ namespace uppgifLoginViewComponent.Controllers
         //parameter IndexViewModel model
         public IActionResult OnSubmitAjax(int StudentId) //obs att selectlistan selected inte uppdateras görs genom 1) javascript onsubmit eller 2) att ta med selectlistan i partiella vyn "TestAjax".
         {
+            //Skapa istället en StudentViewModel och använd fetch istället för ajax som verkar vara avvecklad
+            //gör en todo och visa inlämnade uppgifter och inlämnings/ sista inl.datum för sent ska det inte gå att lämna
             Student s;
             try
             {
                 s = _context.Students.Where(s => s.ID == StudentId).Include(s => s.Enrollments)
-                    .Include(s => s.Assignments).FirstOrDefault();
-                ViewBag.FName = s.FirstMidName; ViewBag.LName = s.LastName;
-                ViewBag.Enrollments = s.Enrollments;
-                ViewBag.Submit = true;
-                ViewBag.Assignments = s.Assignments;
+                    .Include(s => s.Assignments).FirstOrDefault(); //automapper
 
-               //använd istället och flytta på dropzone/ var model = new IndexViewModel() { Student = s };
-                return View("Testajax");
+                StudentInfoViewModel model = _mapper.Map<StudentInfoViewModel>(s);
+                ViewBag.Submit = true;
+               
+                return View("Testajax", model);
             }
             catch (Exception e)
             {
