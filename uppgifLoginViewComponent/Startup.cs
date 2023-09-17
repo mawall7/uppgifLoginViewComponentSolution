@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,7 +38,15 @@ namespace uppgifLoginViewComponent
             //services.AddRazorPages();
             services.AddDbContext<SchoolContext>(options  => { 
                   options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+
             });
+            var mapperconfiguration = new MapperConfiguration(c =>
+            {
+                c.AddProfile(new MapperProfile());
+            });
+
+            IMapper mapper = mapperconfiguration.CreateMapper();
+            services.AddSingleton(mapper);
             
             
         }

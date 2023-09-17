@@ -332,8 +332,6 @@
                             var studcanv1 = "#offcanv" + item.ID.ToString();
 
 
-
-
                             <a class="btn text-info ml-5 d-inline" style="margin:0; padding:0" role="button" data-bs-toggle="offcanvas" data-bs-target="@(studcanv1)"> <img src="https://cdn.pixabay.com/photo/2017/06/25/19/09/house-2441625_960_720.png" style="height:auto; width:5%; margin:0; padding:0" />Mina kurser</a>
                             @*<div class="text-info mr-5">Dina kurser</div>*@
                             <div class="border-left border-primary d-inline" style="margin:0; padding:0"></div>
@@ -347,14 +345,8 @@
                             }
                             <div @Html.Partial("_StudCanvas", ViewData["partialstudinfo"])></div>
 
-
-
-
-
                         }
-
                     }
-
 
                 </td>
                 <td>
@@ -367,21 +359,6 @@
 
 </table>
 
-<meta charset="UTF-8">
-<title>Dropzone JS tutorial</title>
-<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
-<link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
-
-
-<form id="my-awesome-dropzone" class="dropzone" action="/Home/Upload" method="post" enctype="multipart/form-data">
-    <div class="dropzone-previews"></div>
-    this is were the previews should be shown.
-    Now setup your input fields
-
-    <button type="submit">Submit data and files!</button>
-</form>
-<script src="dropzone-custom.js"></script>
-<script>
 <!--....
         <div class="modal" id="myModal">
             <div class="modal-dialog">
@@ -400,13 +377,7 @@
 <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 
 
-<form id="my-awesome-dropzone" class="dropzone" action="/Home/Upload/" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" value="1" />
-    <div class="dropzone-previews"></div>
-    <span>-></span>
-    <button class="btn btn-success btn-sm " type="submit">Spara din fil</button>
-    <span>| Ladda upp/ skicka din text-fil</span>
-</form>
+
 <script src="dropzone-custom.js"></script>
 
             </div>-->
@@ -421,42 +392,7 @@
 </div>-->
 
 
-<script>
 
-const dz = new Dropzone(".dropzone", {
-        // The configuration we've talked about above
-        url: "/home/Upload",
-autoProceshQueue: false,
-uploadMultiple: false,
-parallelUploads: 100,
-maxFiles: 100,
-// The setting up of the dropzone
-init: function () {
-var myDropzone = this;
-// First change the button to actually tell Dropzone to process the queue.
-this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-        // Make sure that the form isn't actually being sent.
-        e.preventDefault();
-    e.stopPropagation();
-    myDropzone.processQueue();
-});
-// Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
-// of the sending event because uploadMultiple is set to true. < changed to false
-        this.{
-        // Gets triggered when the form is actually being sent.
-        // Hide the success button or the complete form.
-    });
-this.on("successmultiple", function (files, response) {
-        // Gets triggered when the files have successfully been sent.
-        // Redirect user or notify of success.
-    });
-this.on("errormultiple", function (files, response) {
-        // Gets triggered when there was an error sending the files.
-        // Maybe show form again, and notify user of error
-    });
-}
-});
-</script>
 @*@section Scripts{
 
         <script> //fungerar ej
