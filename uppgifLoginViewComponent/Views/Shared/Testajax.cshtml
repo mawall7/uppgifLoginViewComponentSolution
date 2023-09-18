@@ -1,5 +1,6 @@
 ﻿@model uppgifLoginViewComponent.Models.ViewModels.StudentInfoViewModel
 //you shouldn't use scripts in partial view Scripts section doesnt work by default design. you will need helpers in that case.
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="text-primary">
 </div>
@@ -36,17 +37,17 @@
                                  <span>AssignmentName:&nbsp;@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()</span>
                                  <span>DueDate:</span><span>/&nbsp;:@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().LastSubmissionDate.ToString()</span>
                                     
-                                {<p>AssignmentFileName: @assignment.Name &nbsp;/SubmissionDate:&nbsp;@assignment.SubmissionDate.ToString()</p> }
-                                <span>Submitted: 
+                                <p>AssignmentFileName: @assignment.Name &nbsp;/SubmissionDate:&nbsp;@assignment.SubmissionDate.ToString()</p> 
+                                <span>Submitted: </span>
                                 @if (DateTime.Compare(
                                @Model.CourseAssignment.
                                Where(ca => ca.CourseID == assignment.CourseID)
                                .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
-                                {<span>OnTime</span> }
-                                else {<span>Late</span> } </span>
+                               {<span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span> }
+                                else {<span> <i class="fa fa-times" style="color:red"></i> Late</span> <br>} 
+                               }
 
                                 
-                        }
                         }
                     </div>
                 </div>
