@@ -38,20 +38,25 @@ namespace uppgifLoginViewComponent.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Index(Student selected) //selected student skickas från OnSubmit Action metod nedan i Redirect från selectList formsubmit 
+        public async Task<IActionResult> Index() //selected student skickas från OnSubmit Action metod nedan i Redirect från selectList formsubmit 
         {
             ViewBag.Submit = false;
             IndexViewModel model = new IndexViewModel();
             var studentselect = new List<SelectListItem>();
 
+            //model.Students = await _context.Students.Include(a => a.Enrollments)
+            //    .Include(a => a.Assignments)
+            //    .ToListAsync();
             model.Students = await _context.Students.Include(a => a.Enrollments)
-                .Include(a => a.Assignments)
-                .ToListAsync();
-           
-            model.Student = selected;
-            model.Student.Enrollments = _context.Enrollments.Where(e => e.StudentID == selected.ID).ToList();
-                //_context.Students.Where(s => s.ID == model.StudentId).Include(s => s.Enrollments).FirstOrDefault();
+            .ToListAsync();
+                
+            //var Enrollment = await _context.Enrollments.Include(a => a.Assignments).Include(a => a.Student)
+            //    .ToListAsync();
 
+            //model.Student = selected;
+            //model.Student.Enrollments = await _context.Enrollments.Where(s => s.StudentID == selected.ID).Include(e=>e.Assignments).ToListAsync();
+                //_context.Students.Where(s => s.ID == model.StudentId).Include(s => s.Enrollments).FirstOrDefault();
+               
             var studentslist = new List<Student>();
             //studentslist = _context.Students.ToList();
             
@@ -194,9 +199,11 @@ namespace uppgifLoginViewComponent.Controllers
                 var mstream = new MemoryStream(); //hur använd using statement?
                 file.CopyTo(mstream);
                 byte[] byteArray = mstream.ToArray();
-                var assignment = new Assignment() { Date = DateTime.Now, Name = file.FileName, StudentID = Id, StudentName = _context.Students.Find(Id).LastName, AssignmentFile = byteArray };
+                //var assignment = new Assignment() { SubmissionDate = DateTime.Now, Name = file.FileName, StudentID = Id, StudentName = _context.Students.Find(Id).LastName, AssignmentFile = byteArray };
+                var assignment = new Assignment() { SubmissionDate = DateTime.Now, Name = file.FileName, CourseAssignmentID=1, CourseID=1, EnrollmentID=1 /*StudentID = Id, StudentName = _context.Students.Find(Id).LastName,*/, AssignmentFile = byteArray };
                 _context.Assignments.Add(assignment);
                 _context.SaveChanges();
+                
                 //// to do gör en Db klass istället för att jobba mot contextet direkt: Db.SaveAssignment(name); 
             }
 
@@ -277,9 +284,9 @@ namespace uppgifLoginViewComponent.Controllers
             Student s;
             try
             {
-                s = _context.Students.Where(s => s.ID == StudentId).Include(s => s.Enrollments)
-                    .Include(s => s.Assignments).FirstOrDefault(); //automapper
-
+                s = _context.Students.Where(s => s.ID == StudentId).Include(s => s.Enrollments).ThenInclude(a => a.Assignments).FirstOrDefault();
+                //    .Include(s => s.Assignments).FirstOrDefault(); //automapper
+                
                 StudentInfoViewModel model = _mapper.Map<StudentInfoViewModel>(s);
                 ViewBag.Submit = true;
                

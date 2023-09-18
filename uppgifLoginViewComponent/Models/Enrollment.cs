@@ -1,10 +1,12 @@
-﻿namespace uppgifLoginViewComponent.Models
+﻿using System.Collections.Generic;
+
+namespace uppgifLoginViewComponent.Models
 {
     public class Enrollment
     {
-         public enum Grade
+        public enum Grade
         {
-            A,B,C,D,E,F
+            A, B, C, D, E, F
         }
 
         public int ID { get; set; }
@@ -14,7 +16,7 @@
         public Grade? StudentGrade { get; set; }
         public Course Course { get; set; }
         public Student Student { get; set; }
-
+        public ICollection<Assignment> Assignments {get; set;}
 
 
 

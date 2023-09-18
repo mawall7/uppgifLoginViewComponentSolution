@@ -296,7 +296,7 @@ namespace uppgifLoginViewComponent.Controllers
             List<int> grademean = new List<int>();
             int enrollmentsumgrad = 0;
             List<StudentGradeViewModel> studentgradeViewmodelList = new List<StudentGradeViewModel>();
-            string name;
+            
             foreach(IGrouping<string, Enrollment> group in enrolls)
             {
                 Console.WriteLine(group.Key, group.Count());

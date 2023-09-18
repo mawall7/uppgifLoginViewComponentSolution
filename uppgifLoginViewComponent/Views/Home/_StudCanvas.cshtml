@@ -4,9 +4,9 @@
     string studcanv2 = tupleitems.Item2;
     string studcan1 = tupleitems.Item3;
     Student item = tupleitems.Item1;
-    
-   
-    
+
+
+
     <div class="offcanvas offcanvas-bottom" tabindex="-1" id="@studcanv2" aria-labelledby="offcanvasBottomLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasBottomLabel">Pågående kurser:</h5>
@@ -99,11 +99,12 @@
                         </tablehead>
                         <tbody>
 
-                            @foreach (var assignment in item.Assignments)
+                            @{var assignments = item.Enrollments.SelectMany(a => a.Assignments).ToList();} 
+                            @foreach (var assignment in assignments)
                             {
                                 <tr>
                                     <td>@assignment.Name</td>
-                                    <td>@assignment.Date</td>
+                                    <td>@assignment.SubmissionDate</td>
                                 </tr>
 
                             }

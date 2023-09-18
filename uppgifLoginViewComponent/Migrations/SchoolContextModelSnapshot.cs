@@ -29,28 +29,31 @@ namespace uppgifLoginViewComponent.Migrations
                     b.Property<byte[]>("AssignmentFile")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("CourseAssignmentID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EnrollmentID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StudentID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("StudentID");
+                    b.HasIndex("EnrollmentID");
 
                     b.ToTable("Assignments");
                 });
 
             modelBuilder.Entity("uppgifLoginViewComponent.Models.Course", b =>
                 {
-                    b.Property<int>("CourseID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -61,9 +64,32 @@ namespace uppgifLoginViewComponent.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CourseID");
+                    b.HasKey("ID");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("uppgifLoginViewComponent.Models.CourseAssignment", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AssignmentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastSubmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CourseID");
+
+                    b.ToTable("CourseAssignment");
                 });
 
             modelBuilder.Entity("uppgifLoginViewComponent.Models.Enrollment", b =>
@@ -126,9 +152,18 @@ namespace uppgifLoginViewComponent.Migrations
 
             modelBuilder.Entity("uppgifLoginViewComponent.Models.Assignment", b =>
                 {
-                    b.HasOne("uppgifLoginViewComponent.Models.Student", null)
+                    b.HasOne("uppgifLoginViewComponent.Models.Enrollment", null)
                         .WithMany("Assignments")
-                        .HasForeignKey("StudentID")
+                        .HasForeignKey("EnrollmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("uppgifLoginViewComponent.Models.CourseAssignment", b =>
+                {
+                    b.HasOne("uppgifLoginViewComponent.Models.Course", null)
+                        .WithMany("CourseAssignments")
+                        .HasForeignKey("CourseID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

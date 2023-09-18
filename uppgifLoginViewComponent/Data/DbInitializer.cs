@@ -34,8 +34,8 @@ namespace ContosoUniversity.Data
 
                 var courses = new Course[]
                 {
-            new Course{Title="Chemistry",Credits=3},
-            new Course{Title="Microeconomics",Credits=3},
+                new Course{Title="Chemistry",Credits=3},
+                new Course{Title="Microeconomics",Credits=3},
 
                 };
                 foreach (Course c in courses)
@@ -44,11 +44,26 @@ namespace ContosoUniversity.Data
                 }
                 context.SaveChanges();
 
+
+                var CourseAssignments = new CourseAssignment[]
+                {
+                new CourseAssignment{CourseID=1, AssignmentName="atomicstructure",LastSubmissionDate=DateTime.Now.AddDays(14)},
+                new CourseAssignment{CourseID=1, AssignmentName="analyticchemistry",LastSubmissionDate=DateTime.Now.AddDays(14)},
+                new CourseAssignment{CourseID=2, AssignmentName="basiceconomics",LastSubmissionDate=DateTime.Now.AddDays(14)}
+            };
+                foreach(CourseAssignment c in CourseAssignments)
+                {
+                    context.CourseAssignment.Add(c);
+                }
+                context.SaveChanges();
+
+        
+
                 var enrollments = new Enrollment[]
                 {
-            new Enrollment{CourseID=1, StudentID=1,StudentGrade=Grade.A},
-            new Enrollment{StudentID=2, CourseID=1, StudentGrade=Grade.C},
-            new Enrollment{StudentID=1, CourseID=2, StudentGrade=Grade.B},
+            new Enrollment{CourseID=1, StudentID=1, Name="microeconomics",StudentGrade=Grade.A},
+            new Enrollment{StudentID=2, CourseID=1, Name="chemistry", StudentGrade=Grade.C},
+            new Enrollment{StudentID=1, CourseID=2, Name="chemistry", StudentGrade=Grade.B},
 
                 };
                 foreach (Enrollment e in enrollments)

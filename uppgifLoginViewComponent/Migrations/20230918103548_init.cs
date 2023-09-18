@@ -11,14 +11,14 @@ namespace uppgifLoginViewComponent.Migrations
                 name: "Courses",
                 columns: table => new
                 {
-                    CourseID = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(nullable: true),
                     Credits = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.CourseID);
+                    table.PrimaryKey("PK_Courses", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -39,24 +39,22 @@ namespace uppgifLoginViewComponent.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Assignments",
+                name: "CourseAssignment",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    AssignmentFile = table.Column<byte[]>(nullable: true),
-                    StudentID = table.Column<int>(nullable: false),
-                    StudentName = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: false)
+                    CourseID = table.Column<int>(nullable: false),
+                    AssignmentName = table.Column<string>(nullable: true),
+                    LastSubmissionDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Assignments", x => x.ID);
+                    table.PrimaryKey("PK_CourseAssignment", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Assignments_Students_StudentID",
-                        column: x => x.StudentID,
-                        principalTable: "Students",
+                        name: "FK_CourseAssignment_Courses_CourseID",
+                        column: x => x.CourseID,
+                        principalTable: "Courses",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -79,7 +77,7 @@ namespace uppgifLoginViewComponent.Migrations
                         name: "FK_Enrollments_Courses_CourseID",
                         column: x => x.CourseID,
                         principalTable: "Courses",
-                        principalColumn: "CourseID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Enrollments_Students_StudentID",
@@ -89,10 +87,39 @@ namespace uppgifLoginViewComponent.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Assignments",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CourseID = table.Column<int>(nullable: false),
+                    CourseAssignmentID = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    AssignmentFile = table.Column<byte[]>(nullable: true),
+                    EnrollmentID = table.Column<int>(nullable: false),
+                    SubmissionDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Assignments", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Assignments_Enrollments_EnrollmentID",
+                        column: x => x.EnrollmentID,
+                        principalTable: "Enrollments",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Assignments_StudentID",
+                name: "IX_Assignments_EnrollmentID",
                 table: "Assignments",
-                column: "StudentID");
+                column: "EnrollmentID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseAssignment_CourseID",
+                table: "CourseAssignment",
+                column: "CourseID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollments_CourseID",
@@ -109,6 +136,9 @@ namespace uppgifLoginViewComponent.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Assignments");
+
+            migrationBuilder.DropTable(
+                name: "CourseAssignment");
 
             migrationBuilder.DropTable(
                 name: "Enrollments");

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -29,7 +28,7 @@ namespace uppgifLoginViewComponent.Models
         public string PostalCode { get; set; }
 
         public ICollection<Enrollment> Enrollments { get; set; }
-        public ICollection<Assignment> Assignments { get; set; }
+       
         }
     
 }

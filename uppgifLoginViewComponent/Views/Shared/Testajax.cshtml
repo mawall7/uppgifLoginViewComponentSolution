@@ -28,9 +28,10 @@
 
                         <p>CourseName: @item.Name</p>
                         <p>Grade: @item.StudentGrade</p>
-                        @{ foreach (var assignment in Model.Assignments)
+                        @{ foreach (var assignment in item.Assignments)
                             {
-                                <p> @assignment.Name</p>
+                                if (assignment.CourseID == item.CourseID)
+                                {<p> @assignment.Name</p>}
                             }
                         }
                     </div>
