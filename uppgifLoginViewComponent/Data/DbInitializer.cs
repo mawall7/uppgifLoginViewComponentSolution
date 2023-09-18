@@ -62,8 +62,8 @@ namespace ContosoUniversity.Data
                 var enrollments = new Enrollment[]
                 {
             new Enrollment{CourseID=1, StudentID=1, Name="microeconomics",StudentGrade=Grade.A},
-            new Enrollment{StudentID=2, CourseID=1, Name="chemistry", StudentGrade=Grade.C},
-            new Enrollment{StudentID=1, CourseID=2, Name="chemistry", StudentGrade=Grade.B},
+            new Enrollment{CourseID=2, StudentID=2,  Name="chemistry", StudentGrade=Grade.C},
+            new Enrollment{CourseID=2, StudentID=1,  Name="chemistry", StudentGrade=Grade.B},
 
                 };
                 foreach (Enrollment e in enrollments)

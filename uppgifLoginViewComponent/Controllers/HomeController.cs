@@ -287,7 +287,9 @@ namespace uppgifLoginViewComponent.Controllers
                 s = _context.Students.Where(s => s.ID == StudentId).Include(s => s.Enrollments).ThenInclude(a => a.Assignments).FirstOrDefault();
                 //    .Include(s => s.Assignments).FirstOrDefault(); //automapper
                 
+                
                 StudentInfoViewModel model = _mapper.Map<StudentInfoViewModel>(s);
+                model.CourseAssignment = _context.CourseAssignment.ToList();
                 ViewBag.Submit = true;
                
                 return View("Testajax", model);

@@ -26,13 +26,27 @@
                 <div id="item@(item.ID.ToString())" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
 
+                          
                         <p>CourseName: @item.Name</p>
                         <p>Grade: @item.StudentGrade</p>
                         @{ foreach (var assignment in item.Assignments)
                             {
-                                if (assignment.CourseID == item.CourseID)
-                                {<p> @assignment.Name</p>}
-                            }
+
+                                // if (assignment.CourseID == item.CourseID)
+                                 <span>AssignmentName:&nbsp;@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()</span>
+                                 <span>DueDate:</span><span>/&nbsp;:@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().LastSubmissionDate.ToString()</span>
+                                    
+                                {<p>AssignmentFileName: @assignment.Name &nbsp;/SubmissionDate:&nbsp;@assignment.SubmissionDate.ToString()</p> }
+                                <span>Submitted: 
+                                @if (DateTime.Compare(
+                               @Model.CourseAssignment.
+                               Where(ca => ca.CourseID == assignment.CourseID)
+                               .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
+                                {<span>OnTime</span> }
+                                else {<span>Late</span> } </span>
+
+                                
+                        }
                         }
                     </div>
                 </div>

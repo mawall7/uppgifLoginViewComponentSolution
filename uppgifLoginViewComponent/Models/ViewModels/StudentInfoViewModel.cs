@@ -27,5 +27,9 @@ namespace uppgifLoginViewComponent.Models.ViewModels
 
         public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<Assignment> Assignments { get; set; }
+        public ICollection<CourseAssignment> CourseAssignment { get; set; }
+
+
+        
     }
 }
