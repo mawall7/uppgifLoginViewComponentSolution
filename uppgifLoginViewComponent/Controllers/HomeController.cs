@@ -179,11 +179,11 @@ namespace uppgifLoginViewComponent.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file, int Id) //to do kolla vilken student som laddat upp t.ex. döp om filen till att sluta med studentnamn via student id
+        public async Task<IActionResult> Upload(IFormFile file, int Id, string CourseName) //to do kolla vilken student som laddat upp t.ex. döp om filen till att sluta med studentnamn via student id
         {
             //var uploads = @"C:\Users\matte\Downloads\";
             int teststudid = Id;
-            
+            string courseName = CourseName;
             //spara filen
             var uploads = CreateFilePath(file);
 

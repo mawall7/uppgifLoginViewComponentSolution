@@ -11,12 +11,13 @@
         <script src="https://use.fontawesome.com/3c66019ee4.js"></script>
 
         }*@
+@* for asp-action returnerar TestAjax partial*@
 <form asp-action="OnSubmitAjax" asp-controller="Home"
       data-ajax="true"
       data-ajax-metod="POST"
       data-ajax-mode="replace"
       data-ajax-update="#info"
-      //data-ajax-success="UpdateSelect">
+      //data-ajax-success ="UpdateSelect">
 
 
 
@@ -36,11 +37,105 @@
     <input type="submit" value="Submit" name="btnSubmit" class="btn btn-dark">
 </form>
 
-<script>
- //flytta till wwroot
-   
 
-    function UpdateSelect() {
+
+<div id="info">
+    @*@if(ViewBag.Name!= null) {<p>@ViewBag.Name</p>;}*@
+    @*@if(ViewBag.Name == null){<p>Empty</p>}*@
+    @*@{ if (Model.Student != null) {
+
+            <p>@Model.Student.FirstMidName</p>
+            <p>@Model.Student.Email</p>
+                @if(Model.Student.Enrollments != null)
+                    foreach (var item in Model.Student.Enrollments)
+                { <p>@item.Name &nbsp; StudentGrade:@item.StudentGrade </p>}
+
+
+                } }
+        @if(Model.Student== null) { <p>No student selected</p>}*@
+    replace text
+</div>
+
+
+<script>
+
+
+    function Success() {
+        // alert("Success?");
+    }</script>
+    dropzone ok :)
+<meta charset="UTF-8">
+<title>Dropzone JS tutorial</title>
+<link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+
+
+@*action="~/Home/Upload?Id=1"*@
+<form id="my-awesome-dropzone" class="dropzone" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
+    <div class="dropzone-previews"></div>
+    this is were the previews should be shown.
+    Now setup your input fields
+
+    <button type="submit">Submit data and files! </button>
+</form>
+
+
+
+@section Scripts{
+    @*scripts delflyttad från ovanför tag id=info *@
+    <script>
+    
+    //get accordian button coursename oncclick använd till dropdown för att kolla vilken kurs som är vald för parameter till Assignment Course
+    let accordianbtns = document.getElementsByClassName("accordion-button");
+    let coursename;
+    console.log("buttonclasslist", accordianbtns);
+    function GetCourseNameOnClick(courseName) //anropas från TestAjax 
+    {
+        coursename = courseName;
+        console.log("coursename", coursename);
+    };
+
+    //fungerar hämta buttons från TestAjax
+    let ar = Array.from(accordianbtns); console.log("arra", ar);
+    setInterval(function () {
+        let arr = Array.from(accordianbtns); console.log("viewbag", @ViewBag.infofrompartial); console.log("val", arr); /*console.log("arr0.innerText", arr[0].innerText)*/
+    }, 6000);
+
+    //obs fungerar ej eftersom knapparna tas fram med ajax;
+    //behöver ? köra en callback på när knapparna finns och då sätta dit eventlistener:
+    //69 ill 75 fungerarde ändå inte
+    
+    //.forEach(function (element) {
+    //    console.log("btelement.innertext", element.innerHTML);
+    //    console.log("btnelement.innerhtml", element.innerText);
+    //});
+
+    //for (let i = 0; accordianbtns.length; i++) {
+    //    console.log("thisval", accordianbtns[i]);
+    //}
+
+    //for (let i of accordianbtns) {
+    //       console.log("value is", accordianbtns[i].ariaExpanded);
+    //    }
+
+
+
+    //to do onclick fungerar ej
+    //let courseName;
+
+    //for (let i of accordianbtns) {
+    //    console.log("item", accordianbtns[i]);
+    //}
+    //for (var i = 0; i < accordianbtns.length; i++) {
+    //    var item = accordianbtns[i].value;
+    //    console.log("courseit[i]", accordianbtns.item(i));
+    //    console.log("courseit[i].value", accordianbtns[i].value);
+    //    item.addEventListener("click", function () {
+    //        courseName = item.innerHTML;
+    //        console.log("item.innerHTML", courseName);
+    //    })
+    //}
+
+    function UpdateSelect() { //används ej är för att nollställa studselect till --choose student--
         document.getElementById("jsupdate").innerHTML = "";
         let mainelement = document.getElementById("jsupdate");
         let select = document.createElement("select");
@@ -90,118 +185,85 @@
         //    select.appendChild(opt);
         //    mainelement.appendChild(select);
     }
-</script>
+    </script>
 
-<div id="info">
-    @*@if(ViewBag.Name!= null) {<p>@ViewBag.Name</p>;}*@
-    @*@if(ViewBag.Name == null){<p>Empty</p>}*@
-    @*@{ if (Model.Student != null) {
+    @*scripts del flyttad från ovanför tag id=info 1*@
 
-            <p>@Model.Student.FirstMidName</p>
-            <p>@Model.Student.Email</p>
-                @if(Model.Student.Enrollments != null)
-                    foreach (var item in Model.Student.Enrollments)
-                { <p>@item.Name &nbsp; StudentGrade:@item.StudentGrade </p>}
+    <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+    <script src="dropzone-custom.js"></script>
 
+    <script>
+        setInterval(function () {
+            console.log("coursen", coursename);
 
-                } }
-        @if(Model.Student== null) { <p>No student selected</p>}*@
-    replace text
-</div>
+        }, 1000);
 
-
-<script>
-
-
-    function Success() {
-        // alert("Success?");
-    }</script>
-    dropzone ok :)
-<meta charset="UTF-8">
-<title>Dropzone JS tutorial</title>
-<link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
-
-
-@*action="~/Home/Upload?Id=1"*@
-<form id="my-awesome-dropzone" class="dropzone" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
-    <div class="dropzone-previews"></div>
-    this is were the previews should be shown.
-    Now setup your input fields
-
-    <button type="submit">Submit data and files! </button>
-</form>
-
-
-
-@section Scripts{
-
-<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
-<script src="dropzone-custom.js"></script>
-
-<script>
-
-    let selectvalue;
-    let myurl; 
-    function LoggSelectlistvalue() {
-        selectvalue = document.getElementById("studselect").value;
-        console.log("value=", selectvalue);
-         myurl = "/home/Upload?Id=" + selectvalue;
-    }
-
-
-    const dz = new Dropzone(".dropzone", {
-
-
-        // The configuration we've talked about above
-        url: "/Home/Upload/", //tog bort det för att använda action = i form taggen i stället för att få in id
-        autoProceshQueue: false,
-        uploadMultiple: false,
-        parallelUploads: 100,
-        maxFiles: 100,
-        params: function params(files, xhr, chunk) { return { 'Id': selectvalue }; },
-       /* params: {'Id': 1},*/
-        
-        // The setting up of the dropzone
-        init: function () {
-            var myDropzone = this;
-
-            this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-                // Make sure that the form isn't actually being sent.
-                e.preventDefault();
-                e.stopPropagation();
-                myDropzone.processQueue()
-            });
-            //// First change the button to actually tell Dropzone to process the queue.
-            //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-            //    // Make sure that the form isn't actually being sent.
-            //    e.preventDefault();
-            //    e.stopPropagation();
-            //    myDropzone.processQueue();
-            //});
-            //// Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
-            //// of the sending event because uploadMultiple is set to true. < changed to false
-            //this.on("sendingmultiple", function () {
-            //    // Gets triggered when the form is actually being sent.
-            //    // Hide the success button or the complete form.
-            //});
-            //this.on("successmultiple", function (files, response) {
-            //    // Gets triggered when the files have successfully been sent.
-            //    // Redirect user or notify of success.
-            //});
-            //this.on("errormultiple", function (files, response) {
-            //    // Gets triggered when there was an error sending the files.
-            //    // Maybe show form again, and notify user of error
-            //});
+        let buttons;
+        let selectvalue;
+        let myurl;
+        function LoggSelectlistvalue() {
+            selectvalue = document.getElementById("studselect").value;
+            console.log("value=", selectvalue);
+            myurl = "/home/Upload?Id=" + selectvalue;
         }
-    });
-    
-    
-        //function AddStudId() { //AddStudId till dropzone fungerar ej varför? borde gå att få id från selectlistan studselect efter att den byggs upp med BuildSelectOptions.  körs vid ajax anrop innan det körs , data-ajax-begin sätter då dit id på valdstudent på dropzone action attribut (id är parameter till Home/Upload i controllern)
-        //    let dz = document.getElementById("my-awesome-dropzone");
-        //    let sselectval = document.getElementById("studselect").value; //value ska vara studentid:t;
-        //    dz.setAttribute("action", "~/Home/Upload?Id=" + sselectval);
-        
-</script>
+
+
+
+
+        const dz = new Dropzone(".dropzone", {
+
+
+            // The configuration we've talked about above
+            url: "/Home/Upload/", //tog bort det för att använda action = i form taggen i stället för att få in id
+            autoProceshQueue: false,
+            uploadMultiple: false,
+            parallelUploads: 100,
+            maxFiles: 100,
+            params: function params(files, xhr, chunk) { return { 'Id': selectvalue, 'CourseName': coursename }; },
+
+            /* params: {'Id': 1},*/
+
+            // The setting up of the dropzone
+            init: function () {
+                var myDropzone = this;
+
+                this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    // Make sure that the form isn't actually being sent.
+                    e.preventDefault();
+                    e.stopPropagation();
+                    myDropzone.processQueue()
+                });
+                //// First change the button to actually tell Dropzone to process the queue.
+                //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                //    // Make sure that the form isn't actually being sent.
+                //    e.preventDefault();
+                //    e.stopPropagation();
+                //    myDropzone.processQueue();
+                //});
+                //// Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                //// of the sending event because uploadMultiple is set to true. < changed to false
+                //this.on("sendingmultiple", function () {
+                //    // Gets triggered when the form is actually being sent.
+                //    // Hide the success button or the complete form.
+                //});
+                //this.on("successmultiple", function (files, response) {
+                //    // Gets triggered when the files have successfully been sent.
+                //    // Redirect user or notify of success.
+                //});
+                //this.on("errormultiple", function (files, response) {
+                //    // Gets triggered when there was an error sending the files.
+                //    // Maybe show form again, and notify user of error
+                //});
+            }
+        });
+
+
+                //function AddStudId() { //AddStudId till dropzone fungerar ej varför? borde gå att få id från selectlistan studselect efter att den byggs upp med BuildSelectOptions.  körs vid ajax anrop innan det körs , data-ajax-begin sätter då dit id på valdstudent på dropzone action attribut (id är parameter till Home/Upload i controllern)
+                //    let dz = document.getElementById("my-awesome-dropzone");
+                //    let sselectval = document.getElementById("studselect").value; //value ska vara studentid:t;
+                //    dz.setAttribute("action", "~/Home/Upload?Id=" + sselectval);
+
+    </script>
 }
 
 
@@ -213,10 +275,6 @@
 @*<div @Html.Partial("_Students", Model)*@ @*asp-controller="Home" asp-action="StudentsPartial"*@>@*</div>*@
 <p class="text-primary">
 </p>
-
-
-
-@*.fa fa-floppy-o fa-lg {color: blue;}*@
 
 <div await @Html.PartialAsync("_Students", Model)></div>
 

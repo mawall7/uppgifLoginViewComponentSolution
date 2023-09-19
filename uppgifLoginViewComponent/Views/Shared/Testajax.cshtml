@@ -1,5 +1,24 @@
 ﻿@model uppgifLoginViewComponent.Models.ViewModels.StudentInfoViewModel
-//you shouldn't use scripts in partial view Scripts section doesnt work by default design. you will need helpers in that case.
+@*use scripts in partial view? går enligt plural sight utan section artikel! Scripts section doesnt work by default design. you will need helpers in that case.*@
+<script>
+    buttons = document.getElementsByTagName("button");
+    //let number = 0;
+    for (let i = 0 ; i < buttons.length; i++) {
+        console.log("button", buttons[i]);
+        buttons[i].addEventListener("click", function (e)
+        {
+            //let target;
+            //console.log("etarget", target);
+            let target = e.target.innerHTML.replace(/^a-zA-Z0-9 ]/g, '')
+            target = target.trim();
+            //number++;
+            //LogOnClick(number);
+            GetCourseNameOnClick(target);
+        })
+    }
+   
+</script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="text-primary">
@@ -20,7 +39,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="acsitems@(item.ID.ToString())">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item@(item.ID.ToString())" aria-expanded="true" aria-controls="collapseOne@(item.ID.ToString())"
-                            onclick="function(){ }">
+                         >
                         @item.Name
                     </button>
                 </h2>

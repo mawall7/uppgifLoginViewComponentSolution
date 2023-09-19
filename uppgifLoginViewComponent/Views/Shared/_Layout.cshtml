@@ -75,8 +75,8 @@
             </div>
         </footer>
     }
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+        <script src="~/lib/jquery/dist/jquery.js"></script> @*används på många ställen t.ex. behövs det av både bootstrap och ajax*@ 
+      @*det här flyttas till vyer som använder ajax*@ <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
         @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>*@
         @*<script src="~/js/site.js" asp-append-version="true"></script>*@
         @await RenderSectionAsync("Scripts", required: false)
