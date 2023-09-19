@@ -63,36 +63,46 @@
     function Success() {
         // alert("Success?");
     }</script>
-    dropzone ok :)
+  <div class="col-6 w-50 mx-auto text-center" > Submit Assignment for Course > <span id="submit">Select Course</span></div>
 <meta charset="UTF-8">
-<title>Dropzone JS tutorial</title>
+
 <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 
 
 @*action="~/Home/Upload?Id=1"*@
-<form id="my-awesome-dropzone" class="dropzone" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
-    <div class="dropzone-previews"></div>
-    this is were the previews should be shown.
-    Now setup your input fields
-
-    <button type="submit">Submit data and files! </button>
-</form>
+<div class="row">
+    <div id="dropzone"class="w-50 mx-auto">
+    <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
+        <div class="dz-message needscklick">
+           Drop files here of click to upload.
+        </div>
+        @*in TestAjax*@
+ 
+    </form>
+    </div>
+</div>
 
 
 
 @section Scripts{
     @*scripts delflyttad från ovanför tag id=info *@
     <script>
-    
+
     //get accordian button coursename oncclick använd till dropdown för att kolla vilken kurs som är vald för parameter till Assignment Course
     let accordianbtns = document.getElementsByClassName("accordion-button");
     let coursename;
     console.log("buttonclasslist", accordianbtns);
-    function GetCourseNameOnClick(courseName) //anropas från TestAjax 
+
+        function GetCourseNameOnClick(courseName) //anropas från TestAjax
     {
         coursename = courseName;
         console.log("coursename", coursename);
-    };
+        };
+
+        function ShowCourseAtDropzone(cname)
+        {
+            $("#submit").html(cname + "?");
+        }
 
     //fungerar hämta buttons från TestAjax
     let ar = Array.from(accordianbtns); console.log("arra", ar);
@@ -103,7 +113,7 @@
     //obs fungerar ej eftersom knapparna tas fram med ajax;
     //behöver ? köra en callback på när knapparna finns och då sätta dit eventlistener:
     //69 ill 75 fungerarde ändå inte
-    
+
     //.forEach(function (element) {
     //    console.log("btelement.innertext", element.innerHTML);
     //    console.log("btnelement.innerhtml", element.innerText);
@@ -157,12 +167,7 @@
             var studentjobj = students["$values"][student];
             console.log("studobj", studentjobj);
             BuildSelectOptions(studentjobj);
-
-
         }
-
-
-
 
         function BuildSelectOptions(student)
         {
@@ -175,16 +180,8 @@
                 console.log(value);
                 console.log("LName--", value);
 
-
-            //var opt = document.createElement("option");
-            //opt.value = students["firstMidName"];
-
-
-
-        //opt.setAttribute("selected", "selected"); opt.innerHTML = "--select student--"; opt.setAttribute("disabled", "disabled");
-        //    select.appendChild(opt);
-        //    mainelement.appendChild(select);
     }
+
     </script>
 
     @*scripts del flyttad från ovanför tag id=info 1*@
@@ -206,8 +203,6 @@
             console.log("value=", selectvalue);
             myurl = "/home/Upload?Id=" + selectvalue;
         }
-
-
 
 
         const dz = new Dropzone(".dropzone", {
@@ -258,10 +253,10 @@
         });
 
 
-                //function AddStudId() { //AddStudId till dropzone fungerar ej varför? borde gå att få id från selectlistan studselect efter att den byggs upp med BuildSelectOptions.  körs vid ajax anrop innan det körs , data-ajax-begin sätter då dit id på valdstudent på dropzone action attribut (id är parameter till Home/Upload i controllern)
-                //    let dz = document.getElementById("my-awesome-dropzone");
-                //    let sselectval = document.getElementById("studselect").value; //value ska vara studentid:t;
-                //    dz.setAttribute("action", "~/Home/Upload?Id=" + sselectval);
+                    //function AddStudId() { //AddStudId till dropzone fungerar ej varför? borde gå att få id från selectlistan studselect efter att den byggs upp med BuildSelectOptions.  körs vid ajax anrop innan det körs , data-ajax-begin sätter då dit id på valdstudent på dropzone action attribut (id är parameter till Home/Upload i controllern)
+                    //    let dz = document.getElementById("my-awesome-dropzone");
+                    //    let sselectval = document.getElementById("studselect").value; //value ska vara studentid:t;
+                    //    dz.setAttribute("action", "~/Home/Upload?Id=" + sselectval);
 
     </script>
 }

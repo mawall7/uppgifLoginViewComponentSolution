@@ -14,6 +14,7 @@
             //number++;
             //LogOnClick(number);
             GetCourseNameOnClick(target);
+            ShowCourseAtDropzone(target);
         })
     }
    
@@ -62,7 +63,7 @@
                                @Model.CourseAssignment.
                                Where(ca => ca.CourseID == assignment.CourseID)
                                .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
-                               {<span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span> }
+                               {<span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span><br> }
                                 else {<span> <i class="fa fa-times" style="color:red"></i> Late</span> <br>} 
                                }
 
