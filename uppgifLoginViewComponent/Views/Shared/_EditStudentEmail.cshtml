@@ -1,0 +1,32 @@
+﻿@model uppgifLoginViewComponent.Models.Student
+
+<p class="h3">Change Email</p>
+    
+    <form class="d-flex flex-row justify-content-center" asp-action="EditStudentEmail" asp-controller="Home" asp-route-id="@Model.ID"
+          data-ajax="true" data-ajax-method="POST" data-ajax-mode="update" data-ajax-update="#updateemailsuccess">
+        
+            @*<div class="p-0">
+                <label class="col-form-label" asp-for="Email">Write New Email Here</label>
+            </div>*@
+            <div class="ps-2 input-group w-25 ">
+                <input type="text" class="form-control" id="email" asp-for="@Model.Email" />
+            </div>
+            <div class="p-0 input-group-append">
+                <button class="btn btn-info" type="submit">Save New Email</button>
+            </div>
+        
+    </form>
+
+            
+          
+           
+
+
+
+    
+    
+    
+  
+
+
+<span class="text-info" id="#updateemailsuccess"></span>

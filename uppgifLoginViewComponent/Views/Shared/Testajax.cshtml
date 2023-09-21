@@ -17,6 +17,8 @@
             ShowCourseAtDropzone(target);
         })
     }
+
+ 
    
 </script>
 
@@ -24,9 +26,13 @@
 
 <div class="text-primary">
 </div>
-@*<h3>Info</h3>*@
+
+<div>@{Html.RenderPartial("_StudentInfo", Model);}</div>
+<span id="email"></span>
+<span id="updateemailsuccess"></span> @*från EditStudenEmail*@
+
 @*<p>Name:@ViewBag.FName &nbsp; @ViewBag.LName</p>*@
-<p>Name:@Model.FirstMidName &nbsp; @Model.LastName</p>
+<!--<p>Name:@Model.FirstMidName &nbsp; @Model.LastName</p>-->
 
 
 <h3>Courses</h3>
@@ -57,14 +63,14 @@
                                  <span>AssignmentName:&nbsp;@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()</span>
                                  <span>DueDate:</span><span>/&nbsp;:@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().LastSubmissionDate.ToString()</span>
                                     
-                                <p>AssignmentFileName: @assignment.Name &nbsp;/SubmissionDate:&nbsp;@assignment.SubmissionDate.ToString()</p> 
+                                <span>AssignmentFileName: @assignment.Name &nbsp;/SubmissionDate:&nbsp;@assignment.SubmissionDate.ToString()</span> 
                                 <span>Submitted: </span>
                                 @if (DateTime.Compare(
                                @Model.CourseAssignment.
                                Where(ca => ca.CourseID == assignment.CourseID)
                                .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
-                               {<span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span><br> }
-                                else {<span> <i class="fa fa-times" style="color:red"></i> Late</span> <br>} 
+                               {<span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span><br><br> }
+                                else {<span> <i class="fa fa-times" style="color:red"></i> Late</span> <br><br>} 
                                }
 
                                 
@@ -75,10 +81,9 @@
         }
     }
 
-
-
-
 </div>
+
+<div id="studinfo"></div>
 
 
 

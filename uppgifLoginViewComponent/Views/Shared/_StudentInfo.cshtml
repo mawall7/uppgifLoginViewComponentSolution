@@ -1,0 +1,43 @@
+﻿@model uppgifLoginViewComponent.Models.ViewModels.StudentInfoViewModel
+
+<div>
+    <h3>Student</h3>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(Model=> Model.FirstMidName)</th>
+            <th scope="col">@Html.DisplayNameFor(Model => Model.LastName)</th>
+            <th scope="col">@Html.DisplayNameFor(Model => Model.PostalCode)</th>
+            <th scope="col">@Html.DisplayNameFor(Model => Model.Email)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr scope="col">
+            <td>@Html.DisplayFor(Model => Model.FirstMidName)</td>
+            <td>@Html.DisplayFor(Model => Model.LastName)</td>
+            <td>@Html.DisplayFor(Model => Model.PostalCode)</td>
+            <td>@Html.DisplayFor(Model => Model.Email)
+            
+              <form style="display:inline" asp-action="GetEmailEdit" asp-controller="Home" asp-route-student="@Model" asp-route-id="@Model.ID" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#email">
+                   
+
+
+                  <button class="btn btn-sm btn-info pl-2" type="submit"> Redigera</button>
+                </form>
+            
+            
+            
+            
+            </td>
+    @*<td>@Html.DisplayFor(Model => Model.Email)</td>*@
+        </tr>r
+    </tbody>
+</table>
+
+@*<form asp-action="GetEmailEdit" asp-controller="Home" asp-route-student="@Model" asp-route-id="@Model.ID" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#email">Redigera
+    
+    
+    <button class="btn btn-sm btn-info" type="submit"></button>
+</form>*@
+@*<div id="email"><div>*@

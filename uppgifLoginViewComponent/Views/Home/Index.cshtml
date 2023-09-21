@@ -23,9 +23,7 @@
 
     <div id="jsupdate" class="form-group">
         //ändra till att visa alla studenter i selectlista och sedan val visas via home ajax och det visas då alla uppgifter för den studenten med symboler hus och assignments. sedan kan man beroende på inloggning få viss athorization
-        @*<div><h4>@Html.Label("studentid")</h4></div>*@
-        @*<input type="text" name="studentid"/> alternativ*@
-        @*<div>@Html.TextBox("Search student", "", htmlAttributes: new { @class = "form-control", id = "studentid" })</div>*@
+
         <label class="custom-control-label">Select Student</label>
         <select id="studselect" class="form-control" asp-items="Model.StudentsSelect" name="StudentId" onchange="LoggSelectlistvalue()">
             <option value="" selected="selected" disabled="disabled">--select student--</option>
@@ -37,22 +35,10 @@
     <input type="submit" value="Submit" name="btnSubmit" class="btn btn-dark">
 </form>
 
-
+@*<div>@{await Html.RenderPartialAsync("_StudentInfo", Model.Student = Model.Students.Where(s=> s.ID == 1).FirstOrDefault());}</div>*@
+ 
 
 <div id="info">
-    @*@if(ViewBag.Name!= null) {<p>@ViewBag.Name</p>;}*@
-    @*@if(ViewBag.Name == null){<p>Empty</p>}*@
-    @*@{ if (Model.Student != null) {
-
-            <p>@Model.Student.FirstMidName</p>
-            <p>@Model.Student.Email</p>
-                @if(Model.Student.Enrollments != null)
-                    foreach (var item in Model.Student.Enrollments)
-                { <p>@item.Name &nbsp; StudentGrade:@item.StudentGrade </p>}
-
-
-                } }
-        @if(Model.Student== null) { <p>No student selected</p>}*@
     replace text
 </div>
 
@@ -271,7 +257,7 @@
 <p class="text-primary">
 </p>
 
-<div await @Html.PartialAsync("_Students", Model)></div>
+@*<div @await Html.PartialAsync("_Students", Model)></div>*@
 
 }
 

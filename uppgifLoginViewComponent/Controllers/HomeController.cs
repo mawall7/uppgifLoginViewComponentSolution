@@ -94,8 +94,16 @@ namespace uppgifLoginViewComponent.Controllers
         }
         public IActionResult ModalPartial()
         {
+            
             return PartialView("_Modal");
         }
+
+        //public async Task<IActionResult> StudentInfo(int Id)
+        //{
+        //    var model = await _context.Students.Where(s => s.ID == Id).FirstOrDefaultAsync();
+            
+        //    return PartialView("_StudentInfo", model);
+        //}
 
         public IActionResult StudentÉnrollment(int? ID)
         {
@@ -276,7 +284,28 @@ namespace uppgifLoginViewComponent.Controllers
         }
 
         [HttpPost]
-        //parameter IndexViewModel model
+        public async Task <IActionResult> GetEmailEdit(int id, StudentInfoViewModel student) //varför student null?
+        {
+            var stud = await _context.Students.Where(s => s.ID == id).FirstOrDefaultAsync();
+            return PartialView("_EditStudentEmail", stud);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditStudentEmail(int ID, string email)
+        {
+            var student = await _context.Students.Where(s => s.ID == ID).FirstOrDefaultAsync();
+            student.Email = email;
+            //if (emailallreadyexist) { ViewBag.emailIsSaved = false; }
+           
+            _context.Update(student);
+            await _context.SaveChangesAsync();
+              
+            ViewBag.emailIsSaved = true; //validering använd helpers istället 
+            return PartialView("_Studentemailsaved");
+        }
+
+        
+        [HttpPost]
         public IActionResult OnSubmitAjax(int StudentId) //obs att selectlistan selected inte uppdateras görs genom 1) javascript onsubmit eller 2) att ta med selectlistan i partiella vyn "TestAjax".
         {
             //Skapa istället en StudentViewModel och använd fetch istället för ajax som verkar vara avvecklad
@@ -301,11 +330,6 @@ namespace uppgifLoginViewComponent.Controllers
             }
             //return RedirectToAction(nameof(Index), s);
         }
-
-
-
-
-
 
 
         [HttpPost]
