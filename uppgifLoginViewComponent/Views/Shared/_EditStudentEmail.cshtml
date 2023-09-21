@@ -1,5 +1,10 @@
 ﻿@model uppgifLoginViewComponent.Models.Student
 
+<script>
+    
+    $('#deleteemailbtn').on('click', () => { $('#email').empty() });
+</script>
+
 <p class="h3">Change Email</p>
     
     <form class="d-flex flex-row justify-content-center" asp-action="EditStudentEmail" asp-controller="Home" asp-route-id="@Model.ID"
@@ -14,6 +19,9 @@
             <div class="p-0 input-group-append">
                 <button class="btn btn-info" type="submit">Save New Email</button>
             </div>
+        <div class="align-self-end">
+            <button id="deleteemailbtn" type="reset">X</button>
+        </div>
         
     </form>
 
