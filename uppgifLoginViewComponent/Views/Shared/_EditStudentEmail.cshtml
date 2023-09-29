@@ -1,40 +1,51 @@
 ﻿@model uppgifLoginViewComponent.Models.Student
 
-<script>
-    
-    $('#deleteemailbtn').on('click', () => { $('#email').empty() });
-</script>
+    <script>
 
-<p class="h3">Change Email</p>
-    
-    <form class="d-flex flex-row justify-content-center" asp-action="EditStudentEmail" asp-controller="Home" asp-route-id="@Model.ID"
-          data-ajax="true" data-ajax-method="POST" data-ajax-mode="update" data-ajax-update="#updateemailsuccess">
+        $(document).ready(function () {
+            $('#deleteemailbtn').on('click', () => { $('#email').empty() })
+        });
+    </script>
+
+    <div class="d-flex flex-row justify-content-start">
+        <div class="h3 w-15 align-self-auto">
+            <span class="text-dark">Change Email</span>
+        </div>
+        <div class="align-self-auto">
+            <button class="btn btn-light" id="deleteemailbtn" type="reset">X</button>
+        </div>
+    </div>
+       
         
-            @*<div class="p-0">
+       
+  
+  <form class="d-flex flex-row justify-content-center" asp-action="EditStudentEmail" asp-controller="Home" asp-route-id="@Model.ID"
+
+
+          data-ajax="true" data-ajax-method="POST" data-ajax-mode="update" data-ajax-update="#updateemailsuccess">
+
+        @*<div class="p-0">
                 <label class="col-form-label" asp-for="Email">Write New Email Here</label>
             </div>*@
-            <div class="ps-2 input-group w-25 ">
-                <input type="text" class="form-control" id="email" asp-for="@Model.Email" />
-            </div>
-            <div class="p-0 input-group-append">
-                <button class="btn btn-info" type="submit">Save New Email</button>
-            </div>
-        <div class="align-self-end">
-            <button id="deleteemailbtn" type="reset">X</button>
+        <div class="ps-2 input-group w-25 ">
+            <input type="text" class="form-control" id="email" asp-for="@Model.Email" />
         </div>
-        
+        <div class="p-0 input-group-append">
+            <button class="btn btn-info" type="submit">Save New Email</button>
+        </div>
+
     </form>
 
-            
-          
-           
 
 
 
-    
-    
-    
-  
 
 
-<span class="text-info" id="#updateemailsuccess"></span>
+
+
+
+
+
+
+
+    <span class="text-info" id="#updateemailsuccess"></span>

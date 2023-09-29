@@ -1,55 +1,82 @@
-﻿@*@model IEnumerable<uppgifLoginViewComponent.Models.Student>*@
+﻿@using uppgifLoginViewComponent.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@using uppgifLoginViewComponent.Data
+@using uppgifLoginViewComponent.Models.ViewModels
+@*@model IEnumerable<uppgifLoginViewComponent.Models.Student>*@
 @model uppgifLoginViewComponent.Models.ViewModels.IndexViewModel
-@*@{
-        ViewData["Title"] = "Home Page";
-    }*@
-@*
+@inject UserManager<User> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@inject StudentInfoHelp Studenthelp
 
-    @section Scripts {
-
-
-        <script src="https://use.fontawesome.com/3c66019ee4.js"></script>
-
-        }*@
-@* for asp-action returnerar TestAjax partial*@
-<form asp-action="OnSubmitAjax" asp-controller="Home"
-      data-ajax="true"
-      data-ajax-metod="POST"
-      data-ajax-mode="replace"
-      data-ajax-update="#info"
-      //data-ajax-success ="UpdateSelect">
+@{ }
 
 
+@{if (User.IsInRole("Teacher"))
+    { //fixa landingpage innan index med meny login
 
-    <div id="jsupdate" class="form-group">
-        //ändra till att visa alla studenter i selectlista och sedan val visas via home ajax och det visas då alla uppgifter för den studenten med symboler hus och assignments. sedan kan man beroende på inloggning få viss athorization
+        @* for asp-action returnerar TestAjax partial*@
+        <form asp-action="OnSubmitAjax" asp-controller="Home"
+              data-ajax="true"
+              data-ajax-metod="POST"
+              data-ajax-mode="replace"
+              data-ajax-update="#info">
 
-        <label class="custom-control-label">Select Student</label>
-        <select id="studselect" class="form-control" asp-items="Model.StudentsSelect" name="StudentId" onchange="LoggSelectlistvalue()">
-            <option value="" selected="selected" disabled="disabled">--select student--</option>
-        </select>
-        <input type="hidden" name="StudentId" />
+            <div id="jsupdate" class="form-group">
+                //ändra till att visa alla studenter i selectlista och sedan val visas via home ajax och det visas då alla uppgifter för den studenten med symboler hus och assignments. sedan kan man beroende på inloggning få viss athorization
+
+                <label class="custom-control-label">Select Student</label>
+                <select id="studselect" class="form-control" asp-items="Model.StudentsSelect" name="StudentId" onchange="LoggSelectlistvalue()">
+                    <option value="" selected="selected" disabled="disabled">--select student--</option>
+                </select>
+                <input type="hidden" name="StudentId" />
+            </div>
+
+
+            <input type="submit" value="Submit" name="btnSubmit" class="btn btn-dark">
+        </form>
+
+
+    }//verkar inte fungera eller index renderas inte om vid inloggning
+    else if (User.IsInRole("Student"))
+    {
+
+        var studemail = User.Identity.Name.ToString();
+
+        var studhelp = Studenthelp; StudentInfoViewModel studentmodel = studhelp.GetStudentInfo(studemail);
+        <span>Student</span>
+        @*<div> @await Html.PartialAsync("Testajax", studentmodel)</div> //använd helper egen helper passar nog för då kan man få in parameter ? eller konstruktor*@
+        <div> @await Html.PartialAsync("Testajax", studentmodel)</div>
+
+
+    }
+    else
+    { <span>role not set</span>
+    }
+    
+    <div id="info">
+        replace text
     </div>
 
 
-    <input type="submit" value="Submit" name="btnSubmit" class="btn btn-dark">
-</form>
-
+}
 @*<div>@{await Html.RenderPartialAsync("_StudentInfo", Model.Student = Model.Students.Where(s=> s.ID == 1).FirstOrDefault());}</div>*@
- 
 
-<div id="info">
-    replace text
-</div>
+
+
 
 
 <script>
+    let span = document.getElementById("info");
+    let text;
+    window.onload = function () { span.innerHTML = ""; }
 
 
-    function Success() {
-        // alert("Success?");
-    }</script>
-  <div class="col-6 w-50 mx-auto text-center" > Submit Assignment for Course > <span id="submit">Select Course</span></div>
+   setInterval(function() { text = @User.IsInRole("Teacher").ToString().ToLower(); if (text == "false") { span.innerHTML = "Show Student info" } else if(text == "true") (span.innerHTML = "Show Teacher info") }, 2000);
+
+      function Success() {
+          // alert("Success?");
+      }</script>
+<div class="col-6 w-50 mx-auto text-center"> Submit Assignment for Course > <span id="submit">Select Course</span></div>
 <meta charset="UTF-8">
 
 <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
@@ -57,14 +84,14 @@
 
 @*action="~/Home/Upload?Id=1"*@
 <div class="row">
-    <div id="dropzone"class="w-50 mx-auto">
-    <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
-        <div class="dz-message needscklick">
-           Drop files here of click to upload.
-        </div>
-        @*in TestAjax*@
- 
-    </form>
+    <div id="dropzone" class="w-50 mx-auto">
+        <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
+            <div class="dz-message needscklick">
+                Drop files here of click to upload.
+            </div>
+            @*in TestAjax*@
+
+        </form>
     </div>
 </div>
 
@@ -239,10 +266,10 @@
         });
 
 
-                    //function AddStudId() { //AddStudId till dropzone fungerar ej varför? borde gå att få id från selectlistan studselect efter att den byggs upp med BuildSelectOptions.  körs vid ajax anrop innan det körs , data-ajax-begin sätter då dit id på valdstudent på dropzone action attribut (id är parameter till Home/Upload i controllern)
-                    //    let dz = document.getElementById("my-awesome-dropzone");
-                    //    let sselectval = document.getElementById("studselect").value; //value ska vara studentid:t;
-                    //    dz.setAttribute("action", "~/Home/Upload?Id=" + sselectval);
+                                                //function AddStudId() { //AddStudId till dropzone fungerar ej varför? borde gå att få id från selectlistan studselect efter att den byggs upp med BuildSelectOptions.  körs vid ajax anrop innan det körs , data-ajax-begin sätter då dit id på valdstudent på dropzone action attribut (id är parameter till Home/Upload i controllern)
+                                                //    let dz = document.getElementById("my-awesome-dropzone");
+                                                //    let sselectval = document.getElementById("studselect").value; //value ska vara studentid:t;
+                                                //    dz.setAttribute("action", "~/Home/Upload?Id=" + sselectval);
 
     </script>
 }

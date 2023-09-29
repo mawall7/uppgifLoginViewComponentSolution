@@ -56,25 +56,34 @@
                           
                         <p>CourseName: @item.Name</p>
                         <p>Grade: @item.StudentGrade</p>
-                        @{ foreach (var assignment in item.Assignments)
+
+                        @{
+                            if (item.Assignments != null)
                             {
 
-                                // if (assignment.CourseID == item.CourseID)
+                                foreach (var assignment in item.Assignments)
+                                {
+
+                                    // if (assignment.CourseID == item.CourseID)
                                  <span>AssignmentName:&nbsp;@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()</span>
                                  <span>DueDate:</span><span>/&nbsp;:@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().LastSubmissionDate.ToString()</span>
-                                    
+
                                 <span>AssignmentFileName: @assignment.Name &nbsp;/SubmissionDate:&nbsp;@assignment.SubmissionDate.ToString()</span> 
                                 <span>Submitted: </span>
-                                @if (DateTime.Compare(
-                               @Model.CourseAssignment.
-                               Where(ca => ca.CourseID == assignment.CourseID)
-                               .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
-                               {<span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span><br><br> }
-                                else {<span> <i class="fa fa-times" style="color:red"></i> Late</span> <br><br>} 
-                               }
+                                @if (DateTime.Compare(   //use helper
+                                           @Model.CourseAssignment.
+                                           Where(ca => ca.CourseID == assignment.CourseID)
+                                           .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
+                                {<span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span><br><br> }
+                                else
+                                {<span> <i class="fa fa-times" style="color:red"></i> Late</span> <br><br>} 
+                                }
 
-                                
-                        }
+                            }//if Assignments
+                            else
+                            { <span>No current assignments  </span>}
+                           
+                            }
                     </div>
                 </div>
             </div>

@@ -25,13 +25,15 @@ namespace uppgifLoginViewComponent.Controllers
         public SchoolContext _context;
         private IWebHostEnvironment hostEnv;
         private readonly IMapper _mapper;
-        public HomeController(ILogger<HomeController> logger, SchoolContext context, IWebHostEnvironment env, IMapper mapper)
+        private readonly IdentityDbContext _identitycontext;
+        public HomeController(ILogger<HomeController> logger, SchoolContext context, IWebHostEnvironment env, IMapper mapper, IdentityDbContext identitycontext)
         {
             _logger = logger;
             _context = context;
             hostEnv = env;
             _logger.LogInformation("Logging from Index - index reached");
             _mapper = mapper;
+            _identitycontext = identitycontext;
         }
         private bool HttpOnly { get; set; }
         Dictionary<string, string> KVDict;
@@ -292,15 +294,24 @@ namespace uppgifLoginViewComponent.Controllers
 
         [HttpPost]
         public async Task<IActionResult> EditStudentEmail(int ID, string email)
-        {
+        {   
+
+            //Ändra tillbaks senare? ändrar man mail då änras även useremail som används som password inte säkert att man vill ha den implementationen. beroende på om en user ska ha authorisering för att ändra password. 
             var student = await _context.Students.Where(s => s.ID == ID).FirstOrDefaultAsync();
-            student.Email = email;
+
             //if (emailallreadyexist) { ViewBag.emailIsSaved = false; }
-           
+            var oldemail = student.Email;
+            var user = await _identitycontext.Users.Where(u => u.UserName == oldemail).FirstOrDefaultAsync();
+            user.Email = email; user.UserName = email; user.NormalizedUserName = email.ToUpper();user.NormalizedUserName = email; 
+            _identitycontext.Users.Update(user);
+            await _identitycontext.SaveChangesAsync();
+
+            student.Email = email;
             _context.Update(student);
             await _context.SaveChangesAsync();
               
             ViewBag.emailIsSaved = true; //validering använd helpers istället 
+
             return PartialView("_Studentemailsaved");
         }
 

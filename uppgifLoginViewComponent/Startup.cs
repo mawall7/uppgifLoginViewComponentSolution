@@ -14,7 +14,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using uppgifLoginViewComponent.Areas.Identity.Data;
 using uppgifLoginViewComponent.Data;
+using uppgifLoginViewComponent.Models;
 
 namespace uppgifLoginViewComponent
 {
@@ -34,12 +36,27 @@ namespace uppgifLoginViewComponent
         {
 
             
+            
             services.AddControllersWithViews().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
-            //services.AddRazorPages();
-            services.AddDbContext<SchoolContext>(options  => { 
-                  options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+
+            services.AddDbContext<SchoolContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
 
             });
+
+            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+                  .AddRoles<IdentityRole>()
+                  .AddEntityFrameworkStores<IdentityDbContext>()
+             .AddEntityFrameworkStores<IdentityDbContext>()
+             .AddRoleManager<RoleManager<IdentityRole>>()
+             .AddDefaultUI()
+             .AddDefaultTokenProviders();
+            
+            services.AddRazorPages();
+            //services.AddControllersWithViews();
+            
+
             var mapperconfiguration = new MapperConfiguration(c =>
             {
                 c.AddProfile(new MapperProfile());
@@ -48,13 +65,10 @@ namespace uppgifLoginViewComponent
             IMapper mapper = mapperconfiguration.CreateMapper();
             services.AddSingleton(mapper);
             
+           services.AddTransient<StudentInfoHelp>();
             
         }
-           
-
-
-                
-            
+        
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -83,12 +97,13 @@ namespace uppgifLoginViewComponent
             app.UseAuthentication();
             app.UseAuthorization();
 
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}");
-                //endpoints.MapRazorPages();
+                endpoints.MapRazorPages();
             });
         }
     }
