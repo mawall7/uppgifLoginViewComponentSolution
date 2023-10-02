@@ -199,17 +199,18 @@ namespace uppgifLoginViewComponent.Controllers
 
             if (file.Length > 0)
             {
-                using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
-                {
-                    await file.CopyToAsync(fileStream);
-                }
+                //används ej?
+                //using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                //{
+                //    await file.CopyToAsync(fileStream);
+                //}
 
-                //sparars fil i databas som binär kod eller blob 
+                //spara fil i databas som binär kod
 
-                var mstream = new MemoryStream(); //hur använd using statement?
+                var mstream = new MemoryStream(); //using?
                 file.CopyTo(mstream);
                 byte[] byteArray = mstream.ToArray();
-                //var assignment = new Assignment() { SubmissionDate = DateTime.Now, Name = file.FileName, StudentID = Id, StudentName = _context.Students.Find(Id).LastName, AssignmentFile = byteArray };
+
                 var assignment = new Assignment() { SubmissionDate = DateTime.Now, Name = file.FileName, CourseAssignmentID=1, CourseID=1, EnrollmentID=1 /*StudentID = Id, StudentName = _context.Students.Find(Id).LastName,*/, AssignmentFile = byteArray };
                 _context.Assignments.Add(assignment);
                 _context.SaveChanges();

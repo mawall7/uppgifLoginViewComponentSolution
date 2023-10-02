@@ -22,7 +22,7 @@ namespace uppgifLoginViewComponent
 {
     public class Startup
     {
-        
+        //IConfiguration injected via runtime hosting service
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,7 +31,7 @@ namespace uppgifLoginViewComponent
         public IConfiguration Configuration { get; }
         //public IWebHostEnvironment WebHostEnv { get; set; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime. Use this method to add services to the container. is composed to an IServiceProvider class. for resolving services directly.
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -41,6 +41,7 @@ namespace uppgifLoginViewComponent
 
             services.AddDbContext<SchoolContext>(options =>
             {
+
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
 
             });
@@ -66,6 +67,7 @@ namespace uppgifLoginViewComponent
             services.AddSingleton(mapper);
             
            services.AddTransient<StudentInfoHelp>();
+           
             
         }
         

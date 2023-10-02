@@ -18,6 +18,8 @@ namespace uppgifLoginViewComponent.Data
             public DbSet<Assignment> Assignments { get; set; }
             public DbSet<CourseAssignment> CourseAssignment { get; set;}
 
+        
+
 
     }
 }
