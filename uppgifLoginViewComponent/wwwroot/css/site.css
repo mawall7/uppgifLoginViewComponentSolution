@@ -89,3 +89,23 @@ body {
     top:0;
     left:0;
 }
+#featuredCourses {
+    position: relative;
+    animation: mymove 5s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes mymove {
+    0% {
+        top: 30px;
+        opacity:1;
+    }
+    80%{
+        opacity:0.75
+    }
+    
+    100% {
+        top: 450px;
+        opacity:0;
+    }
+}
