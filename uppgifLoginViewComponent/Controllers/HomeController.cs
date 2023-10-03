@@ -16,6 +16,7 @@ using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using uppgifLoginViewComponent.Extensionmethods;
 using AutoMapper;
+using uppgifLoginViewComponent.CusomAttributes;
 
 namespace uppgifLoginViewComponent.Controllers
 {
@@ -46,18 +47,9 @@ namespace uppgifLoginViewComponent.Controllers
             IndexViewModel model = new IndexViewModel();
             var studentselect = new List<SelectListItem>();
 
-            //model.Students = await _context.Students.Include(a => a.Enrollments)
-            //    .Include(a => a.Assignments)
-            //    .ToListAsync();
             model.Students = await _context.Students.Include(a => a.Enrollments)
             .ToListAsync();
                 
-            //var Enrollment = await _context.Enrollments.Include(a => a.Assignments).Include(a => a.Student)
-            //    .ToListAsync();
-
-            //model.Student = selected;
-            //model.Student.Enrollments = await _context.Enrollments.Where(s => s.StudentID == selected.ID).Include(e=>e.Assignments).ToListAsync();
-                //_context.Students.Where(s => s.ID == model.StudentId).Include(s => s.Enrollments).FirstOrDefault();
                
             var studentslist = new List<Student>();
             //studentslist = _context.Students.ToList();
@@ -75,38 +67,31 @@ namespace uppgifLoginViewComponent.Controllers
                     studentselect.Add(new SelectListItem() { Value = s.ID.ToString(), Text = $"{s.FirstMidName} {s.LastName }" });
                 }    
             }
-           // studentselect.Add(new SelectListItem() { Value = 0.ToString(), Text = "--Select Student--", Selected = true });
+          
             model.StudentsSelect = studentselect;
             
             return View(model);
         }
-            
-        //public bool IsDuplicated(Student s, List<Student> list) 
-        //{
-        //    return list.Any(i => i.FirstMidName == s.FirstMidName);
-        //}
-       
-            public IActionResult StudentsPartial()
+
+        //från exempel används ej för tillfället
+        public IActionResult StudentsPartial()
         {
             var st = _context.Students.ToList();
-           
+
 
             return PartialView("_Students"/*_context.Students.ToList()*/);
-            
+
         }
+        
+        //från exempel används ej för tillfället
         public IActionResult ModalPartial()
         {
             
             return PartialView("_Modal");
         }
 
-        //public async Task<IActionResult> StudentInfo(int Id)
-        //{
-        //    var model = await _context.Students.Where(s => s.ID == Id).FirstOrDefaultAsync();
-            
-        //    return PartialView("_StudentInfo", model);
-        //}
 
+        //från exempel används ej för tillfället
         public IActionResult StudentÉnrollment(int? ID)
         {
             Enrollment enrollment = _context.Enrollments.Where(a => a.StudentID == ID).FirstOrDefault();
@@ -176,8 +161,6 @@ namespace uppgifLoginViewComponent.Controllers
         {
             return !e.IsDevelopment(); 
              
-
-
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -186,8 +169,7 @@ namespace uppgifLoginViewComponent.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
-
+        [ServiceFilter(typeof(ValidationFilterFileNotEmptyAttribute))]
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file, int Id, string CourseName) //to do kolla vilken student som laddat upp t.ex. döp om filen till att sluta med studentnamn via student id
         {
@@ -199,12 +181,7 @@ namespace uppgifLoginViewComponent.Controllers
 
             if (file.Length > 0)
             {
-                //används ej?
-                //using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
-                //{
-                //    await file.CopyToAsync(fileStream);
-                //}
-
+               
                 //spara fil i databas som binär kod
 
                 var mstream = new MemoryStream(); //using?
@@ -215,56 +192,11 @@ namespace uppgifLoginViewComponent.Controllers
                 _context.Assignments.Add(assignment);
                 _context.SaveChanges();
                 
-                //// to do gör en Db klass istället för att jobba mot contextet direkt: Db.SaveAssignment(name); 
             }
 
             return RedirectToAction("Index");
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        ////public async Task<IActionResult> Upload(IFormFile file, int id) //to do skicka istället en vymodel via en form. IForm som property i vymodellen
-        //{
-        //    int StudentId = id;
-
-        //   if (isTextFile(file)){
-
-        //   var filePath = CreateFilePath(file);  verkar inte fungera
-
-        //   using (var memoryStream = new MemoryStream())
-        //    {
-        //        await file.CopyToAsync(memoryStream);
-        //        //try
-        //        //{
-        //            //if (memoryStream.Length < 100000) //validera bytelängd 
-        //            //{
-        //                var assignment = new Assignment() { AssignmentFile = memoryStream.ToArray(), Name = file.FileName, Date = DateTime.Now, StudentID = id};//IFORM fil konverteras till bytes eller sparas som textfil.
-        //                _context.Assignments.Add(assignment);
-        //                _context.SaveChanges();
-
-        //            //}
-        //      }
-        //        //catch(Exception e)
-        //        //{
-        //        //    throw new FileLoadException("file is to large must be less than 10 kb ", e.Message);
-        //        //}
-
-        //        //} 
-
-        //        //using (FileStream fs = System.IO.File.Create(filePath))  //sparar filerna till root/files 
-        //        //{
-
-        //        //    file.CopyTo(fs);
-
-        //        //}
-        //    }
-        //    else
-        //    {
-        //        throw new IOException("file must be a text file");
-
-        //    }
-
-        //    return RedirectToAction(nameof(Index));
-        //}
+        
 
         [HttpPost]
         public IActionResult OnSubmit(IndexViewModel model)
@@ -272,11 +204,9 @@ namespace uppgifLoginViewComponent.Controllers
             Student s;
             try
             {
-                //s = _context.Students.Find(model.StudentId);
+             
                 s = _context.Students.Where(s => s.ID == model.StudentId).Include(s => s.Enrollments).FirstOrDefault();
-               // ViewBag.Submit = true;
-
-                //return View("Testajax");
+               
             }
             catch (Exception e)
             {

@@ -7,8 +7,14 @@
 @inject UserManager<User> UserManager
 @inject RoleManager<IdentityRole> RoleManager
 @inject StudentInfoHelp Studenthelp
+@inject SignInManager<User> SigninManager
 
-@{ }
+
+
+@if (!SigninManager.IsSignedIn(User))
+{
+<body style="background-image: url('https://thumbs.dreamstime.com/z/high-school-college-students-studying-reading-together-high-school-college-students-studying-reading-together-105156570.jpg?w=992'); background-size:cover"></body>
+}
 
 
 @{if (User.IsInRole("Teacher"))
@@ -21,10 +27,10 @@
               data-ajax-mode="replace"
               data-ajax-update="#info">
 
-            <div id="jsupdate" class="form-group">
-                //ändra till att visa alla studenter i selectlista och sedan val visas via home ajax och det visas då alla uppgifter för den studenten med symboler hus och assignments. sedan kan man beroende på inloggning få viss athorization
+            <div id="jsupdate" class="form-group mt-1">
+               
 
-                <label class="custom-control-label">Select Student</label>
+                <label class="custom-control-label display-4">Select Student</label>
                 <select id="studselect" class="form-control" asp-items="Model.StudentsSelect" name="StudentId" onchange="LoggSelectlistvalue()">
                     <option value="" selected="selected" disabled="disabled">--select student--</option>
                 </select>
@@ -36,7 +42,7 @@
         </form>
 
 
-    }//verkar inte fungera eller index renderas inte om vid inloggning
+    }
     else if (User.IsInRole("Student"))
     {
 
@@ -50,22 +56,21 @@
 
     }
     else
-    { <span>role not set</span>
+    { @*<span>role not set</span>*@
     }
-    
-    <div id="info">
-        replace text
-    </div>
 
 
-}
+
+<div id="info">
+       
+    </div>}
 @*<div>@{await Html.RenderPartialAsync("_StudentInfo", Model.Student = Model.Students.Where(s=> s.ID == 1).FirstOrDefault());}</div>*@
 
 
 
 
 
-<script>
+@*<script>
     let span = document.getElementById("info");
     let text;
     window.onload = function () { span.innerHTML = ""; }
@@ -74,15 +79,18 @@
    setInterval(function() { text = @User.IsInRole("Teacher").ToString().ToLower(); if (text == "false") { span.innerHTML = "Show Student info" } else if(text == "true") (span.innerHTML = "Show Teacher info") }, 2000);
 
       function Success() {
-          // alert("Success?");
-      }</script>
-<div class="col-6 w-50 mx-auto text-center"> Submit Assignment for Course > <span id="submit">Select Course</span></div>
+         
+      }</script>*@
 <meta charset="UTF-8">
 
 <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 
 
 @*action="~/Home/Upload?Id=1"*@
+@if (SigninManager.IsSignedIn(User))
+{
+<div class="col-6 w-50 mx-auto text-center"> Submit Assignment for Course > <span id="submit">Select Course</span></div>
+
 <div class="row">
     <div id="dropzone" class="w-50 mx-auto">
         <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
@@ -94,8 +102,8 @@
         </form>
     </div>
 </div>
-
-
+}
+</p>
 
 @section Scripts{
     @*scripts delflyttad från ovanför tag id=info *@
@@ -264,44 +272,8 @@
                 //});
             }
         });
-
-
-                                                //function AddStudId() { //AddStudId till dropzone fungerar ej varför? borde gå att få id från selectlistan studselect efter att den byggs upp med BuildSelectOptions.  körs vid ajax anrop innan det körs , data-ajax-begin sätter då dit id på valdstudent på dropzone action attribut (id är parameter till Home/Upload i controllern)
-                                                //    let dz = document.getElementById("my-awesome-dropzone");
-                                                //    let sselectval = document.getElementById("studselect").value; //value ska vara studentid:t;
-                                                //    dz.setAttribute("action", "~/Home/Upload?Id=" + sselectval);
+                                   
 
     </script>
 }
-
-
-@*</div>*@
-
-
-@*<div @Html.Partial("_Modal")></div>*@
-
-@*<div @Html.Partial("_Students", Model)*@ @*asp-controller="Home" asp-action="StudentsPartial"*@>@*</div>*@
-<p class="text-primary">
-</p>
-
-@*<div @await Html.PartialAsync("_Students", Model)></div>*@
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

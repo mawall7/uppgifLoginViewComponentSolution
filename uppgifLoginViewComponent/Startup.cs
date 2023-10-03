@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using uppgifLoginViewComponent.Areas.Identity.Data;
+using uppgifLoginViewComponent.CusomAttributes;
 using uppgifLoginViewComponent.Data;
 using uppgifLoginViewComponent.Models;
 
@@ -55,6 +56,8 @@ namespace uppgifLoginViewComponent
              .AddDefaultTokenProviders();
             
             services.AddRazorPages();
+
+            services.AddScoped<ValidationFilterFileNotEmptyAttribute>();
             //services.AddControllersWithViews();
             
 

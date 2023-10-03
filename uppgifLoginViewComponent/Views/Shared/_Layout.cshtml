@@ -8,19 +8,29 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-  <div class="row">
-      <div class="col-12 mx-1 bg-dark text-center">
-          <h1 class="display-6 font-weight-bold text-warning " >
-              University
-          </h1>
-      </div>
-  </div>
 
-    <partial name="_LoginPartial"/>
-    
     @if (ViewBag.Submit != true)
     {
-        <header>
+    <div class="row">
+        <div class="col-5 bg-dark text-left" >
+            <partial name="_LoginPartial" />
+        </div>
+
+        <div class="col-7 bg-dark text-left">
+            <h1 class="display-6 font-weight-bold text-warning ">
+                University
+            </h1>
+        </div>
+    </div>
+    }
+
+
+
+
+
+    @if (ViewBag.Submit != true)
+    {
+        @*<header>*@
             @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
                 <div class="container">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Contoso University</a>
@@ -52,7 +62,7 @@
                     </div>
                 </div>
             </nav>*@
-        </header>
+        @*</header>*@
     }
     @RenderBody()
     <div class="container">
@@ -61,7 +71,7 @@
 
             @if (ViewBag.Submit == false)
             {
-                <span>not a submit yet</span>
+                @*<span>not a submit yet</span>*@
               
             }
 
