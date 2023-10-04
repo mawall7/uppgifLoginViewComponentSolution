@@ -14,5 +14,6 @@ namespace uppgifLoginViewComponent
         {
             CreateMap<Student, StudentInfoViewModel>();
         }
+
     }
 }

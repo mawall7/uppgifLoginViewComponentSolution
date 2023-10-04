@@ -56,18 +56,18 @@ namespace uppgifLoginViewComponent
              .AddDefaultTokenProviders();
             
             services.AddRazorPages();
-
+            services.AddAutoMapper(c => c.AddProfile(new MapperProfile()));
             services.AddScoped<ValidationFilterFileNotEmptyAttribute>();
             //services.AddControllersWithViews();
             
 
-            var mapperconfiguration = new MapperConfiguration(c =>
-            {
-                c.AddProfile(new MapperProfile());
-            });
+            //var mapperconfiguration = new MapperConfiguration(c =>
+            //{
+            //    c.AddProfile(new MapperProfile());
+            //});
 
-            IMapper mapper = mapperconfiguration.CreateMapper();
-            services.AddSingleton(mapper);
+            //IMapper mapper = mapperconfiguration.CreateMapper();
+            //services.AddSingleton(mapper);
             
            services.AddTransient<StudentInfoHelp>();
            

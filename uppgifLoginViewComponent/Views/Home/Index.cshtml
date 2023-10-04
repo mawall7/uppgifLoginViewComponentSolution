@@ -16,12 +16,10 @@
 @if (!SigninManager.IsSignedIn(User))
 {
 <body style="background-image: url('https://thumbs.dreamstime.com/z/high-school-college-students-studying-reading-together-high-school-college-students-studying-reading-together-105156570.jpg?w=992'); background-size:cover"></body>
-<div id="featuredCourses" class="h5 text-center">Featured Courses
-<h5>@await Component.InvokeAsync("FeauturedCourses")</h5>
-   @*<p> await @Component.InvokeAsync("FeauturedCourses")</P>;*@
-    @*@foreach (var item in Courses) { }*@ 
-       
-</div>
+    <div id="featuredCourses" class="h5 text-center">Featured Courses
+        <h5>@await Component.InvokeAsync("FeauturedCourses")</h5>
+    </div>
+  
 }
 
 
