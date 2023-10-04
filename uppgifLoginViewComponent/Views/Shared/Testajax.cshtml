@@ -7,12 +7,10 @@
         console.log("button", buttons[i]);
         buttons[i].addEventListener("click", function (e)
         {
-            //let target;
-            //console.log("etarget", target);
+           
             let target = e.target.innerHTML.replace(/^a-zA-Z0-9 ]/g, '')
+          
             target = target.trim();
-            //number++;
-            //LogOnClick(number);
             GetCourseNameOnClick(target);
             ShowCourseAtDropzone(target);
         })
