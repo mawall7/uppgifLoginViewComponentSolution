@@ -1,24 +1,67 @@
 ﻿@model uppgifLoginViewComponent.Models.ViewModels.StudentInfoViewModel
 @*use scripts in partial view? går enligt plural sight utan section artikel! Scripts section doesnt work by default design. you will need helpers in that case.*@
+
+@*<head>
+    <title>Bootstrap Example</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<a href="#" data-toggle="popover" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a>*@
 <script>
-    buttons = document.getElementsByTagName("button");
+
+    function Popfunction(e) {
+        //let popoverelement = document.getElementById("popbtn");
+        //let popelements = document.getElementsByTagName("button");
+        let el = e.target; console.log("elem", el);
+        //popoverelement.showPopover();
+    };
+
+    var $j = jQuery.noConflict();
+
+    function Mybootspop(event) {
+
+        var ev = event;
+        console.log("event", ev); console.log("attribute", ev.target.attributes.getNamedItem("id"));
+        var id = ev.target.attributes.getNamedItem("id").value;
+        var stringid = "#".concat(id); console.log("myid=", stringid); var target = $j(stringid); target.popover();
+        
+    };
+    
+</script>
+<script>
+    //var $j = jQuery.noConflict();
+
+    function Myfunct() {
+
+        $j('[data-toggle="popover"]').popover();
+    };
+
+    //buttons = document.getElementsByTagName("button");
+    buttons = document.getElementsByClassName("mybutton");
+
     //let number = 0;
-    for (let i = 0 ; i < buttons.length; i++) {
+    for (let i = 0; i < buttons.length; i++) {
         console.log("button", buttons[i]);
-        buttons[i].addEventListener("click", function (e)
-        {
-           
+        buttons[i].addEventListener("click", function (e) {
+
             let target = e.target.innerHTML.replace(/^a-zA-Z0-9 ]/g, '')
-          
+
             target = target.trim();
             GetCourseNameOnClick(target);
             ShowCourseAtDropzone(target);
         })
     }
 
- 
-   
+
+
 </script>
+
+<div class="container">
+    <h3>Popover Example2</h3>
+    <a href="#" data-toggle="popover" title="Popover Header" onclick="Myfunct()" data-content="Some content inside the popover">Toggle popover</a>")
+</div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -43,15 +86,14 @@
 
             <div class="accordion-item">
                 <h2 class="accordion-header" id="acsitems@(item.ID.ToString())">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item@(item.ID.ToString())" aria-expanded="true" aria-controls="collapseOne@(item.ID.ToString())"
-                         >
+                    <button class="mybutton accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item@(item.ID.ToString())" aria-expanded="true" aria-controls="collapseOne@(item.ID.ToString())">
                         @item.Name
                     </button>
                 </h2>
                 <div id="item@(item.ID.ToString())" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
 
-                          
+
                         <p>CourseName: @item.Name</p>
                         <p>Grade: @item.StudentGrade</p>
 
@@ -63,25 +105,34 @@
                                 {
 
                                     // if (assignment.CourseID == item.CourseID)
-                                 <span>AssignmentName:&nbsp;@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()</span>
-                                 <span>DueDate:</span><span>/&nbsp;:@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().LastSubmissionDate.ToString()</span>
+                                    <span>AssignmentName:&nbsp;@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()</span>
+                                    <span>DueDate:</span><span>/&nbsp;:@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().LastSubmissionDate.ToString()</span>
+                                    //--
+                                    @*<button id="popbtn@(assignment.ID)" popovertarget="mypop@(assignment.ID)" onclick="Popfunction(event)">pop</button>*@
+                                   <a id="@(assignment.ID)" href="#/" data-toggle="popover" title="details"
+                                      
+                                      data-bs-content="assignmentname: @assignment.Name / submissiondate: @assignment.SubmissionDate.ToString()"
+                                      onclick="Mybootspop(event)">Details
+                                   </a>
 
-                                <span>AssignmentFileName: @assignment.Name &nbsp;/SubmissionDate:&nbsp;@assignment.SubmissionDate.ToString()</span> 
-                                <span>Submitted: </span>
-                                @if (DateTime.Compare(   //use helper
-                                           @Model.CourseAssignment.
-                                           Where(ca => ca.CourseID == assignment.CourseID)
-                                           .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
-                                {<span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span><br><br> }
-                                else
-                                {<span> <i class="fa fa-times" style="color:red"></i> Late</span> <br><br>} 
+                                    //--
+                    
+
+                    
+                                    @if (DateTime.Compare(   //use helper
+                                   @Model.CourseAssignment.
+                                   Where(ca => ca.CourseID == assignment.CourseID)
+                                   .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
+                                    {<span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span><br><br> }
+                                    else
+                                    {<span> <i class="fa fa-times" style="color:red"></i> Late</span> <br><br>}
                                 }
 
                             }//if Assignments
                             else
                             { <span>No current assignments  </span>}
-                           
-                            }
+
+                        }
                     </div>
                 </div>
             </div>
@@ -91,6 +142,15 @@
 </div>
 
 <div id="studinfo"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+@*popover requires tooptips in js initialization fungerade ändå inte. ? varför?*@
+
+
+
+
 
 
 

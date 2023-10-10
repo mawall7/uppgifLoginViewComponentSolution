@@ -89,11 +89,11 @@ body {
     top:0;
     left:0;
 }
-#featuredCourses {
+/*#featuredCourses {
     position: relative;
     animation: mymove 5s;
     animation-iteration-count: infinite;
-}
+}*/
 
 @keyframes mymove {
     0% {

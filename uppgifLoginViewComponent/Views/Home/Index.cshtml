@@ -10,16 +10,57 @@
 @inject StudentInfoHelp Studenthelp
 @inject SignInManager<User> SigninManager
 
+
+    <title>Bootstrap Example</title>
+
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>*@
+
+
+
+
+<script>
+  
+    //function Myfunct() {
+       
+    //    $('[data-toggle="popover"]').popover();
+    //};
+
+    function Myfunct2() {
+
+        $('#pop2').popover();
+        /*$('[data-toggle="popover2"]').popover();*/
+    };
+        
+</script>
+
+
+@*<div class="container">
+    <h3>Popover Example</h3>
+    <a href="#" data-toggle="popover" title="Popover Header" onclick="Myfunct()" data-content="Some content inside the popover">Toggle popover</a>")
+</div>*@
+ <script>
+
+
    
+</script>
+    
+
+
+
+
 
 
 @if (!SigninManager.IsSignedIn(User))
 {
-<body style="background-image: url('https://thumbs.dreamstime.com/z/high-school-college-students-studying-reading-together-high-school-college-students-studying-reading-together-105156570.jpg?w=992'); background-size:cover"></body>
-    <div id="featuredCourses" class="h5 text-center">Featured Courses
+    <body style="background-image: url('https://thumbs.dreamstime.com/z/high-school-college-students-studying-reading-together-high-school-college-students-studying-reading-together-105156570.jpg?w=992'); background-size:cover">
+    </body>
+    <div id="featuredCourses" class="h5 text-center">
+        Featured Courses
         <h5>@await Component.InvokeAsync("FeauturedCourses")</h5>
     </div>
-  
+
 }
 
 
@@ -34,13 +75,13 @@
               data-ajax-update="#info">
 
             <div id="jsupdate" class="form-group mt-1">
-               
+
 
                 <label class="custom-control-label display-4">Select Student</label>
                 <select id="studselect" class="form-control" asp-items="Model.StudentsSelect" name="StudentId" onchange="LoggSelectlistvalue()">
                     <option value="" selected="selected" disabled="disabled">--select student--</option>
                 </select>
-                <input type="hidden" name="StudentId" />
+                <input type="hidden"  name="StudentId" />
             </div>
 
 
@@ -55,7 +96,7 @@
         var studemail = User.Identity.Name.ToString();
 
         var studhelp = Studenthelp; StudentInfoViewModel studentmodel = studhelp.GetStudentInfo(studemail);
-        <span>Student</span>
+
         @*<div> @await Html.PartialAsync("Testajax", studentmodel)</div> //använd helper egen helper passar nog för då kan man få in parameter ? eller konstruktor*@
         <div> @await Html.PartialAsync("Testajax", studentmodel)</div>
 
@@ -63,13 +104,13 @@
     }
     else
     { @*<span>role not set</span>*@
-    }
+}
 
 
 
 <div id="info">
-       
-    </div>}
+
+</div>}
 @*<div>@{await Html.RenderPartialAsync("_StudentInfo", Model.Student = Model.Students.Where(s=> s.ID == 1).FirstOrDefault());}</div>*@
 
 
@@ -77,16 +118,16 @@
 
 
 @*<script>
-    let span = document.getElementById("info");
-    let text;
-    window.onload = function () { span.innerHTML = ""; }
+     let span = document.getElementById("info");
+     let text;
+     window.onload = function () { span.innerHTML = ""; }
 
 
-   setInterval(function() { text = @User.IsInRole("Teacher").ToString().ToLower(); if (text == "false") { span.innerHTML = "Show Student info" } else if(text == "true") (span.innerHTML = "Show Teacher info") }, 2000);
+    setInterval(function() { text = @User.IsInRole("Teacher").ToString().ToLower(); if (text == "false") { span.innerHTML = "Show Student info" } else if(text == "true") (span.innerHTML = "Show Teacher info") }, 2000);
 
-      function Success() {
-         
-      }</script>*@
+       function Success() {
+
+       }</script>*@
 <meta charset="UTF-8">
 
 <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
@@ -95,24 +136,28 @@
 @*action="~/Home/Upload?Id=1"*@
 @if (SigninManager.IsSignedIn(User))
 {
-<div class="col-6 w-50 mx-auto text-center"> Submit Assignment for Course > <span id="submit">Select Course</span></div>
+    <div class="col-6 w-50 mx-auto text-center"> Submit Assignment for Course > <span id="submit">Select Course</span></div>
 
-<div class="row">
-    <div id="dropzone" class="w-50 mx-auto">
-        <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
-            <div class="dz-message needscklick">
-                Drop files here of click to upload.
-            </div>
-            @*in TestAjax*@
+    <div class="row">
+        <div id="dropzone" class="w-50 mx-auto">
+            <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
 
-        </form>
+                @*<div class="needscklick">
+                </div>*@
+                <button type="submit" title="mydropzonebtn" hidden="hidden">open file</button>
+                
+                @*in TestAjax here you can add button*@
+
+            </form>
+        </div>
     </div>
-</div>
 }
 
 
 @section Scripts{
     @*scripts delflyttad från ovanför tag id=info *@
+   
+
     <script>
 
     //get accordian button coursename oncclick använd till dropdown för att kolla vilken kurs som är vald för parameter till Assignment Course
@@ -214,7 +259,7 @@
     @*scripts del flyttad från ovanför tag id=info 1*@
 
     <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
-    <script src="dropzone-custom.js"></script>
+    @*<script src="dropzone-custom.js"></script>*@
 
     <script>
         setInterval(function () {
@@ -231,55 +276,57 @@
             myurl = "/home/Upload?Id=" + selectvalue;
         }
 
+        if (document.getElementById('dropzone')) {
+            const dz = new Dropzone(".dropzone", {
 
-        const dz = new Dropzone(".dropzone", {
 
+                // The configuration we've talked about above
+                url: "/Home/Upload/", //tog bort det för att använda action = i form taggen i stället för att få in id
+                autoProceshQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 100,
+                maxFiles: 100,
+                params: function params(files, xhr, chunk) { return { 'Id': selectvalue, 'CourseName': coursename }; },
 
-            // The configuration we've talked about above
-            url: "/Home/Upload/", //tog bort det för att använda action = i form taggen i stället för att få in id
-            autoProceshQueue: false,
-            uploadMultiple: false,
-            parallelUploads: 100,
-            maxFiles: 100,
-            params: function params(files, xhr, chunk) { return { 'Id': selectvalue, 'CourseName': coursename }; },
+                /* params: {'Id': 1},*/
 
-            /* params: {'Id': 1},*/
+                // The setting up of the dropzone
+                init: function () {
+                    var myDropzone = this;
 
-            // The setting up of the dropzone
-            init: function () {
-                var myDropzone = this;
-
-                this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
                     // Make sure that the form isn't actually being sent.
                     e.preventDefault();
                     e.stopPropagation();
                     myDropzone.processQueue()
-                });
-                //// First change the button to actually tell Dropzone to process the queue.
-                //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-                //    // Make sure that the form isn't actually being sent.
-                //    e.preventDefault();
-                //    e.stopPropagation();
-                //    myDropzone.processQueue();
-                //});
-                //// Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
-                //// of the sending event because uploadMultiple is set to true. < changed to false
-                //this.on("sendingmultiple", function () {
-                //    // Gets triggered when the form is actually being sent.
-                //    // Hide the success button or the complete form.
-                //});
-                //this.on("successmultiple", function (files, response) {
-                //    // Gets triggered when the files have successfully been sent.
-                //    // Redirect user or notify of success.
-                //});
-                //this.on("errormultiple", function (files, response) {
-                //    // Gets triggered when there was an error sending the files.
-                //    // Maybe show form again, and notify user of error
-                //});
-            }
-        });
-                                   
+                     });
+                    //// First change the button to actually tell Dropzone to process the queue.
+                    //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    //    // Make sure that the form isn't actually being sent.
+                    //    e.preventDefault();
+                    //    e.stopPropagation();
+                    //    myDropzone.processQueue();
+                    //});
+                    //// Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                    //// of the sending event because uploadMultiple is set to true. < changed to false
+                    //this.on("sendingmultiple", function () {
+                    //    // Gets triggered when the form is actually being sent.
+                    //    // Hide the success button or the complete form.
+                    //});
+                    //this.on("successmultiple", function (files, response) {
+                    //    // Gets triggered when the files have successfully been sent.
+                    //    // Redirect user or notify of success.
+                    //});
+                    //this.on("errormultiple", function (files, response) {
+                    //    // Gets triggered when there was an error sending the files.
+                    //    // Maybe show form again, and notify user of error
+                    //});
+                }
+            });
+        }
+
 
     </script>
-}
+
+    }
 
