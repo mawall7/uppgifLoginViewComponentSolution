@@ -22,16 +22,6 @@
 
 <script>
   
-    //function Myfunct() {
-       
-    //    $('[data-toggle="popover"]').popover();
-    //};
-
-    function Myfunct2() {
-
-        $('#pop2').popover();
-        /*$('[data-toggle="popover2"]').popover();*/
-    };
         
 </script>
 
@@ -77,7 +67,7 @@
             <div id="jsupdate" class="form-group mt-1">
 
 
-                <label class="custom-control-label display-4">Select Student</label>
+                <label class="custom-control-label h6">Select Student</label>
                 <select id="studselect" class="form-control" asp-items="Model.StudentsSelect" name="StudentId" onchange="LoggSelectlistvalue()">
                     <option value="" selected="selected" disabled="disabled">--select student--</option>
                 </select>
@@ -96,6 +86,8 @@
         var studemail = User.Identity.Name.ToString();
 
         var studhelp = Studenthelp; StudentInfoViewModel studentmodel = studhelp.GetStudentInfo(studemail);
+
+      
 
         @*<div> @await Html.PartialAsync("Testajax", studentmodel)</div> //använd helper egen helper passar nog för då kan man få in parameter ? eller konstruktor*@
         <div> @await Html.PartialAsync("Testajax", studentmodel)</div>

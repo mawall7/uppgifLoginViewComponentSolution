@@ -1,15 +1,18 @@
 ﻿@model uppgifLoginViewComponent.Models.ViewModels.StudentInfoViewModel
 @*use scripts in partial view? går enligt plural sight utan section artikel! Scripts section doesnt work by default design. you will need helpers in that case.*@
 
-@*<head>
-    <title>Bootstrap Example</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Bootstrap Example</title>
+    
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">*@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<a href="#" data-toggle="popover" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a>*@
+    @*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>*@
+
+@*<a href="#" data-toggle="popover" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a>*@
+
 <script>
+    
+    let $j;
 
     function Popfunction(e) {
         //let popoverelement = document.getElementById("popbtn");
@@ -18,14 +21,16 @@
         //popoverelement.showPopover();
     };
 
-    var $j = jQuery.noConflict();
 
-    function Mybootspop(event) {
+    $(document).ready(function () { $j = jQuery.noConflict(); });
+
+    function Mybootspop(event) { 
+        //var $j = jQuery.noConflict();
 
         var ev = event;
         console.log("event", ev); console.log("attribute", ev.target.attributes.getNamedItem("id"));
         var id = ev.target.attributes.getNamedItem("id").value;
-        var stringid = "#".concat(id); console.log("myid=", stringid); var target = $j(stringid); target.popover();
+        var stringid = "#".concat(id); console.log("myid=", stringid); /*var target = $j(stringid);*/ /*target.popover();*/$j(stringid).popover();
         
     };
     
@@ -58,11 +63,6 @@
 
 </script>
 
-<div class="container">
-    <h3>Popover Example2</h3>
-    <a href="#" data-toggle="popover" title="Popover Header" onclick="Myfunct()" data-content="Some content inside the popover">Toggle popover</a>")
-</div>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="text-primary">
@@ -86,7 +86,7 @@
 
             <div class="accordion-item">
                 <h2 class="accordion-header" id="acsitems@(item.ID.ToString())">
-                    <button class="mybutton accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item@(item.ID.ToString())" aria-expanded="true" aria-controls="collapseOne@(item.ID.ToString())">
+                    <button class="mybutton accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#item@(item.ID.ToString())" aria-expanded="true" aria-controls="collapseOne@(item.ID.ToString())" data-parent="#accordionExample">
                         @item.Name
                     </button>
                 </h2>
