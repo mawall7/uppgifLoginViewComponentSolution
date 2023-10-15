@@ -105,7 +105,7 @@
                                 {
 
                                     // if (assignment.CourseID == item.CourseID)
-                                    <span>AssignmentName:&nbsp;@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()</span>
+                                    <span>AssignmentName:&nbsp;@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()<a asp-controller="Home"asp-action="StudAssignment" asp-route-Id="@(assignment.EnrollmentID)" asp-route-AssId="@assignment.ID">examine/correct</a></span>
                                     <span>DueDate:</span><span>/&nbsp;:@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().LastSubmissionDate.ToString()</span>
                                     //--
                                     @*<button id="popbtn@(assignment.ID)" popovertarget="mypop@(assignment.ID)" onclick="Popfunction(event)">pop</button>*@

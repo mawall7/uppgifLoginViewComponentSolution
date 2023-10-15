@@ -1,0 +1,21 @@
+﻿@model uppgifLoginViewComponent.Models.Assignment
+@using uppgifLoginViewComponent.Data
+@inject Reader Reader;
+<h6>Student Assignment</h6>
+@{ foreach (var item in Reader.Read(Model.AssignmentFile).ToString())
+    {
+        <span>@item.ToString()</span>
+
+        if (item.ToString().Contains('\n'))
+        { <br/>};
+
+        if (item.ToString() == " ")
+        { <span>&nbsp;</span>}
+        //else;
+
+
+    }
+}
+
+    
+    

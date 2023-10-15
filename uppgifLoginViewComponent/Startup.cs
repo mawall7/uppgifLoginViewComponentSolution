@@ -70,7 +70,7 @@ namespace uppgifLoginViewComponent
             //services.AddSingleton(mapper);
             
            services.AddTransient<StudentInfoHelp>();
-           
+            services.AddTransient<Reader>();
             
         }
         

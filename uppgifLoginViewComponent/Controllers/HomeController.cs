@@ -186,7 +186,7 @@ namespace uppgifLoginViewComponent.Controllers
 
                 var mstream = new MemoryStream(); //using?
                 file.CopyTo(mstream);
-                byte[] byteArray = mstream.ToArray();
+                byte[] byteArray = mstream.ToArray(); //alt Encoding.Default.GetBytes(string)
 
                 var assignment = new Assignment() { SubmissionDate = DateTime.Now, Name = file.FileName, CourseAssignmentID=1, CourseID=1, EnrollmentID=1 /*StudentID = Id, StudentName = _context.Students.Find(Id).LastName,*/, AssignmentFile = byteArray };
                 _context.Assignments.Add(assignment);
@@ -283,6 +283,13 @@ namespace uppgifLoginViewComponent.Controllers
             ViewBag.Submit = true;
             return View("Studentinfo", student);
             
+        }
+
+        public async Task<IActionResult> StudAssignment(int Id, int AssId)
+        {
+            var assignments = _context.Enrollments.Include(e => e.Assignments).Where(a=> a.ID == Id).ToList();
+            var sassignment = assignments.Select(s => new Assignment() { AssignmentFile = s.Assignments.Where(a => a.ID == AssId).Select(s => s.AssignmentFile).FirstOrDefault()  }).FirstOrDefault();
+            return View(sassignment);
         }
 
         private string CreateFilePath(IFormFile file)
