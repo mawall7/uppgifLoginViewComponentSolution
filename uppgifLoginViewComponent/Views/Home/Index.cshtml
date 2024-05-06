@@ -10,10 +10,9 @@
 @inject StudentInfoHelp Studenthelp
 @inject SignInManager<User> SigninManager
 
+@*<title>Bootstrap Example</title>*@
 
-    <title>Bootstrap Example</title>
-
-    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>*@
 
@@ -21,61 +20,82 @@
 
 
 <script>
-  
-        
+    //not used at the moment
+    $j(document).ready(function (e) {
+
+        let selectoption = $("#studselect").val(); //studentid
+        $("#studselect").on('change', function (e) {
+            var url = "/Home/OnSubmitAjax/StudentId=" + selectoption;
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $("#indexform").serialize(),
+                success: function (data) {
+                    $(".tnxforate").html(data)
+                },
+                failure: function () { console.log("javasscript ajaxcall on change for studselect failed" + e.value); }
+            });
+        });
+    });
+
+
 </script>
 
 
-@*<div class="container">
-    <h3>Popover Example</h3>
-    <a href="#" data-toggle="popover" title="Popover Header" onclick="Myfunct()" data-content="Some content inside the popover">Toggle popover</a>")
-</div>*@
- <script>
+@{TempData.Keep("GradechangeInfo");}
+@{TempData.Keep("GradechangeEnrollmentId");}
 
-
-   
-</script>
-    
+<div id="myindex">
 
 
 
+    @if (!SigninManager.IsSignedIn(User))
+    {
+        <body style="background-image: url('https://thumbs.dreamstime.com/z/high-school-college-students-studying-reading-together-high-school-college-students-studying-reading-together-105156570.jpg?w=992'); background-size:cover">
+        </body>
+        <div id="featuredCourses" class="h5 text-center">
+            Featured Courses
+            <h5>@await Component.InvokeAsync("FeauturedCourses")</h5>
+        </div>
+
+    }
+
+    @{ if (TempData["Message"] != null)
+        {
+            <p class="alert-info">@TempData["Message"]</p>
+        }
+     }
+    @{TempData?.Remove("Message"); } 
+
+    @{if (User.IsInRole("Teacher"))
+        {
+            <p class="alert-info">@ViewBag.AssignmentUpdated</p>
+            @* for asp-action returnerar TestAjax partial*@
+            @*<form id="indexform" method="post" action="">*@
+            <form id="indexform" asp-action="OnSubmitAjax" asp-controller="Home"
+                  data-ajax="true"
+                  data-ajax-metod="POST"
+                  data-ajax-mode="replace"
+                  data-ajax-update="#info">
+
+                <div id="jsupdate" class="form-group mt-1 border border-dark rounded p-5">
+
+
+                    @*<label class="custom-control-label h5">Select Student</label>*@
+                    <p>Select Student</p>
+                    <div class="bg-light clearfix">
+                        <select class="float-left form-select" id="studselect" title="Students" asp-items="Model.StudentsSelect" name="StudentId">
+                            @*onchange="LoggSelectlistvalue()"*@
+
+                        <option value="" selected="selected" disabled="disabled">--select student--</option>
+                    </select>
+                    <input type="hidden" name="StudentId" class="float-right" />
 
 
 
-@if (!SigninManager.IsSignedIn(User))
-{
-    <body style="background-image: url('https://thumbs.dreamstime.com/z/high-school-college-students-studying-reading-together-high-school-college-students-studying-reading-together-105156570.jpg?w=992'); background-size:cover">
-    </body>
-    <div id="featuredCourses" class="h5 text-center">
-        Featured Courses
-        <h5>@await Component.InvokeAsync("FeauturedCourses")</h5>
-    </div>
-
-}
-
-
-@{if (User.IsInRole("Teacher"))
-    { //fixa landingpage innan index med meny login
-
-        @* for asp-action returnerar TestAjax partial*@
-        <form asp-action="OnSubmitAjax" asp-controller="Home"
-              data-ajax="true"
-              data-ajax-metod="POST"
-              data-ajax-mode="replace"
-              data-ajax-update="#info">
-
-            <div id="jsupdate" class="form-group mt-1">
-
-
-                <label class="custom-control-label h6">Select Student</label>
-                <select id="studselect" class="form-control" asp-items="Model.StudentsSelect" name="StudentId" onchange="LoggSelectlistvalue()">
-                    <option value="" selected="selected" disabled="disabled">--select student--</option>
-                </select>
-                <input type="hidden"  name="StudentId" />
+                    <input id="myformsubmit" type="submit" value="Submit" name="btnSubmit" class="btn btn-sm float-left" autocomplete="on">
+                </div>
             </div>
-
-
-            <input type="submit" value="Submit" name="btnSubmit" class="btn btn-dark">
         </form>
 
 
@@ -87,7 +107,7 @@
 
         var studhelp = Studenthelp; StudentInfoViewModel studentmodel = studhelp.GetStudentInfo(studemail);
 
-      
+
 
         @*<div> @await Html.PartialAsync("Testajax", studentmodel)</div> //använd helper egen helper passar nog för då kan man få in parameter ? eller konstruktor*@
         <div> @await Html.PartialAsync("Testajax", studentmodel)</div>
@@ -103,54 +123,61 @@
 <div id="info">
 
 </div>}
-@*<div>@{await Html.RenderPartialAsync("_StudentInfo", Model.Student = Model.Students.Where(s=> s.ID == 1).FirstOrDefault());}</div>*@
+    @*<div>@{await Html.RenderPartialAsync("_StudentInfo", Model.Student = Model.Students.Where(s=> s.ID == 1).FirstOrDefault());}</div>*@
 
 
 
 
 
-@*<script>
-     let span = document.getElementById("info");
-     let text;
-     window.onload = function () { span.innerHTML = ""; }
+    @*<script>
+         let span = document.getElementById("info");
+         let text;
+         window.onload = function () { span.innerHTML = ""; }
 
 
-    setInterval(function() { text = @User.IsInRole("Teacher").ToString().ToLower(); if (text == "false") { span.innerHTML = "Show Student info" } else if(text == "true") (span.innerHTML = "Show Teacher info") }, 2000);
+        setInterval(function() { text = @User.IsInRole("Teacher").ToString().ToLower(); if (text == "false") { span.innerHTML = "Show Student info" } else if(text == "true") (span.innerHTML = "Show Teacher info") }, 2000);
 
-       function Success() {
+           function Success() {
 
-       }</script>*@
-<meta charset="UTF-8">
+           }</script>*@
+    <meta charset="UTF-8">
 
-<link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 
 
-@*action="~/Home/Upload?Id=1"*@
-@if (SigninManager.IsSignedIn(User))
-{
-    <div class="col-6 w-50 mx-auto text-center"> Submit Assignment for Course > <span id="submit">Select Course</span></div>
+    @* ----Dropzone --- action="~/Home/Upload?Id=1"*@
+    @if (SigninManager.IsSignedIn(User))
+    {
+        <div class="col-6 w-50 mx-auto text-center"> Submit Assignment for Course > <span id="submit">Select Course</span></div>
 
-    <div class="row">
-        <div id="dropzone" class="w-50 mx-auto">
-            <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div id="dropzone" class="w-50 mx-auto">
+                <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
 
-                @*<div class="needscklick">
-                </div>*@
-                <button type="submit" title="mydropzonebtn" hidden="hidden">open file</button>
-                
-                @*in TestAjax here you can add button*@
+                    @*<div class="needscklick">
+                        </div>*@
+                    <button type="submit" title="mydropzonebtn" hidden="hidden">open file</button>
 
-            </form>
+                    @*in TestAjax here you can add button*@
+
+                </form>
+            </div>
         </div>
-    </div>
-}
+    }
+</div>
 
 
 @section Scripts{
     @*scripts delflyttad från ovanför tag id=info *@
-   
+
 
     <script>
+
+        function SubmitForm()
+        {
+            $j("#myformsubmit").submit();
+
+        }
 
     //get accordian button coursename oncclick använd till dropdown för att kolla vilken kurs som är vald för parameter till Assignment Course
     let accordianbtns = document.getElementsByClassName("accordion-button");
@@ -174,40 +201,9 @@
         let arr = Array.from(accordianbtns); console.log("viewbag", @ViewBag.infofrompartial); console.log("val", arr); /*console.log("arr0.innerText", arr[0].innerText)*/
     }, 6000);
 
-    //obs fungerar ej eftersom knapparna tas fram med ajax;
-    //behöver ? köra en callback på när knapparna finns och då sätta dit eventlistener:
-    //69 ill 75 fungerarde ändå inte
-
-    //.forEach(function (element) {
-    //    console.log("btelement.innertext", element.innerHTML);
-    //    console.log("btnelement.innerhtml", element.innerText);
-    //});
-
-    //for (let i = 0; accordianbtns.length; i++) {
-    //    console.log("thisval", accordianbtns[i]);
-    //}
-
-    //for (let i of accordianbtns) {
-    //       console.log("value is", accordianbtns[i].ariaExpanded);
-    //    }
 
 
 
-    //to do onclick fungerar ej
-    //let courseName;
-
-    //for (let i of accordianbtns) {
-    //    console.log("item", accordianbtns[i]);
-    //}
-    //for (var i = 0; i < accordianbtns.length; i++) {
-    //    var item = accordianbtns[i].value;
-    //    console.log("courseit[i]", accordianbtns.item(i));
-    //    console.log("courseit[i].value", accordianbtns[i].value);
-    //    item.addEventListener("click", function () {
-    //        courseName = item.innerHTML;
-    //        console.log("item.innerHTML", courseName);
-    //    })
-    //}
 
     function UpdateSelect() { //används ej är för att nollställa studselect till --choose student--
         document.getElementById("jsupdate").innerHTML = "";
@@ -287,11 +283,11 @@
                     var myDropzone = this;
 
                     this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
-                    // Make sure that the form isn't actually being sent.
-                    e.preventDefault();
-                    e.stopPropagation();
-                    myDropzone.processQueue()
-                     });
+                        // Make sure that the form isn't actually being sent.
+                        e.preventDefault();
+                        e.stopPropagation();
+                        myDropzone.processQueue()
+                    });
                     //// First change the button to actually tell Dropzone to process the queue.
                     //this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
                     //    // Make sure that the form isn't actually being sent.
@@ -320,5 +316,5 @@
 
     </script>
 
-    }
+}
 

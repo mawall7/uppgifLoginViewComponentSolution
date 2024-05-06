@@ -24,7 +24,7 @@ namespace uppgifLoginViewComponent.Models.ViewModels
         [RegularExpression(@"^[1-9]{5}\s[a-zA-Z]{2,15}$")]
         [StringLength(20)]
         public string PostalCode { get; set; }
-
+        public string? GradeUpdated { get; set; }//to do show in student courses view 
         public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<Assignment> Assignments { get; set; }
         public ICollection<CourseAssignment> CourseAssignment { get; set; }

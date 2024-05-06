@@ -68,19 +68,39 @@
 <div class="text-primary">
 </div>
 
-<div>@{Html.RenderPartial("_StudentInfo", Model);}</div>
+<div class="border border-dark rounded p-5 mt-5>@{Html.RenderPartial("_StudentInfo", Model);}</div>
 <span id="email"></span>
 <span id="updateemailsuccess"></span> @*från EditStudenEmail*@
 
 @*<p>Name:@ViewBag.FName &nbsp; @ViewBag.LName</p>*@
 <!--<p>Name:@Model.FirstMidName &nbsp; @Model.LastName</p>-->
 
-
+<div class="border border-dark rounded p-5 mt-5">
 <h3>Courses</h3>
 
 
 <div class="accordion" id="accordionExample">
+    <div class="alert-info">
 
+
+        @{  if (TempData.Count != 0)
+            {
+            
+                if(Model.Enrollments.Any(item=> item.ID.ToString().Equals(TempData["GradechangeEnrollmentId"])))
+                {
+                    <p>
+                        @TempData["GradechangeInfo"] course 
+                        @*@TempData["GradechangeEnrollmentId"]*@  
+
+                    </p>
+                
+                }
+            }
+        }
+
+        
+
+    </div>
     @{ foreach (var item in Model.Enrollments)
         {
 
@@ -88,14 +108,54 @@
                 <h2 class="accordion-header" id="acsitems@(item.ID.ToString())">
                     <button class="mybutton accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#item@(item.ID.ToString())" aria-expanded="true" aria-controls="collapseOne@(item.ID.ToString())" data-parent="#accordionExample">
                         @item.Name
+
+                        @{//to do göra en taghelper istället dry
+                            string changedGradeEnrollmentid = null;
+                            if (TempData["GradechangeEnrollmentId"] != null)
+                            {
+                                changedGradeEnrollmentid = TempData.Peek("GradechangeEnrollmentId").ToString();
+                                
+                                //courseId = (int)TempData["GradechangeCourseId"];
+
+                                if (changedGradeEnrollmentid.Equals(item.ID.ToString()))
+                                {
+                                    <span class="text-danger">(@(TempData.Peek("GradechangeInfo"))!)</span>
+                                }
+                                
+                            }
+                        }
+
+
                     </button>
                 </h2>
                 <div id="item@(item.ID.ToString())" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
 
 
-                        <p>CourseName: @item.Name</p>
-                        <p>Grade: @item.StudentGrade</p>
+                        <p>
+                            CourseName: @item.Name
+                        </p>
+                        <p class=@(changedGradeEnrollmentid!=null && changedGradeEnrollmentid.Equals(item.ID.ToString())? "text-danger" : "text-success")>
+
+
+                            Grade: @item.StudentGrade
+
+
+                        </p>
+
+                        @*<table class="table">
+        <thead>
+            <tr>
+                Name thead
+            </tr>
+        </thead>
+        <tbody>
+          <tr>*@
+
+
+                        <div class="text-primary tex ">
+                          <p class="fw-light text-decoration-underline">Returned Assignments</p>
+                       </div>
 
                         @{
                             if (item.Assignments != null)
@@ -105,34 +165,73 @@
                                 {
 
                                     // if (assignment.CourseID == item.CourseID)
-                                    <span>AssignmentName:&nbsp;@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()<a asp-controller="Home"asp-action="StudAssignment" asp-route-Id="@(assignment.EnrollmentID)" asp-route-AssId="@assignment.ID">examine/correct</a></span>
-                                    <span>DueDate:</span><span>/&nbsp;:@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().LastSubmissionDate.ToString()</span>
+                                    <div>
+                                        <span>
+                                            AssignmentName:&nbsp;@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()
+                                            @if (User.IsInRole("Teacher"))
+                                            {<a asp-controller="Home" asp-action="StudAssignment" asp-route-Id="@(assignment.EnrollmentID)" asp-route-AssId="@assignment.ID">examine/correct</a>}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span>DueDate:</span>
+                                        <span>/&nbsp;:@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().LastSubmissionDate.ToString()</span>
+                                    </div>
                                     //--
                                     @*<button id="popbtn@(assignment.ID)" popovertarget="mypop@(assignment.ID)" onclick="Popfunction(event)">pop</button>*@
-                                   <a id="@(assignment.ID)" href="#/" data-toggle="popover" title="details"
-                                      
-                                      data-bs-content="assignmentname: @assignment.Name / submissiondate: @assignment.SubmissionDate.ToString()"
-                                      onclick="Mybootspop(event)">Details
-                                   </a>
 
-                                    //--
-                    
+                                    <a id="@(assignment.ID)" href="#/" data-toggle="popover" title="details"
+                                       data-bs-content="assignmentname: @assignment.Name / submissiondate: @assignment.SubmissionDate.ToString()"
+                                       onclick="Mybootspop(event)">
+                                        Details
+                                    </a>
 
-                    
+
+
                                     @if (DateTime.Compare(   //use helper
-                                   @Model.CourseAssignment.
-                                   Where(ca => ca.CourseID == assignment.CourseID)
-                                   .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
-                                    {<span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span><br><br> }
+                            @Model.CourseAssignment.
+                            Where(ca => ca.CourseID == assignment.CourseID)
+                            .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
+                                    {
+                                        <span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span>
+                                        <br>
+                                        <br>
+
+
+                                    }
                                     else
-                                    {<span> <i class="fa fa-times" style="color:red"></i> Late</span> <br><br>}
+                                    {
+                                        <span> <i class="fa fa-times" style="color:red"></i> Late</span>
+                                        <br>
+                                        <br>
+
+                                        @*<span>
+                            <a asp-action="DeleteFile" asp-controller="Home" asp-route-Id="@(assignment.ID)">
+                                DeleteFile
+                            </a>
+                        </span>*@
+                                    }
+                                    <span>
+                                        <a asp-controller="Home" asp-action="DeleteAssignment" asp-route-assignmentId="@(assignment.ID)">
+                                            DeleteFile
+                                        </a>
+                                    </span>
+
                                 }
 
                             }//if Assignments
                             else
-                            { <span>No current assignments  </span>}
+                            {
+                                <span>No current assignments  </span>
+
+                            }
+
+
 
                         }
+
+                        @*</tbody>
+        </table>*@
+
                     </div>
                 </div>
             </div>
@@ -140,6 +239,7 @@
     }
 
 </div>
+    </div>
 
 <div id="studinfo"></div>
 

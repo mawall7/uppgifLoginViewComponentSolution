@@ -41,16 +41,22 @@ namespace uppgifLoginViewComponent.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Index() //selected student skickas från OnSubmit Action metod nedan i Redirect från selectList formsubmit 
+        public async Task<IActionResult> Index(string? assignmentupdate) //selected student skickas från OnSubmit Action metod nedan i Redirect från selectList formsubmit 
         {
             ViewBag.Submit = false;
+            TempData.Keep("GradechangeInfo");
+            TempData.Keep("GradechangeEnrollmentId");
+
+            TempData.Keep("Message");
+
+
             IndexViewModel model = new IndexViewModel();
             var studentselect = new List<SelectListItem>();
 
             model.Students = await _context.Students.Include(a => a.Enrollments)
             .ToListAsync();
-                
-               
+
+            ViewBag.AssignmentUpdated = assignmentupdate;   
             var studentslist = new List<Student>();
             //studentslist = _context.Students.ToList();
             
@@ -181,9 +187,10 @@ namespace uppgifLoginViewComponent.Controllers
 
             if (file.Length > 0)
             {
-               
-                //spara fil i databas som binär kod
+                
 
+                //spara fil i databas som binär kod
+                
                 var mstream = new MemoryStream(); //using?
                 file.CopyTo(mstream);
                 byte[] byteArray = mstream.ToArray(); //alt Encoding.Default.GetBytes(string)
@@ -287,8 +294,28 @@ namespace uppgifLoginViewComponent.Controllers
 
         public async Task<IActionResult> StudAssignment(int Id, int AssId)
         {
-            var assignments = _context.Enrollments.Include(e => e.Assignments).Where(a=> a.ID == Id).ToList();
-            var sassignment = assignments.Select(s => new Assignment() { AssignmentFile = s.Assignments.Where(a => a.ID == AssId).Select(s => s.AssignmentFile).FirstOrDefault()  }).FirstOrDefault();
+            var assignments = _context.Enrollments.Include(e => e.Assignments)
+                .Where(a=> a.ID == Id).ToList();
+            
+            var sassignment = assignments.Select(s =>
+            new Assignment()
+            {
+                AssignmentFile = s.Assignments //skicka en viewmodel istället
+            .Where(a => a.ID == AssId)
+            .Select(s => s.AssignmentFile).FirstOrDefault()
+            }).FirstOrDefault();
+           
+            ViewBag.CourseAssignmentId = _context.Assignments.
+                Where(assignment =>
+            assignment.ID == AssId)
+            .Select(item => item.CourseID)
+            .FirstOrDefault();
+
+            //ViewBag.CourseAssignmentId = assignments.Where(assignment =>
+            //assignment.ID == AssId)
+            //.Select(item => item.CourseID)
+            //.FirstOrDefault();
+
             return View(sassignment);
         }
 
@@ -312,5 +339,49 @@ namespace uppgifLoginViewComponent.Controllers
             return file.ContentType == "text/plain";
 
         }
+#nullable enable
+        public async Task<IActionResult> GradeAssignment(string Grade) //felaktig model skickad fel att skapa en ny i vyn
+        {
+            var gradecourse = Grade.Split(",");
+            var grade = gradecourse[0];
+            var courseid = gradecourse[1];
+            int assignmentCourse = int.Parse(courseid);
+            //manuellt test ska ändra tillbaks eftersom name inte inte ska vara grade borde använda viewmodel ist.
+            Enrollment enrollment = await _context.Enrollments
+            .Where(enrollment => enrollment.CourseID == assignmentCourse)
+            .FirstOrDefaultAsync();
+            enrollment.StudentGrade = Enum.Parse<Enrollment.Grade>(grade);
+            _context.Update(enrollment);
+            _context.SaveChanges();
+            string info = "updated";
+
+            TempData["GradechangeInfo"] = info;
+            TempData["GradechangeEnrollmentId"] = enrollment.ID.ToString();
+            
+            TempData.Keep("GradechangeStatus");
+            
+
+            return RedirectToAction("Index", "Home", new { assignmentupdate = "updated" });
+          
+        }
+
+        public async Task<IActionResult> DeleteAssignment(int assignmentId)
+        {
+            var assignmentfile = await _context.Assignments.Where(item => item.ID == assignmentId)
+                .FirstOrDefaultAsync();
+
+            return View(nameof(DeleteAssignmentConfirm), new DeleteFileViewModel(){FileName = assignmentfile.Name, FileId = assignmentfile.ID });
+        }
+        public async Task<IActionResult> DeleteAssignmentConfirm(int assignmentId)
+        {
+            var assignmentfile = await _context.Assignments.Where(item => item.ID == assignmentId)
+                .FirstOrDefaultAsync();
+            _context.Remove(assignmentfile);
+            _context.SaveChangesAsync();
+            TempData["Message"] = "Successfully Removed a File";
+            
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

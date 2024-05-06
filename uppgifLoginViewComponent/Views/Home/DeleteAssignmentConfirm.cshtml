@@ -1,0 +1,15 @@
+﻿@model uppgifLoginViewComponent.Models.ViewModels.DeleteFileViewModel
+
+<div class="d-flex card-columns">
+    <div class="text-primary-lg">
+        Delete File ?
+    </div>
+    <div>
+        <p class="font-weight-light text-warning" >@Model.FileName</p>
+    </div>
+    <div>
+        <a asp-controller="Home" asp-action="DeleteAssignmentConfirm" asp-route-assignmentId="@Model.FileId">Delete</a>
+    </div>
+
+</div>
+   
