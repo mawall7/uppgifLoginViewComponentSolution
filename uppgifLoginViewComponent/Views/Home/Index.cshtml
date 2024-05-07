@@ -84,8 +84,8 @@
                     @*<label class="custom-control-label h5">Select Student</label>*@
                     <p>Select Student</p>
                     <div class="bg-light clearfix">
-                        <select class="float-left form-select" id="studselect" title="Students" asp-items="Model.StudentsSelect" name="StudentId">
-                            @*onchange="LoggSelectlistvalue()"*@
+                        <select class="float-left form-select" id="studselect" title="Students" asp-items="Model.StudentsSelect" name="StudentId" onchange="LoggSelectlistvalue()">
+                            
 
                         <option value="" selected="selected" disabled="disabled">--select student--</option>
                     </select>
@@ -108,8 +108,6 @@
         var studhelp = Studenthelp; StudentInfoViewModel studentmodel = studhelp.GetStudentInfo(studemail);
 
 
-
-        @*<div> @await Html.PartialAsync("Testajax", studentmodel)</div> //använd helper egen helper passar nog för då kan man få in parameter ? eller konstruktor*@
         <div> @await Html.PartialAsync("Testajax", studentmodel)</div>
 
 
@@ -152,10 +150,11 @@
 
         <div class="row">
             <div id="dropzone" class="w-50 mx-auto">
-                <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload?Id=5" method="post" enctype="multipart/form-data">
+                <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload" method="post" enctype="multipart/form-data">
+                   @*action="/Home/Upload?Id=5"*@
 
                     @*<div class="needscklick">
-                        </div>*@
+        </div>*@
                     <button type="submit" title="mydropzonebtn" hidden="hidden">open file</button>
 
                     @*in TestAjax here you can add button*@
@@ -218,7 +217,7 @@
         var studentsobjs = @Json.Serialize(Model);
         console.log("studentsobject: ", studentsobjs);
         var students = studentsobjs.students;
-        console.log("students", students); //to do onsdag
+        console.log("students", students); 
 
 
         for (let student in students["$values"]) { //student blir = 0 , 1 listindex varför ?
@@ -262,6 +261,7 @@
             selectvalue = document.getElementById("studselect").value;
             console.log("value=", selectvalue);
             myurl = "/home/Upload?Id=" + selectvalue;
+            console.log(myurl);
         }
 
         if (document.getElementById('dropzone')) {
@@ -269,7 +269,7 @@
 
 
                 // The configuration we've talked about above
-                url: "/Home/Upload/", //tog bort det för att använda action = i form taggen i stället för att få in id
+                //url: "/Home/Upload/", //tog bort det för att använda action = i form taggen i stället för att få in id
                 autoProceshQueue: false,
                 uploadMultiple: false,
                 parallelUploads: 100,

@@ -180,22 +180,37 @@ namespace uppgifLoginViewComponent.Controllers
         public async Task<IActionResult> Upload(IFormFile file, int Id, string CourseName) //to do kolla vilken student som laddat upp t.ex. döp om filen till att sluta med studentnamn via student id
         {
             //var uploads = @"C:\Users\matte\Downloads\";
-            int teststudid = Id;
+            int studentid = Id;
             string courseName = CourseName;
+           
+                
             //spara filen
             var uploads = CreateFilePath(file);
 
             if (file.Length > 0)
             {
-                
 
                 //spara fil i databas som binär kod
-                
+
                 var mstream = new MemoryStream(); //using?
                 file.CopyTo(mstream);
                 byte[] byteArray = mstream.ToArray(); //alt Encoding.Default.GetBytes(string)
 
-                var assignment = new Assignment() { SubmissionDate = DateTime.Now, Name = file.FileName, CourseAssignmentID=1, CourseID=1, EnrollmentID=1 /*StudentID = Id, StudentName = _context.Students.Find(Id).LastName,*/, AssignmentFile = byteArray };
+                Enrollment enrollment = _context.Enrollments.Where(enrollment =>
+                enrollment.Student.ID == Id && enrollment.Course.Title == CourseName)
+                    .FirstOrDefault();
+                //if enrollment not choose display message
+
+                Assignment assignment = new Assignment()
+                   {
+                    //ID ?? skapas dynamiskt här också?
+                       Name = file.FileName,
+                       SubmissionDate = DateTime.Now,
+                       EnrollmentID = enrollment.ID,
+                       CourseID = enrollment.CourseID,
+                       AssignmentFile = byteArray
+                   };
+               
                 _context.Assignments.Add(assignment);
                 _context.SaveChanges();
                 

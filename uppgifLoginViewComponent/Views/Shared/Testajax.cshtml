@@ -68,7 +68,9 @@
 <div class="text-primary">
 </div>
 
-<div class="border border-dark rounded p-5 mt-5>@{Html.RenderPartial("_StudentInfo", Model);}</div>
+<div class="border border-dark rounded p-5 mt-5>
+    @{Html.RenderPartial("_StudentInfo", Model);}
+</div>
 <span id="email"></span>
 <span id="updateemailsuccess"></span> @*från EditStudenEmail*@
 
@@ -83,7 +85,7 @@
     <div class="alert-info">
 
 
-        @{  if (TempData.Count != 0)
+        @{  if(TempData["Gradechangeinfo"]!= null) //.Count != 0)
             {
             
                 if(Model.Enrollments.Any(item=> item.ID.ToString().Equals(TempData["GradechangeEnrollmentId"])))
