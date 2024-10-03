@@ -21,6 +21,7 @@
 
 <script>
     //not used at the moment
+    
     $j(document).ready(function (e) {
 
         let selectoption = $("#studselect").val(); //studentid
@@ -57,6 +58,11 @@
             Featured Courses
             <h5>@await Component.InvokeAsync("FeauturedCourses")</h5>
         </div>
+        <div>
+            <h1>pdf test below- nästa steg är att kunna ladda ner och upp pdf från databasen</h1>
+            <object data="~/files/fortum_september.pdf" type="application/pdf" width="1000px" height="500px">
+            </object>
+        </div>
 
     }
 
@@ -64,8 +70,8 @@
         {
             <p class="alert-info">@TempData["Message"]</p>
         }
-     }
-    @{TempData?.Remove("Message"); } 
+    }
+    @{TempData?.Remove("Message"); }
 
     @{if (User.IsInRole("Teacher"))
         {
@@ -85,42 +91,63 @@
                     <p>Select Student</p>
                     <div class="bg-light clearfix">
                         <select class="float-left form-select" id="studselect" title="Students" asp-items="Model.StudentsSelect" name="StudentId" onchange="LoggSelectlistvalue()">
-                            
-
-                        <option value="" selected="selected" disabled="disabled">--select student--</option>
-                    </select>
-                    <input type="hidden" name="StudentId" class="float-right" />
 
 
+                            <option value="" selected="selected" disabled="disabled">--select student--</option>
+                        </select>
+                        <input type="hidden" name="StudentId" class="float-right" />
 
-                    <input id="myformsubmit" type="submit" value="Submit" name="btnSubmit" class="btn btn-sm float-left" autocomplete="on">
+
+
+                        <input id="myformsubmit" type="submit" value="Submit" name="btnSubmit" class="btn btn-sm float-left" autocomplete="on">
+                    </div>
+                </div>
+            </form>
+
+            <div class="row mb-2">
+                <div class="col-8 ml-1 border-1 border-dark h-100">
+                    <h4 class="d-inline">
+                        Add Course
+                    </h4>
+                    <a class="btn-light">
+                        <i class="fa fa-plus" style="color:black">
+                        </i>
+                    </a>
                 </div>
             </div>
-        </form>
+            
+            <h4 class="ml-1">Search/Edit an existing Course</h4>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Enter Course Name "ria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search Course</button>
+            </div>
 
+
+        }
+        else if (User.IsInRole("Student"))
+        {
+
+            var studemail = User.Identity.Name.ToString();
+
+            var studhelp = Studenthelp; StudentInfoViewModel studentmodel = studhelp.GetStudentInfo(studemail);
+
+
+            <div> @await Html.PartialAsync("Testajax", studentmodel)</div>
+
+
+        }
+        else
+        { @*<span>role not set</span>*@
+    }
+
+
+    //teacher login returnerar samma partial som student , Testajax men, teacher gör det via home controllern data-ajax attribut, som är deprecated, kan det vara anledningen till att bootstrap collapse bara fungerar för student?
+    <div id="info">
+
+
+    </div>
 
     }
-    else if (User.IsInRole("Student"))
-    {
-
-        var studemail = User.Identity.Name.ToString();
-
-        var studhelp = Studenthelp; StudentInfoViewModel studentmodel = studhelp.GetStudentInfo(studemail);
-
-
-        <div> @await Html.PartialAsync("Testajax", studentmodel)</div>
-
-
-    }
-    else
-    { @*<span>role not set</span>*@
-}
-
-
-
-<div id="info">
-
-</div>}
     @*<div>@{await Html.RenderPartialAsync("_StudentInfo", Model.Student = Model.Students.Where(s=> s.ID == 1).FirstOrDefault());}</div>*@
 
 
@@ -146,22 +173,68 @@
     @* ----Dropzone --- action="~/Home/Upload?Id=1"*@
     @if (SigninManager.IsSignedIn(User))
     {
-        <div class="col-6 w-50 mx-auto text-center"> Submit Assignment for Course > <span id="submit">Select Course</span></div>
+        //
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Commit Assignment >
+        </button>
 
-        <div class="row">
-            <div id="dropzone" class="w-50 mx-auto">
-                <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload" method="post" enctype="multipart/form-data">
-                   @*action="/Home/Upload?Id=5"*@
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button id="dropzonemodal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-6 w-50 mx-auto text-center"> Submit Assignment for Course > <span id="submit">Select Course</span></div>
 
-                    @*<div class="needscklick">
-        </div>*@
-                    <button type="submit" title="mydropzonebtn" hidden="hidden">open file</button>
+                        <div class="row">
+                            <div visibility="visible" id="dropzone" class="w-50 mx-auto">
+                                <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload" method="post" enctype="multipart/form-data">
+                                    @*action="/Home/Upload?Id=5"*@
 
-                    @*in TestAjax here you can add button*@
+                                    @*<div class="needscklick">
+                                        </div>*@
+                                    <button type="submit" title="mydropzonebtn" hidden="hidden">open file</button>
 
-                </form>
+                                    @*in TestAjax here you can add button*@
+
+                                </form>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
             </div>
         </div>
+
+
+
+        //
+        <!--<div class="col-6 w-50 mx-auto text-center"> Submit Assignment for Course > <span id="submit">Select Course</span></div>
+
+        <div class="row">
+            <div visibility ="visible" id="dropzone" class="w-50 mx-auto">
+                <form id="my-awesome-dropzone" class="dropzone form-control-file bg-secondary" action="/Home/Upload" method="post" enctype="multipart/form-data">-->
+        @*action="/Home/Upload?Id=5"*@
+
+        @*<div class="needscklick">
+            </div>*@
+        <!--<button type="submit" title="mydropzonebtn" hidden="hidden">open file</button>-->
+
+        @*in TestAjax here you can add button*@
+
+        <!--</form>
+            </div>
+        </div>-->
     }
 </div>
 
@@ -171,7 +244,8 @@
 
 
     <script>
-
+        ToggleDropZone();
+      
         function SubmitForm()
         {
             $j("#myformsubmit").submit();
@@ -184,15 +258,26 @@
     console.log("buttonclasslist", accordianbtns);
 
         function GetCourseNameOnClick(courseName) //anropas från TestAjax
-    {
+        {
         coursename = courseName;
         console.log("coursename", coursename);
         };
-
+        
         function ShowCourseAtDropzone(cname)
         {
+            ToggleDropZone();
             $("#submit").html(cname + "?");
         }
+
+       /* $(document).ready(function () {*/
+            function ToggleDropZone() {
+                
+               $("#dropzone").toggle();
+            }
+ /*       });*/
+
+
+        
 
     //fungerar hämta buttons från TestAjax
     let ar = Array.from(accordianbtns); console.log("arra", ar);
@@ -268,7 +353,6 @@
             const dz = new Dropzone(".dropzone", {
 
 
-                // The configuration we've talked about above
                 //url: "/Home/Upload/", //tog bort det för att använda action = i form taggen i stället för att få in id
                 autoProceshQueue: false,
                 uploadMultiple: false,

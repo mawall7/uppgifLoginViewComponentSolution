@@ -68,8 +68,8 @@
 <div class="text-primary">
 </div>
 
-<div class="border border-dark rounded p-5 mt-5>
-    @{Html.RenderPartial("_StudentInfo", Model);}
+<div class="border border-dark rounded p-5 mt-5">
+    @{await Html.RenderPartialAsync("_StudentInfo", Model);}
 </div>
 <span id="email"></span>
 <span id="updateemailsuccess"></span> @*från EditStudenEmail*@
@@ -84,31 +84,29 @@
 <div class="accordion" id="accordionExample">
     <div class="alert-info">
 
-
-        @{  if(TempData["Gradechangeinfo"]!= null) //.Count != 0)
+        @{ if (TempData["Gradechangeinfo"] != null) //.Count != 0) // to do - ta bort Tempdata -är inte typesafe
             {
-            
-                if(Model.Enrollments.Any(item=> item.ID.ToString().Equals(TempData["GradechangeEnrollmentId"])))
+
+                if (Model.Enrollments.Any(item => item.ID.ToString().Equals(TempData["GradechangeEnrollmentId"])))
                 {
                     <p>
-                        @TempData["GradechangeInfo"] course 
-                        @*@TempData["GradechangeEnrollmentId"]*@  
+                        @TempData["GradechangeInfo"] course
+                        @*@TempData["GradechangeEnrollmentId"]*@
 
                     </p>
-                
+
                 }
             }
         }
 
-        
+
 
     </div>
     @{ foreach (var item in Model.Enrollments)
         {
-
             <div class="accordion-item">
                 <h2 class="accordion-header" id="acsitems@(item.ID.ToString())">
-                    <button class="mybutton accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#item@(item.ID.ToString())" aria-expanded="true" aria-controls="collapseOne@(item.ID.ToString())" data-parent="#accordionExample">
+                    <button class="mybutton accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#item@(item.ID.ToString())" aria-expanded="true" aria-controls="collapseOne@(item.ID.ToString())">
                         @item.Name
 
                         @{//to do göra en taghelper istället dry
@@ -116,48 +114,68 @@
                             if (TempData["GradechangeEnrollmentId"] != null)
                             {
                                 changedGradeEnrollmentid = TempData.Peek("GradechangeEnrollmentId").ToString();
-                                
+
                                 //courseId = (int)TempData["GradechangeCourseId"];
 
                                 if (changedGradeEnrollmentid.Equals(item.ID.ToString()))
                                 {
                                     <span class="text-danger">(@(TempData.Peek("GradechangeInfo"))!)</span>
                                 }
-                                
+
                             }
                         }
-
-
                     </button>
                 </h2>
-                <div id="item@(item.ID.ToString())" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+
+
+                <div id="item@(item.ID.ToString())" class="accordion-collapse collapse " aria-labelledby="headingOne">
                     <div class="accordion-body">
+                        @*<div class="accordion-item">
+                            <h2 class="accordion-header" id="acsitems@(item.ID.ToString())">
+                                <button class="mybutton accordion-button " type="button" data-toggle="collapse" data-bs-target="#item@(item.ID.ToString())" aria-expanded="true" aria-controls="collapseOne@(item.ID.ToString())" >
+                                    @item.Name
+
+                                    @{//to do göra en taghelper istället dry
+                                        string changedGradeEnrollmentid = null;
+                                        if (TempData["GradechangeEnrollmentId"] != null)
+                                        {
+                                            changedGradeEnrollmentid = TempData.Peek("GradechangeEnrollmentId").ToString();
+
+                                            //courseId = (int)TempData["GradechangeCourseId"];
+
+                                            if (changedGradeEnrollmentid.Equals(item.ID.ToString()))
+                                            {
+                                                <span class="text-danger">(@(TempData.Peek("GradechangeInfo"))!)</span>
+                                            }
+
+                                        }
+                                    }
+                                </button>
+                            </h2>
+
+
+                            <div id="item@(item.ID.ToString())" class="accordion-collapse collapse" aria-labelledby="headingOne" >
+                                <div class="accordion-body">*@
 
 
                         <p>
                             CourseName: @item.Name
                         </p>
-                        <p class=@(changedGradeEnrollmentid!=null && changedGradeEnrollmentid.Equals(item.ID.ToString())? "text-danger" : "text-success")>
+                        <p class=@(changedGradeEnrollmentid != null && changedGradeEnrollmentid.Equals(item.ID.ToString()) ? "text-danger" : "text-success")>
 
 
-                            Grade: @item.StudentGrade
+                            Grade: @if (item.StudentGrade != null)
+                            {@item.StudentGrade }
+                        else
+                        {<span>"Not Set"</span>}
 
 
                         </p>
 
-                        @*<table class="table">
-        <thead>
-            <tr>
-                Name thead
-            </tr>
-        </thead>
-        <tbody>
-          <tr>*@
-
 
                         <div class="text-primary tex ">
-                          <p class="fw-light text-decoration-underline">Returned Assignments</p>
-                       </div>
+                            <p class="fw-light text-decoration-underline">Returned Assignments</p>
+                        </div>
 
                         @{
                             if (item.Assignments != null)
@@ -169,7 +187,10 @@
                                     // if (assignment.CourseID == item.CourseID)
                                     <div>
                                         <span>
-                                            AssignmentName:&nbsp;@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()
+                                            AssignmentName:&nbsp;@*@Model.CourseAssignment.Where(ca => ca.CourseID == assignment.CourseID).FirstOrDefault().AssignmentName.ToString()*@
+                                            @if (assignment.CourseID == item.CourseID)
+                                            {@assignment.Name;
+                                        }
                                             @if (User.IsInRole("Teacher"))
                                             {<a asp-controller="Home" asp-action="StudAssignment" asp-route-Id="@(assignment.EnrollmentID)" asp-route-AssId="@assignment.ID">examine/correct</a>}
                                         </span>
@@ -190,9 +211,9 @@
 
 
                                     @if (DateTime.Compare(   //use helper
-                            @Model.CourseAssignment.
-                            Where(ca => ca.CourseID == assignment.CourseID)
-                            .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
+                           @Model.CourseAssignment.
+                           Where(ca => ca.CourseID == assignment.CourseID)
+                           .FirstOrDefault().LastSubmissionDate, assignment.SubmissionDate) > 0)
                                     {
                                         <span><i class="fa fa-check" style="color:forestgreen"></i>OnTime</span>
                                         <br>
@@ -207,10 +228,10 @@
                                         <br>
 
                                         @*<span>
-                            <a asp-action="DeleteFile" asp-controller="Home" asp-route-Id="@(assignment.ID)">
-                                DeleteFile
-                            </a>
-                        </span>*@
+                                                <a asp-action="DeleteFile" asp-controller="Home" asp-route-Id="@(assignment.ID)">
+                                                    DeleteFile
+                                                </a>
+                                            </span>*@
                                     }
                                     <span>
                                         <a asp-controller="Home" asp-action="DeleteAssignment" asp-route-assignmentId="@(assignment.ID)">
@@ -232,7 +253,7 @@
                         }
 
                         @*</tbody>
-        </table>*@
+                            </table>*@
 
                     </div>
                 </div>
@@ -246,7 +267,9 @@
 <div id="studinfo"></div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+</div>
+
+
 
 @*popover requires tooptips in js initialization fungerade ändå inte. ? varför?*@
 

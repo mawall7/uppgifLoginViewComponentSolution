@@ -18,7 +18,7 @@
 
             <div class="col-7 bg-dark text-left">
                 <h1 class="display-4 font-weight-normal text-white ">
-                    LMS 
+                    LMS
                 </h1>
             </div>
         </div>
@@ -64,9 +64,9 @@
             </nav>*@
         @*</header>*@
     }
-    
-        @RenderBody()
-    
+
+    @RenderBody()
+
     <div class="container">
         <main role="main" class="pb-3">
 
@@ -96,17 +96,19 @@
             </div>
         </footer>
     }
-    
+
     @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">*@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-   
-    
+
+
     @*<script src="~/lib/jquery/dist/jquery.js"></script>*@ @*används på många ställen t.ex. behövs det av både bootstrap och ajax*@
-   
+
     @*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>*@
     @*det här flyttas till vyer som använder ajax*@
     <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
-     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
     @*<script src="~/js/site.js" asp-append-version="true"></script>*@
     @await RenderSectionAsync("Scripts", required: false)
 

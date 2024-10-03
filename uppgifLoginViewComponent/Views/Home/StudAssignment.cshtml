@@ -1,4 +1,5 @@
-﻿@model uppgifLoginViewComponent.Models.Assignment
+﻿@*model uppgifLoginViewComponent.Models.Assignment*@
+@model uppgifLoginViewComponent.Models.AssignmentViewModel
 @using uppgifLoginViewComponent.Data
 @using uppgifLoginViewComponent.Models.ViewModels
 @inject Reader Reader;
@@ -6,7 +7,7 @@
 
 <div height="200px">
 <h6>Student Assignment</h6> @*assignmenttext*@
-@{ foreach (var item in Reader.Read(Model.AssignmentFile).ToString())
+@{ foreach (var item in Reader.Read(Model.File).ToString())
     {
         <span>@item.ToString()</span>
 
@@ -28,9 +29,10 @@
             <label class="form-label">Grade</label>         
                 <select id="gradeAssignment"class="form-select" aria-label="Default select example" name="Grade">
                     <option disabled="disabled">Open this select menu</option>
-                    <option value="A,@ViewBag.CourseAssignmentId">A</option>
-                    <option value="B,@ViewBag.CourseAssignmentId">B</option>
-                    <option value="C,@ViewBag.CourseAssignmentId">C</option>
+                    @*<option value="A,@ViewBag.CourseAssignmentId">A</option>*@
+                    <option value="A,@Model.CourseIDAssignment">A</option>
+                    <option value="B,@Model.CourseIDAssignment">B</option>
+                    <option value="C,@Model.CourseIDAssignment">C</option>
                 </select>
                 <input class="form-control" type="submit" title="submit">
             </div>

@@ -8,9 +8,11 @@ namespace uppgifLoginViewComponent.Models
 {
     public class AssignmentViewModel
     {
-        public IFormFile File { get; set; }
+        //public IFormFile File { get; set; }
+        public byte[] File { get; set; }
         public int StudentID { get; set; }
-        public string StudentLastName { get; set; } 
+        public string StudentLastName { get; set; }
+        public int CourseIDAssignment { get; set; }
 
 
     }

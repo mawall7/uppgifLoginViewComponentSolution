@@ -139,7 +139,7 @@ namespace uppgifLoginViewComponent.Controllers
         //    return View(nameof(Index), model);
 
         //}
-        
+        [AutoValidateAntiforgeryToken]
         public IActionResult Delete(string courseTitle, string lastname)
         {
             var studentid = _context.Students.Where(a => a.LastName == lastname).Select(s=> s.ID).FirstOrDefault();
@@ -162,7 +162,6 @@ namespace uppgifLoginViewComponent.Controllers
             return View();
         }
 
-        
         public bool IsInDevelopment(IWebHostEnvironment e)
         {
             return !e.IsDevelopment(); 
@@ -175,45 +174,47 @@ namespace uppgifLoginViewComponent.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [ServiceFilter(typeof(ValidationFilterFileNotEmptyAttribute))]
+        [ServiceFilter(typeof(ValidationFilterFileNotEmptyAttribute))] //skrivet attribut av mig för att kolla om fil innehåller text ej är tom 
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file, int Id, string CourseName) //to do kolla vilken student som laddat upp t.ex. döp om filen till att sluta med studentnamn via student id
         {
             //var uploads = @"C:\Users\matte\Downloads\";
+            //sparas bara lokalt i localdb kan så klart bytas ut
+            //till en mySQL moln databas mongo db eller liknande.
             int studentid = Id;
             string courseName = CourseName;
-           
-                
-            //spara filen
+            
             var uploads = CreateFilePath(file);
 
             if (file.Length > 0)
             {
 
-                //spara fil i databas som binär kod
+                //spara fil i localdb som binär kod
 
-                var mstream = new MemoryStream(); //using?
-                file.CopyTo(mstream);
-                byte[] byteArray = mstream.ToArray(); //alt Encoding.Default.GetBytes(string)
+                using (var mstream = new MemoryStream())
+                { //using?
+                    
+                    file.CopyTo(mstream);
+                    byte[] byteArray = mstream.ToArray(); //alt Encoding.Default.GetBytes(string)
 
-                Enrollment enrollment = _context.Enrollments.Where(enrollment =>
-                enrollment.Student.ID == Id && enrollment.Course.Title == CourseName)
-                    .FirstOrDefault();
-                //if enrollment not choose display message
+                    Enrollment enrollment = await _context.Enrollments.Where(enrollment =>
+                    enrollment.Student.ID == Id && enrollment.Course.Title == CourseName)
+                        .FirstOrDefaultAsync(); //await async 
+                    //if enrollment not choosen  display message
 
-                Assignment assignment = new Assignment()
-                   {
-                    //ID ?? skapas dynamiskt här också?
-                       Name = file.FileName,
-                       SubmissionDate = DateTime.Now,
-                       EnrollmentID = enrollment.ID,
-                       CourseID = enrollment.CourseID,
-                       AssignmentFile = byteArray
-                   };
+                    Assignment assignment = new Assignment(){/*ta bort courseassignmentID har redan CourseID !*/
+                        //ID ?? skapas dynamiskt här också? ja
+                        Name = file.FileName,
+                        SubmissionDate = DateTime.Now,
+                        EnrollmentID = enrollment.ID,
+                        CourseID = enrollment.CourseID,
+                        AssignmentFile = byteArray
+                    };
                
-                _context.Assignments.Add(assignment);
-                _context.SaveChanges();
+                await _context.Assignments.AddAsync(assignment);
+                await _context.SaveChangesAsync();
                 
+                }
             }
 
             return RedirectToAction("Index");
@@ -249,10 +250,10 @@ namespace uppgifLoginViewComponent.Controllers
         public async Task<IActionResult> EditStudentEmail(int ID, string email)
         {   
 
-            //Ändra tillbaks senare? ändrar man mail då änras även useremail som används som password inte säkert att man vill ha den implementationen. beroende på om en user ska ha authorisering för att ändra password. 
+            //Ändra tillbaks senare? ändrar man mail då ändras även useremail som används som password inte säkert att man vill ha den implementationen.
+            //Beroende på om en user ska ha authorisering för att ändra password. 
             var student = await _context.Students.Where(s => s.ID == ID).FirstOrDefaultAsync();
 
-            //if (emailallreadyexist) { ViewBag.emailIsSaved = false; }
             var oldemail = student.Email;
             var user = await _identitycontext.Users.Where(u => u.UserName == oldemail).FirstOrDefaultAsync();
             user.Email = email; user.UserName = email; user.NormalizedUserName = email.ToUpper();user.NormalizedUserName = email; 
@@ -272,27 +273,26 @@ namespace uppgifLoginViewComponent.Controllers
         [HttpPost]
         public IActionResult OnSubmitAjax(int StudentId) //obs att selectlistan selected inte uppdateras görs genom 1) javascript onsubmit eller 2) att ta med selectlistan i partiella vyn "TestAjax".
         {
-            //Skapa istället en StudentViewModel och använd fetch istället för ajax som verkar vara avvecklad
+            //To do skapa istället en StudentViewModel och använd fetch istället för ajax som verkar vara avvecklad? < ja och nej. gjorde inte det i alla fall, eftersom det inte är meningen att man ska använda
+            //fetch i någon större utsträckning då koden är svårtestad, eftersom det då mer blir javascript baserad kod//verkar ändå som det fortfarnde används
+            //även om fetch api också används.  
             //gör en todo och visa inlämnade uppgifter och inlämnings/ sista inl.datum för sent ska det inte gå att lämna
             Student s;
             try
             {
                 s = _context.Students.Where(s => s.ID == StudentId).Include(s => s.Enrollments).ThenInclude(a => a.Assignments).FirstOrDefault();
-                //    .Include(s => s.Assignments).FirstOrDefault(); //automapper
-                
-                
+
                 StudentInfoViewModel model = _mapper.Map<StudentInfoViewModel>(s);
                 model.CourseAssignment = _context.CourseAssignment.ToList();
                 ViewBag.Submit = true;
                
-                return View("Testajax", model);
+                return PartialView("Testajax", model);
             }
             catch (Exception e)
             {
 
                 throw e;
             }
-            //return RedirectToAction(nameof(Index), s);
         }
 
 
@@ -307,10 +307,10 @@ namespace uppgifLoginViewComponent.Controllers
             
         }
 
-        public async Task<IActionResult> StudAssignment(int Id, int AssId)
+        public async Task<IActionResult> StudAssignment(int Id, int AssId)//borde använda fullständigt namn
         {
-            var assignments = _context.Enrollments.Include(e => e.Assignments)
-                .Where(a=> a.ID == Id).ToList();
+            var assignments = await _context.Enrollments.Include(e => e.Assignments)
+                .Where(a=> a.ID == Id).ToListAsync();
             
             var sassignment = assignments.Select(s =>
             new Assignment()
@@ -318,20 +318,35 @@ namespace uppgifLoginViewComponent.Controllers
                 AssignmentFile = s.Assignments //skicka en viewmodel istället
             .Where(a => a.ID == AssId)
             .Select(s => s.AssignmentFile).FirstOrDefault()
+            }
+            ).FirstOrDefault();
+            
+
+            //
+            var assignmentviewmodel = assignments.Select(s =>
+            new AssignmentViewModel()
+            {
+
+                File = s.Assignments //skicka en viewmodel istället
+            .Where(a => a.ID == AssId)
+            .Select(s => s.AssignmentFile).FirstOrDefault()
+            ,
+                CourseIDAssignment = _context.Assignments
+                  .Where(assignment =>
+                  assignment.ID == AssId)
+                  .Select(item => item.CourseID)
+                  .FirstOrDefault()
             }).FirstOrDefault();
-           
-            ViewBag.CourseAssignmentId = _context.Assignments.
+            //
+
+            ViewBag.CourseAssignmentId = _context.Assignments. //obs använd helst inte då den är hårt typad använd viewmodel istället för det här.
                 Where(assignment =>
-            assignment.ID == AssId)
-            .Select(item => item.CourseID)
-            .FirstOrDefault();
+                assignment.ID == AssId)
+                .Select(item => item.CourseID)
+                .FirstOrDefault();
 
-            //ViewBag.CourseAssignmentId = assignments.Where(assignment =>
-            //assignment.ID == AssId)
-            //.Select(item => item.CourseID)
-            //.FirstOrDefault();
 
-            return View(sassignment);
+            return View(assignmentviewmodel);
         }
 
         private string CreateFilePath(IFormFile file)
@@ -343,25 +358,24 @@ namespace uppgifLoginViewComponent.Controllers
                 Directory.CreateDirectory(filePath); //skapar en mapp files under root
 
             }
-            //var filename = file.FileName;
-            //filePath = Path.Combine(filePath, filename); //skapa filnamn concatenerarar till en string 
             return filePath;
         }
 
-        public bool isTextFile(IFormFile file)
+        public bool IsTextFile(IFormFile file)
         {
 
             return file.ContentType == "text/plain";
 
         }
+
+        [ValidateAntiForgeryToken]
 #nullable enable
-        public async Task<IActionResult> GradeAssignment(string Grade) //felaktig model skickad fel att skapa en ny i vyn
+        public async Task<IActionResult> GradeAssignment(string Grade) 
         {
             var gradecourse = Grade.Split(",");
             var grade = gradecourse[0];
             var courseid = gradecourse[1];
             int assignmentCourse = int.Parse(courseid);
-            //manuellt test ska ändra tillbaks eftersom name inte inte ska vara grade borde använda viewmodel ist.
             Enrollment enrollment = await _context.Enrollments
             .Where(enrollment => enrollment.CourseID == assignmentCourse)
             .FirstOrDefaultAsync();
@@ -392,7 +406,7 @@ namespace uppgifLoginViewComponent.Controllers
             var assignmentfile = await _context.Assignments.Where(item => item.ID == assignmentId)
                 .FirstOrDefaultAsync();
             _context.Remove(assignmentfile);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             TempData["Message"] = "Successfully Removed a File";
             
             return RedirectToAction(nameof(Index));
