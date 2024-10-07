@@ -58,6 +58,7 @@ namespace uppgifLoginViewComponent.Controllers
 
             ViewBag.AssignmentUpdated = assignmentupdate;   
             var studentslist = new List<Student>();
+            var courses = new List<Course>();
             //studentslist = _context.Students.ToList();
             
             foreach (var s in _context.Students) 
@@ -73,7 +74,8 @@ namespace uppgifLoginViewComponent.Controllers
                     studentselect.Add(new SelectListItem() { Value = s.ID.ToString(), Text = $"{s.FirstMidName} {s.LastName }" });
                 }    
             }
-          
+            courses.AddRange(_context.Courses);
+            model.Courses = courses;
             model.StudentsSelect = studentselect;
             
             return View(model);
@@ -269,7 +271,23 @@ namespace uppgifLoginViewComponent.Controllers
             return PartialView("_Studentemailsaved");
         }
 
-        
+        [HttpGet]
+        public IActionResult CoursesFilterAjax(string SearchCoursesInput)
+        {
+            //filtering
+            if (_context.Courses.Any())
+            {
+                var filterdCourses = _context.Courses.Where(course => course.Title.Contains(SearchCoursesInput))
+                    .Select(item => new SelectListItem() { Value = item.ID.ToString(), Text = $"{item.Title}" });
+
+                var filteredCoursesViewModel = new FilteredCoursesViewModel();
+                filteredCoursesViewModel.FilteredCourses = filterdCourses.ToList();
+                return Json(filterdCourses);
+            }
+            else return null;
+
+        }
+
         [HttpPost]
         public IActionResult OnSubmitAjax(int StudentId) //obs att selectlistan selected inte uppdateras görs genom 1) javascript onsubmit eller 2) att ta med selectlistan i partiella vyn "TestAjax".
         {
@@ -305,6 +323,14 @@ namespace uppgifLoginViewComponent.Controllers
             ViewBag.Submit = true;
             return View("Studentinfo", student);
             
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ShowCourseEditOnSearch(string coursename)
+        {
+            var course = _context.Courses.Where(course => course.Title == coursename).FirstOrDefault();
+            CourseViewModel model = new CourseViewModel() { Title = course.Title, Credits = course.Credits };
+            return PartialView("_CourseSearchEdit", model);
         }
 
         public async Task<IActionResult> StudAssignment(int Id, int AssId)//borde använda fullständigt namn

@@ -8,6 +8,15 @@ for details on configuring this project to bundle and minify static web assets. 
     
 }
 
+#courseBox {
+    display: inline-block;
+    border-radius: 25px;
+    background: #73AD21;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+}
+
 .fa-floppy-o {
     color: blue;
 }

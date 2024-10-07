@@ -1,0 +1,39 @@
+﻿@model uppgifLoginViewComponent.Models.CourseViewModel
+
+<div class="d-flex flex-row justify-content-start">
+    <div>
+        <h3>EditCourse</h3>
+    </div>
+    <div class="ps-2">
+        <i class="fa fa-home fa-lg" style="color:yellowgreen"></i>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(Model => Model.Title)</th>
+            <th scope="col">@Html.DisplayNameFor(Model => Model.Credits)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr scope="col">
+            <td>@Html.DisplayFor(Model => Model.Title)</td>
+            <td>@Html.DisplayFor(Model => Model.Credits)</td>
+        </td>
+            
+            <form style="display:inline" asp-action="GetEmailEdit" asp-controller="Home" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#email">
+
+
+
+                <button class="btn btn-sm btn-info pl-2 ml2" type="submit"> Redigera</button>
+            </form>
+
+
+
+            
+
+
+        @*<td>@Html.DisplayFor(Model => Model.Email)</td>*@
+    </tr>
+</tbody>
+</table>
