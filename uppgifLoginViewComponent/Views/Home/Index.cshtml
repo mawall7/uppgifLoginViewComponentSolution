@@ -42,7 +42,7 @@
                 //console.log("courseimte 2 from BuildCourse:", courseitem.text)
                 /*optionsHtml += `<option value=\"${courseitem.text}\">` + `${courseitem.text}</option>`*/
                 console.log("optionsHtml", optionsHtml);
-                optionsHtml += `<li><a class=\"dropdown-item\" href=\"#\" value=\"${courseitem.text}\" onclick=\"OnCourseSearchBarClick(coursename=\'${courseitem.text}\')\">${courseitem.text}</a></li>`
+                optionsHtml += `<li><a class=\"dropdown-item\" href=\"#/\" value=\"${courseitem.text}\" onclick=\"OnCourseSearchBarClick(coursename=\'${courseitem.text}\')\">${courseitem.text}</a></li>`
                 /*      optionsHtml.concat("<option value=\"${courseitem.text}\">${courseitem.text}</option>");//varför tom?*/
                 console.log("insideforEach", optionsHtml);//varför tom?
             });
